@@ -103,20 +103,57 @@
     .info-overview{line-height:1.6;margin-top:15px;opacity:0.95;}
     .player-container{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;margin-top:20px;}
     .player-container iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0;}
-    .selectors{margin-top:20px;display:flex;gap:15px;align-items:center;flex-wrap:wrap;}
-    .selectors label, .selectors select { font-size: 16px; }
-    .selectors select {
+    
+    .selectors-container{margin-top:20px;display:flex;gap:15px;align-items:center;flex-wrap:wrap;background:rgba(255,255,255,0.05);padding:12px 18px;border-radius:8px;}
+    .selectors-container label, .selectors-container select { font-size: 14px; font-weight:600;}
+    .selectors-container select {
         padding: 8px 12px;
-        border-radius: 5px;
-        border: 1px solid #555;
-        background-color: #333;
+        border-radius: 6px;
+        border: 1px solid #444;
+        background-color: #222;
         color: white;
         cursor: pointer;
         outline: none;
         transition: border-color 0.3s;
     }
-    .selectors select:focus {
+    .selectors-container select:focus {
         border-color: #e50914;
+    }
+    .tv-selectors {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    /* Link Checker Styles */
+    .check-servers-btn {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border: 1px solid #555;
+        padding: 7px 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .check-servers-btn:hover {
+        background: #e50914;
+        border-color: #e50914;
+    }
+    .check-servers-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    .server-status-badge {
+        font-size: 13px;
+        font-weight: 600;
+        color: #46d369;
+        margin-left: auto;
     }
 
     /* Animations */
@@ -129,9 +166,9 @@
 <body>
   <header>
     <div class="header-cont">
-        <a href="/">
-  <img class="header-brand" src="logo.png" alt="logo" />
-</a>
+      <a href="/">
+        <img class="header-brand" src="logo.png" alt="logo" onerror="this.style.display='none'" />
+      </a>
 
       <ul class="main-nav">
         <li><a href="javascript:void(0)" onclick="loadInitialContent('movie')">Movies</a></li>
@@ -178,14 +215,27 @@
             <div class="info-overview" id="info-overview">Loading...</div>
           </div>
         </div>
+
+        <div class="selectors-container" id="selectorsContainer">
+          <label for="serverSelect">Server:</label>
+          <select id="serverSelect"></select>
+
+          <button id="checkServersBtn" class="check-servers-btn" onclick="checkAllServers()">
+            ⚡ Check Links
+          </button>
+          
+          <span id="serverStatusBadge" class="server-status-badge"></span>
+
+          <div id="tvSelectors" class="tv-selectors" style="display:none;">
+            <label for="seasonSelect">Season:</label>
+            <select id="seasonSelect"></select>
+            <label for="episodeSelect">Episode:</label>
+            <select id="episodeSelect"></select>
+          </div>
+        </div>
+
         <div class="player-container">
           <iframe id="info-player" src="" allowfullscreen allow="encrypted-media"></iframe>
-        </div>
-        <div id="selectors" class="selectors" style="display:none;">
-          <label for="seasonSelect">Season:</label>
-          <select id="seasonSelect"></select>
-          <label for="episodeSelect">Episode:</label>
-          <select id="episodeSelect"></select>
         </div>
       </div>
     </div>
@@ -196,6 +246,125 @@
     const apiEndpoint = "https://api.themoviedb.org/3";
     const imgPath = "https://image.tmdb.org/t/p/w500";
     
+    // --- EMBED SERVER PROVIDERS ---
+    const PROVIDERS = [
+      {
+        name: "Videasy (Default)",
+        getMovieUrl: (id) => `https://player.videasy.net/movie/${id}?overlay=true&color=E50914`,
+        getTvUrl: (id, s, e) => `https://player.videasy.net/tv/${id}/${s}/${e}?overlay=true&episodeSelector=true&autoplayNextEpisode=true&color=E50914`
+      },
+      {
+        name: "VidKing (Own)",
+        getMovieUrl: (id) => `https://www.vidking.net/embed/movie/${id}`,
+        getTvUrl: (id, s, e) => `https://www.vidking.net/embed/tv/${id}/${s}/${e}`
+      },
+      {
+        name: "VidSrc.me",
+        getMovieUrl: (id) => `https://vidsrc.me/embed/movie/${id}`,
+        getTvUrl: (id, s, e) => `https://vidsrc.me/embed/tv/${id}/${s}/${e}`
+      },
+      {
+        name: "VidLink",
+        getMovieUrl: (id) => `https://vidlink.pro/movie/${id}?ads=0`,
+        getTvUrl: (id, s, e) => `https://vidlink.pro/tv/${id}/${s}/${e}?ads=0`
+      },
+      {
+        name: "PrimeSrc",
+        getMovieUrl: (id) => `https://primesrc.me/embed/movie?tmdb=${id}`,
+        getTvUrl: (id, s, e) => `https://primesrc.me/embed/tv?tmdb=${id}&season=${s}&episode=${e}`
+      },
+      {
+        name: "MultiEmbed",
+        getMovieUrl: (id) => `https://multiembed.mov/?video_id=${id}&tmdb=1`,
+        getTvUrl: (id, s, e) => `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}&server=2`
+      },
+      {
+        name: "GoDrivePlayer",
+        getMovieUrl: (id) => `https://godriveplayer.com/player.php?type=movie&tmdb=${id}`,
+        getTvUrl: (id, s, e) => `https://godriveplayer.com/player.php?type=series&tmdb=${id}&season=${s}&episode=${e}`
+      },
+      {
+        name: "MoviesAPI Club",
+        getMovieUrl: (id) => `https://moviesapi.club/movie/${id}`,
+        getTvUrl: (id, s, e) => `https://moviesapi.club/tv/${id}-${s}-${e}`
+      },
+      {
+        name: "Filmku",
+        getMovieUrl: (id) => `https://filmku.stream/embed/movie/${id}`,
+        getTvUrl: (id, s, e) => `https://filmku.stream/embed/${id}/${s}/${e}`
+      },
+      {
+        name: "Vid.Techneo",
+        getMovieUrl: (id) => `https://vid.techneo.fun/tmdb/movie/${id}`,
+        getTvUrl: (id, s, e) => `https://vid.techneo.fun/tmdb/tv/${id}/${s}/${e}`
+      },
+      {
+        name: "SmashyStream",
+        getMovieUrl: (id) => `https://embed.smashystream.com/playere.php?tmdb=${id}`,
+        getTvUrl: (id, s, e) => `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}&btPosition=10`
+      },
+      {
+        name: "123Embed",
+        getMovieUrl: (id) => `https://play2.123embed.net/movie/${id}`,
+        getTvUrl: (id, s, e) => `https://play2.123embed.net/tv/${id}/${s}/${e}`
+      },
+      {
+        name: "VidSrc.vip",
+        getMovieUrl: (id) => `https://vidsrc.vip/embed/movie/${id}`,
+        getTvUrl: (id, s, e) => `https://vidsrc.vip/embed/tv/${id}/${s}/${e}`
+      },
+      {
+        name: "111Movies",
+        getMovieUrl: (id) => `https://111movies.com/movie/${id}?autoplay=1`,
+        getTvUrl: (id, s, e) => `https://111movies.com/tv/${id}/${s}/${e}?autoplay=1`
+      },
+      {
+        name: "Vidzee",
+        getMovieUrl: (id) => `https://player.vidzee.wtf/embed/movie/${id}`,
+        getTvUrl: (id, s, e) => `https://player.vidzee.wtf/embed/tv/${id}/${s}/${e}`
+      },
+      {
+        name: "RGShows",
+        getMovieUrl: (id) => `https://rgshows.ru/player/movie/api4/index.html?id=${id}`,
+        getTvUrl: (id, s, e) => `https://rgshows.ru/player/series/api4/index.html?id=${id}&s=${s}&e=${e}`
+      },
+      {
+        name: "FrEmbed (French)",
+        getMovieUrl: (id) => `https://frembed.club/api/film.php?id=${id}`,
+        getTvUrl: (id, s, e) => `https://frembed.club/api/serie.php?id=${id}&sa=${s}&epi=${e}`
+      },
+      {
+        name: "Superflix (Portuguese)",
+        getMovieUrl: (id) => `https://superflixapi.digital/filme/${id}`,
+        getTvUrl: (id, s, e) => `https://superflixapi.digital/serie/${id}/${s}/${e}`
+      },
+      {
+        name: "2Embed",
+        getMovieUrl: (id) => `https://www.2embed.cc/embed/${id}`,
+        getTvUrl: (id, s, e) => `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`
+      },
+      {
+        name: "Vidora",
+        getMovieUrl: (id) => `https://vidora.su/movie/${id}&autoplay=true`,
+        getTvUrl: (id, s, e) => `https://vidora.su/tv/${id}/${s}/${e}&autoplay=true`
+      },
+      {
+        name: "VidFast",
+        getMovieUrl: (id) => `https://vidfast.pro/movie/${id}`,
+        getTvUrl: (id, s, e) => `https://vidfast.pro/tv/${id}/${s}/${e}`
+      },
+      {
+        name: "VidSrc.su",
+        getMovieUrl: (id) => `https://vidsrc.su/embed/movie/${id}`,
+        getTvUrl: (id, s, e) => `https://vidsrc.su/embed/tv/${id}/${s}/${e}`
+      },
+      {
+        name: "PStream",
+        getMovieUrl: (id) => `https://iframe.pstream.mov/embed/tmdb-movie-${id}`,
+        getTvUrl: (id, s, e) => `https://iframe.pstream.mov/embed/tmdb-tv-${id}/${s}/${e}`
+      }
+    ];
+
     // --- GENRE DATA ---
     const GENRES = [
         { id: 28, name: "Action" },
@@ -212,6 +381,95 @@
     ];
     
     let currentContentType = 'movie';
+    let currentMediaId = null;
+    let currentSeason = 1;
+    let currentEpisode = 1;
+
+    function initServerSelect() {
+      const serverSelect = document.getElementById('serverSelect');
+      serverSelect.innerHTML = '';
+      PROVIDERS.forEach((provider, index) => {
+        const opt = document.createElement('option');
+        opt.value = index;
+        opt.textContent = provider.name;
+        serverSelect.appendChild(opt);
+      });
+
+      serverSelect.onchange = () => {
+        updatePlayerUrl();
+      };
+    }
+
+    // --- LINK CHECKER FEATURE ---
+    async function checkServerAvailability(url) {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3500);
+      try {
+        const startTime = performance.now();
+        await fetch(url, { method: 'HEAD', mode: 'no-cors', cache: 'no-store', signal: controller.signal });
+        clearTimeout(timeoutId);
+        const latency = Math.round(performance.now() - startTime);
+        return { online: true, latency };
+      } catch (err) {
+        clearTimeout(timeoutId);
+        return { online: false, latency: null };
+      }
+    }
+
+    async function checkAllServers() {
+      const checkBtn = document.getElementById('checkServersBtn');
+      const statusBadge = document.getElementById('serverStatusBadge');
+      const serverSelect = document.getElementById('serverSelect');
+      
+      checkBtn.disabled = true;
+      checkBtn.textContent = '⏳ Checking...';
+      statusBadge.textContent = 'Testing servers...';
+
+      let onlineCount = 0;
+      const testId = currentMediaId || 1078605;
+      const testType = currentContentType || 'movie';
+      const testSeason = currentSeason || 1;
+      const testEpisode = currentEpisode || 1;
+
+      for (let i = 0; i < PROVIDERS.length; i++) {
+        const provider = PROVIDERS[i];
+        const testUrl = testType === 'movie' 
+          ? provider.getMovieUrl(testId) 
+          : provider.getTvUrl(testId, testSeason, testEpisode);
+
+        const result = await checkServerAvailability(testUrl);
+        const option = serverSelect.options[i];
+
+        if (result.online) {
+          onlineCount++;
+          option.textContent = `🟢 [Online ${result.latency}ms] ${provider.name}`;
+        } else {
+          option.textContent = `🔴 [Offline] ${provider.name}`;
+        }
+      }
+
+      checkBtn.disabled = false;
+      checkBtn.textContent = '⚡ Re-check Links';
+      statusBadge.textContent = `${onlineCount}/${PROVIDERS.length} Online`;
+    }
+
+    function updatePlayerUrl() {
+      const player = document.getElementById('info-player');
+      const serverSelect = document.getElementById('serverSelect');
+      const providerIndex = parseInt(serverSelect.value, 10) || 0;
+      const provider = PROVIDERS[providerIndex] || PROVIDERS[0];
+
+      if (!currentMediaId) {
+        player.src = 'about:blank';
+        return;
+      }
+
+      if (currentContentType === 'movie') {
+        player.src = provider.getMovieUrl(currentMediaId);
+      } else if (currentContentType === 'tv') {
+        player.src = provider.getTvUrl(currentMediaId, currentSeason, currentEpisode);
+      }
+    }
 
     function adjustContentPadding() {
         const header = document.querySelector('header');
@@ -358,7 +616,7 @@
       const overlay = document.getElementById('info-overlay');
       const titleEl = document.getElementById('info-title');
       const player = document.getElementById('info-player');
-      const selectors = document.getElementById('selectors');
+      const tvSelectors = document.getElementById('tvSelectors');
       const seasonSelect = document.getElementById('seasonSelect');
       const episodeSelect = document.getElementById('episodeSelect');
       const posterImg = document.getElementById('info-poster-img');
@@ -367,8 +625,13 @@
       const runtimeEl = document.getElementById('info-runtime');
       const overviewEl = document.getElementById('info-overview');
 
+      currentMediaId = id;
+      currentContentType = type;
+      currentSeason = 1;
+      currentEpisode = 1;
+
       overlay.style.display = 'flex';
-      selectors.style.display = 'none';
+      tvSelectors.style.display = 'none';
       titleEl.textContent = 'Loading...';
       player.src = 'about:blank';
       posterImg.src = '';
@@ -411,23 +674,23 @@
         overviewEl.textContent = info.overview || 'No description available.';
 
         if (type === 'movie') {
-          player.src = `https://player.videasy.net/movie/${id}?overlay=true&color=E50914`;
+          updatePlayerUrl();
         } else if (type === 'tv') {
-          selectors.style.display = 'flex';
+          tvSelectors.style.display = 'flex';
           seasonSelect.innerHTML = '';
           episodeSelect.innerHTML = '';
 
-          const viewableSeasons = info.seasons.filter(s => s.season_number > 0);
+          const viewableSeasons = info.seasons ? info.seasons.filter(s => s.season_number > 0) : [];
           
           if (viewableSeasons.length === 0) {
              titleEl.textContent += " (No viewable season data)";
-             selectors.style.display = 'none';
+             tvSelectors.style.display = 'none';
              player.src = 'about:blank';
              return;
           }
           
           const initialSeason = viewableSeasons[0].season_number;
-          let currentShowId = id; 
+          currentSeason = initialSeason;
 
           viewableSeasons.forEach(s => {
             const opt = document.createElement('option');
@@ -442,7 +705,7 @@
             episodeSelect.innerHTML = '<option>Loading episodes...</option>';
             player.src = 'about:blank';
             
-            const epRes = await fetch(`${apiEndpoint}/tv/${currentShowId}/season/${season}?api_key=${apikey}`);
+            const epRes = await fetch(`${apiEndpoint}/tv/${currentMediaId}/season/${season}?api_key=${apikey}`);
             const epData = await epRes.json();
             
             episodeSelect.innerHTML = '';
@@ -456,8 +719,9 @@
               });
               
               const firstEpisodeNumber = epData.episodes[0].episode_number;
-              episodeSelect.value = firstEpisodeNumber; 
-              player.src = `https://player.videasy.net/tv/${currentShowId}/${season}/${firstEpisodeNumber}?overlay=true&episodeSelector=true&autoplayNextEpisode=true&color=E50914`;
+              episodeSelect.value = firstEpisodeNumber;
+              currentEpisode = firstEpisodeNumber;
+              updatePlayerUrl();
             } else {
               episodeSelect.innerHTML = '<option value="">No Episodes Found</option>';
             }
@@ -466,24 +730,20 @@
           await loadEpisodes(initialSeason);
 
           seasonSelect.onchange = async () => {
-            await loadEpisodes(seasonSelect.value);
+            currentSeason = seasonSelect.value;
+            await loadEpisodes(currentSeason);
           };
 
           episodeSelect.onchange = () => {
-            const season = seasonSelect.value;
-            const episode = episodeSelect.value;
-            if (season && episode) {
-                player.src = `https://player.videasy.net/tv/${currentShowId}/${season}/${episode}?overlay=true&episodeSelector=true&autoplayNextEpisode=true&color=E50914`;
-            } else {
-                player.src = 'about:blank';
-            }
+            currentEpisode = episodeSelect.value;
+            updatePlayerUrl();
           };
         }
       } catch (error) {
         console.error("Error loading info:", error);
         titleEl.textContent = "Error Loading Content";
         overviewEl.textContent = "Unable to load content details.";
-        selectors.style.display = 'none';
+        tvSelectors.style.display = 'none';
       }
     }
 
@@ -492,12 +752,14 @@
       const player = document.getElementById('info-player');
       overlay.style.display = 'none';
       player.src = '';
+      currentMediaId = null;
     }
     
     window.onload = function() {
         adjustContentPadding(); 
         window.addEventListener('resize', adjustContentPadding);
         
+        initServerSelect();
         setupCategories();
         loadInitialContent();
     }

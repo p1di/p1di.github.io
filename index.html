@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Apps</title>
+  <title>p1di</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -349,6 +349,37 @@
       border-color: #52525b;
     }
 
+    /* Footer Section */
+    footer {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #222226;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.85rem;
+      font-size: 0.85rem;
+      color: #77777e;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .footer-links a {
+      color: #9999a0;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.15s ease;
+    }
+
+    .footer-links a:hover {
+      color: #ffffff;
+    }
+
     @media (max-width: 480px) {
       body {
         padding: 2.5rem 1rem;
@@ -363,8 +394,8 @@
 
   <div class="container">
     <header>
-      <h1>Apps</h1>
-      <p class="subtitle">Select an application to open.</p>
+      <h1>p1di</h1>
+      <p class="subtitle">organized unblocked apps and tools.</p>
     </header>
 
     <div class="search-wrapper">
@@ -382,6 +413,16 @@
     <div id="emptyState" class="empty-state">
       No apps match your search.
     </div>
+
+    <footer>
+      <nav class="footer-links">
+        <a href="about.html">About</a>
+        <a href="credits.html">Credits</a>
+        <a href="help.html">Help</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <p>&copy; <span id="currentYear">2026</span> p1di</p>
+    </footer>
   </div>
 
   <!-- Info Modal -->

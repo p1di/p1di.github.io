@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Help — p1di</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Google Sans', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #0d0d0e;
+      color: #ededed;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 4rem 1.5rem;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { width: 100%; max-width: 640px; display: flex; flex-direction: column; gap: 2rem; }
+    .back-btn { color: #88888e; text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s ease; }
+    .back-btn:hover { color: #ffffff; }
+    h1 { font-size: 2rem; font-weight: 700; color: #ffffff; }
+    .card { background: #141416; border: 1px solid #242428; border-radius: 14px; padding: 1.75rem; display: flex; flex-direction: column; gap: 1.25rem; line-height: 1.6; color: #c4c4cc; font-size: 0.95rem; }
+    .faq-item { display: flex; flex-direction: column; gap: 0.3rem; }
+    .faq-q { color: #ffffff; font-weight: 600; }
+    .faq-a { color: #9999a0; font-size: 0.9rem; }
+    a.link { color: #6366f1; text-decoration: none; }
+    a.link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-btn">&larr; Back to Apps</a>
+    <h1>Help & Support</h1>
+    <div class="card">
+      <div class="faq-item">
+        <div class="faq-q">How do I switch servers if a player isn't loading?</div>
+        <div class="faq-a">Open the app popup, click the <strong>Server</strong> dropdown, and choose another server. You can also click <strong>⚡ Check Links</strong> to automatically test server availability.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Why am I seeing popups on external servers?</div>
+        <div class="faq-a">External video hosts may serve ads. We strongly recommend installing an adblocker. See our <a href="tools/adblocker/tutorial.html" class="link">Adblocker Guide</a> for instructions.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Can I add my own custom streaming sources?</div>
+        <div class="faq-a">Yes! Inside the player controls, click <strong>+ Add Source</strong> to save your own embed URL pattern.</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

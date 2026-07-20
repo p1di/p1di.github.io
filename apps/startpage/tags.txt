@@ -1,0 +1,1 @@
+startpage, home, dashboard, bookmark, search, links, start, browser, homepage

@@ -1,18 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Spotify</title>
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #121212; color: #1DB954; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-    h1 { font-weight: 700; font-size: 2.2rem; margin-bottom: 0.5rem; }
-    p { color: #b3b3b3; }
-    a { color: #1DB954; text-decoration: none; margin-top: 1.5rem; border: 1px solid #1DB954; padding: 0.5rem 1rem; border-radius: 20px; }
-  </style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+iframe {
+  border: none;
+  width: 100%;
+  height: 100%;
+}
+</style>
 </head>
 <body>
-  <h1>Spotify App</h1>
-  <p>Standard app path: /apps/spotify/index.html</p>
-  <a href="../../index.html">&larr; Back to Apps Launcher</a>
+<iframe src="https://playlistsound.com/discover" allowfullscreen></iframe>
 </body>
 </html>

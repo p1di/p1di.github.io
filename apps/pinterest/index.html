@@ -280,28 +280,75 @@
   </div>
 
   <script>
-    function handleSearch(event) {
-      event.preventDefault();
-      const query = document.getElementById('searchInput').value.trim();
-      
-      // Hide heading image overlay
-      const overlay = document.getElementById('headingOverlay');
-      if (overlay) {
-        overlay.classList.add('hidden');
-      }
-
+    function performSearch(query) {
       if (!query) return;
-
-      // Load Binternet / Pinterest Search Results
+      
+      const searchInput = document.getElementById('searchInput');
+      const overlay = document.getElementById('headingOverlay');
       const resultsContainer = document.getElementById('resultsContainer');
       const resultsFrame = document.getElementById('resultsFrame');
-      
+
+      if (searchInput) searchInput.value = query;
+      if (overlay) overlay.classList.add('hidden');
+
       const searchUrl = `https://bn.opnxng.com/search.php?q=${encodeURIComponent(query)}`;
       resultsFrame.src = searchUrl;
       resultsContainer.classList.add('active');
     }
 
-    // Also hide overlay on direct click on search button
+    function parseSearchFromUrl() {
+      // 1. Check URL hash (e.g. #search/memes, #search=memes, #memes)
+      const hash = decodeURIComponent(window.location.hash || '').trim();
+      if (hash) {
+        let raw = hash.replace(/^#/, '');
+        if (raw.startsWith('search/')) {
+          return raw.replace(/^search\//, '').trim();
+        } else if (raw.startsWith('search=')) {
+          return raw.replace(/^search=/, '').trim();
+        } else if (raw.startsWith('q=')) {
+          return raw.replace(/^q=/, '').trim();
+        } else if (raw.length > 0 && !raw.includes('=')) {
+          return raw.trim();
+        }
+      }
+
+      // 2. Check URL query parameters (e.g. ?q=memes or ?search=memes)
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('q')) return params.get('q').trim();
+      if (params.has('search')) return params.get('search').trim();
+
+      // 3. Check URL pathname (e.g. /apps/pinterest/search/memes)
+      const pathParts = window.location.pathname.split('/').filter(Boolean);
+      const searchIndex = pathParts.indexOf('search');
+      if (searchIndex !== -1 && searchIndex < pathParts.length - 1) {
+        return decodeURIComponent(pathParts.slice(searchIndex + 1).join(' ')).trim();
+      }
+
+      return '';
+    }
+
+    function handleSearch(event) {
+      if (event) event.preventDefault();
+      const query = document.getElementById('searchInput').value.trim();
+      if (query) {
+        window.location.hash = `search/${encodeURIComponent(query)}`;
+        performSearch(query);
+      }
+    }
+
+    function checkAndRunAutoSearch() {
+      const query = parseSearchFromUrl();
+      if (query) {
+        performSearch(query);
+      }
+    }
+
+    // Attach listeners
+    window.addEventListener('hashchange', checkAndRunAutoSearch);
+    window.addEventListener('DOMContentLoaded', checkAndRunAutoSearch);
+    checkAndRunAutoSearch();
+
+    // Hide overlay on search button click
     document.getElementById('searchBtn').addEventListener('click', () => {
       document.getElementById('headingOverlay').classList.add('hidden');
     });

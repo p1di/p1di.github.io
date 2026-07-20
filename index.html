@@ -571,11 +571,11 @@
       modalIcon.src = `apps/${app.name}/icon.png`;
       modalIcon.onerror = function() { this.style.display = 'none'; };
       modalIcon.style.display = 'block';
-      modalLaunchBtn.href = `apps/${app.name}/index.html`;
+      modalLaunchBtn.href = `apps/${app.name}/`;
       modalLaunchBtn.onclick = (e) => {
         e.preventDefault();
         closeModal();
-        launchApp(`apps/${app.name}/index.html`);
+        launchApp(`apps/${app.name}/`);
       };
 
       modalBody.innerHTML = '<em>Loading app info...</em>';
@@ -612,7 +612,7 @@
       apps.forEach(app => {
         const card = document.createElement('a');
         card.className = 'app-card';
-        card.href = `apps/${app.name}/index.html`;
+        card.href = `apps/${app.name}/`;
 
         const iconPath = `apps/${app.name}/icon.png`;
         const title = app.title || app.name;
@@ -642,7 +642,7 @@
         card.addEventListener('click', (e) => {
           if (e.target.closest('.info-btn')) return;
           e.preventDefault();
-          launchApp(`apps/${app.name}/index.html`, card);
+          launchApp(`apps/${app.name}/`, card);
         });
 
         // Attach info button click handler

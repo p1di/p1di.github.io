@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adblocker Installation Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Google Sans', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #0d0d0e;
+      color: #ededed;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 3rem 1.5rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.75rem;
+      background: rgba(229, 9, 20, 0.15);
+      border: 1px solid rgba(229, 9, 20, 0.3);
+      border-radius: 999px;
+      color: #ff4d4d;
+      font-size: 0.8rem;
+      font-weight: 600;
+      width: fit-content;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+    }
+
+    p.subtitle {
+      color: #9999a0;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .card {
+      background: #141417;
+      border: 1px solid #242428;
+      border-radius: 14px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .card h2 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .recommended-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+
+    .ext-card {
+      background: #1a1a1e;
+      border: 1px solid #2c2c32;
+      border-radius: 10px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .ext-name {
+      font-weight: 600;
+      font-size: 1rem;
+      color: #ffffff;
+    }
+
+    .ext-desc {
+      font-size: 0.85rem;
+      color: #9999a0;
+      line-height: 1.4;
+    }
+
+    .ext-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      background: #e50914;
+      color: #ffffff;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: background-color 0.2s ease;
+      margin-top: auto;
+    }
+
+    .ext-link:hover {
+      background: #f40612;
+    }
+
+    .steps-list {
+      list-style-type: decimal;
+      padding-left: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      color: #c4c4cc;
+      line-height: 1.5;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #88888e;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .back-btn:hover {
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <a href="javascript:history.back()" class="back-btn">&larr; Back to App</a>
+
+    <header>
+      <div class="badge">🛡️ Recommended Protection</div>
+      <h1>How to Install an Adblocker</h1>
+      <p class="subtitle">
+        Third-party video streaming players often contain aggressive popups and redirects. Installing a trusted adblocker prevents popups and keeps your browser safe.
+      </p>
+    </header>
+
+    <div class="card">
+      <h2>Recommended Adblockers</h2>
+      <div class="recommended-grid">
+        <div class="ext-card">
+          <div class="ext-name">uBlock Origin</div>
+          <div class="ext-desc">The most efficient, lightweight open-source ad and pop-up blocker.</div>
+          <a href="https://ublockorigin.com/" target="_blank" rel="noopener" class="ext-link">Get uBlock Origin &rarr;</a>
+        </div>
+
+        <div class="ext-card">
+          <div class="ext-name">Brave Browser</div>
+          <div class="ext-desc">Built-in automatic ad and tracker blocking with zero configuration needed.</div>
+          <a href="https://brave.com/" target="_blank" rel="noopener" class="ext-link">Get Brave Browser &rarr;</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Step-by-Step Installation</h2>
+      <ol class="steps-list">
+        <li>Click on <strong>Get uBlock Origin</strong> (or search for <em>uBlock Origin</em> in your browser extension store).</li>
+        <li>Click <strong>Add to Chrome</strong> (or <strong>Add to Firefox / Edge / Safari</strong>).</li>
+        <li>Confirm the prompt by clicking <strong>Add Extension</strong>.</li>
+        <li>Once installed, refresh your streaming page. All popups and ads will be blocked automatically!</li>
+      </ol>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streamed</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        iframe {
+            border: none;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .banner {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #b91c1c;
+            color: #ffffff;
+            padding: 10px 16px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .banner a {
+            color: #ffffff;
+            text-decoration: underline;
+            margin-left: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <iframe src="https://streamed.pk" allowfullscreen></iframe>
+    <div id="banner" class="banner">
+        Links failed, choose a new one here <a href="https://strmd.link" target="_blank"
+            rel="noopener noreferrer">strmd.link</a>
+    </div>
+    <iframe id="stream-frame" allowfullscreen></iframe>
+    <script>
+        const frame = document.getElementById('stream-frame');
+        const banner = document.getElementById('banner');
+        async function checkUrl(url, timeoutMs = 3500) {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), timeoutMs);
+            try {
+                await fetch(url, { mode: 'no-cors', cache: 'no-cache', signal: controller.signal });
+                clearTimeout(timer);
+                return true;
+            } catch (err) {
+                clearTimeout(timer);
+                return false;
+            }
+        }
+        async function init() {
+            // Try loading streamed.pk first
+            if (await checkUrl('https://streamed.pk')) {
+                frame.src = 'https://streamed.pk';
+                return;
+            }
+            // Fallback to streamed.st if streamed.pk fails
+            if (await checkUrl('https://streamed.st')) {
+                frame.src = 'https://streamed.st';
+                return;
+            }
+            // If both fail, show warning message and open strmd.link in iframe
+            banner.style.display = 'block';
+            frame.src = 'https://strmd.link';
+        }
+        init();
+    </script>
+</body>
+
+</html>

@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Netflix — Stream Movies & TV Shows</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link href="https://fonts.googleapis.com/css2?family=Netflix+Sans:wght@400;500;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Netflix+Sans:wght@400;500;700&family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
   <style>
     :root {
       --netflix-red: #E50914;
@@ -14,13 +17,23 @@
       --card-bg: #181818;
     }
 
+    /* Hide scrollbars globally */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -ms-overflow-style: none !important;
+      scrollbar-width: none !important;
     }
 
-    html, body {
+    ::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+    }
+
+    html,
+    body {
       background-color: var(--bg-dark);
       color: #ffffff;
       font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -46,13 +59,13 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%);
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0) 100%);
       transition: background-color 0.4s ease;
     }
 
     header.scrolled {
       background-color: #141414;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     }
 
     .header-left {
@@ -88,7 +101,8 @@
       transition: opacity 0.2s ease, color 0.2s ease;
     }
 
-    .main-nav a:hover, .main-nav a.active {
+    .main-nav a:hover,
+    .main-nav a.active {
       opacity: 1;
       color: #ffffff;
       font-weight: 600;
@@ -104,8 +118,8 @@
       width: 220px;
       padding: 8px 14px;
       border-radius: 4px;
-      border: 1px solid rgba(255,255,255,0.3);
-      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(0, 0, 0, 0.6);
       color: white;
       font-size: 0.85rem;
       outline: none;
@@ -115,7 +129,7 @@
     .search-bar input:focus {
       width: 280px;
       border-color: #ffffff;
-      background: rgba(0,0,0,0.85);
+      background: rgba(0, 0, 0, 0.85);
     }
 
     .search-bar button {
@@ -152,8 +166,8 @@
     .billboard-overlay {
       position: absolute;
       inset: 0;
-      background: 
-        linear-gradient(77deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 55%, transparent 85%),
+      background:
+        linear-gradient(77deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.3) 55%, transparent 85%),
         linear-gradient(180deg, transparent 50%, var(--bg-dark) 100%);
       pointer-events: none;
     }
@@ -183,7 +197,7 @@
       font-weight: 800;
       line-height: 1.1;
       letter-spacing: -0.02em;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.7);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
     }
 
     .billboard-meta {
@@ -199,7 +213,7 @@
     }
 
     .maturity-rating {
-      border: 1px solid rgba(255,255,255,0.4);
+      border: 1px solid rgba(255, 255, 255, 0.4);
       padding: 1px 6px;
       font-size: 0.75rem;
       border-radius: 2px;
@@ -213,7 +227,7 @@
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
     }
 
     .billboard-actions {
@@ -238,7 +252,7 @@
     }
 
     .btn-play:hover {
-      background: rgba(255,255,255,0.8);
+      background: rgba(255, 255, 255, 0.8);
       transform: scale(1.03);
     }
 
@@ -298,7 +312,8 @@
       transition: all 0.2s ease;
     }
 
-    .category-buttons button:hover, .category-buttons button.active {
+    .category-buttons button:hover,
+    .category-buttons button.active {
       background: var(--netflix-red);
       border-color: var(--netflix-red);
       color: #ffffff;
@@ -325,34 +340,29 @@
 
     .row-carousel {
       display: flex;
-      gap: 12px;
+      gap: 14px;
       overflow-x: auto;
       scroll-behavior: smooth;
-      padding: 10px 0 20px;
-    }
-
-    .row-carousel::-webkit-scrollbar {
-      height: 6px;
-    }
-    .row-carousel::-webkit-scrollbar-thumb {
-      background: rgba(255,255,255,0.2);
-      border-radius: 4px;
+      padding: 16px 12px 24px 12px;
+      margin: -16px -12px -12px -12px;
     }
 
     /* Movie Card */
     .movie-card {
       flex: 0 0 170px;
       position: relative;
-      border-radius: 6px;
+      border-radius: 8px;
       overflow: hidden;
       cursor: pointer;
       transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease;
       background: var(--card-bg);
+      display: flex;
+      flex-direction: column;
     }
 
     .movie-card:hover {
       transform: scale(1.08);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.9);
       z-index: 30;
     }
 
@@ -363,33 +373,27 @@
       display: block;
     }
 
-    .movie-card-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.9) 100%);
-      opacity: 0;
-      transition: opacity 0.25s ease;
+    .movie-card-info {
+      padding: 10px 12px 12px;
+      background: #1c1c20;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
-      padding: 10px;
-    }
-
-    .movie-card:hover .movie-card-overlay {
-      opacity: 1;
+      gap: 4px;
+      width: 100%;
     }
 
     .card-title {
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       font-weight: 600;
       color: #ffffff;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      line-height: 1.3;
     }
 
     .card-rating {
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       color: #46d369;
       font-weight: 700;
     }
@@ -407,7 +411,7 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.85);
+      background: rgba(0, 0, 0, 0.85);
       backdrop-filter: blur(10px);
       z-index: 999;
       justify-content: center;
@@ -422,7 +426,7 @@
       max-width: 900px;
       width: 90%;
       overflow: hidden;
-      box-shadow: 0 0 50px rgba(0,0,0,0.9);
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
       margin: auto;
     }
 
@@ -467,7 +471,7 @@
     .info-poster img {
       width: 180px;
       border-radius: 8px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
     }
 
     .info-details {
@@ -519,12 +523,13 @@
       gap: 12px;
       align-items: center;
       flex-wrap: wrap;
-      background: rgba(255,255,255,0.05);
+      background: rgba(255, 255, 255, 0.05);
       padding: 12px 18px;
       border-radius: 8px;
     }
 
-    .selectors-container label, .selectors-container select {
+    .selectors-container label,
+    .selectors-container select {
       font-size: 14px;
       font-weight: 600;
     }
@@ -546,7 +551,8 @@
       flex-wrap: wrap;
     }
 
-    .check-servers-btn, .add-source-btn {
+    .check-servers-btn,
+    .add-source-btn {
       background: rgba(255, 255, 255, 0.1);
       color: #fff;
       border: 1px solid #555;
@@ -558,7 +564,8 @@
       transition: all 0.2s ease;
     }
 
-    .check-servers-btn:hover, .add-source-btn:hover {
+    .check-servers-btn:hover,
+    .add-source-btn:hover {
       background: var(--netflix-red);
       border-color: var(--netflix-red);
     }
@@ -613,7 +620,7 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.8);
+      background: rgba(0, 0, 0, 0.8);
       backdrop-filter: blur(6px);
       z-index: 1000;
       justify-content: center;
@@ -664,25 +671,80 @@
       cursor: pointer;
     }
 
-    .btn-cancel { background: #333; color: #fff; }
-    .btn-save { background: var(--netflix-red); color: #fff; }
+    .btn-cancel {
+      background: #333;
+      color: #fff;
+    }
+
+    .btn-save {
+      background: var(--netflix-red);
+      color: #fff;
+    }
+
+    /* Floating Transparent Back Arrow Overlay */
+    .p1di-back-overlay {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 16px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    .p1di-back-overlay:hover {
+      background: var(--netflix-red);
+      border-color: var(--netflix-red);
+      transform: scale(1.1);
+    }
 
     @media (max-width: 768px) {
-      header { padding: 14px 4%; }
-      .header-left { gap: 15px; }
-      .main-nav { display: none; }
-      .billboard-title { font-size: 2rem; }
-      .movie-card { flex: 0 0 130px; }
-      .movie-poster { height: 185px; }
+      header {
+        padding: 14px 4%;
+      }
+
+      .header-left {
+        gap: 15px;
+      }
+
+      .main-nav {
+        display: none;
+      }
+
+      .billboard-title {
+        font-size: 2rem;
+      }
+
+      .movie-card {
+        flex: 0 0 130px;
+      }
+
+      .movie-poster {
+        height: 185px;
+      }
     }
   </style>
   <script src="providers.js"></script>
 </head>
+
 <body>
 
   <!-- Netflix Navbar -->
   <header id="navbar">
     <div class="header-left">
+      <a href="../../index.html" class="p1di-back-overlay" title="Back to p1di Hub">
+        <span class="p1di-back-arrow">&larr;</span>
+      </a>
       <div class="brand-logo" onclick="loadInitialContent('movie')">NETFLIX</div>
       <ul class="main-nav">
         <li><a href="javascript:void(0)" class="active" onclick="loadInitialContent('movie')">Home</a></li>
@@ -703,7 +765,7 @@
       <div class="billboard-badge">N POPULAR TODAY</div>
       <h1 class="billboard-title" id="billboardTitle">Loading...</h1>
       <div class="billboard-meta">
-        <span class="match-score" id="billboardMatch">98% Match</span>
+        <span class="match-score" id="billboardMatch">98% Rating</span>
         <span id="billboardYear">2026</span>
         <span class="maturity-rating">HD</span>
         <span id="billboardType">Movie</span>
@@ -794,7 +856,7 @@
           <button class="add-source-btn" onclick="openAddSourceModal()">
             + Add Source
           </button>
-          
+
           <span id="serverStatusBadge" class="server-status-badge"></span>
 
           <div id="tvSelectors" class="tv-selectors" style="display:none;">
@@ -809,9 +871,11 @@
         <div class="adblock-warning-banner">
           <div class="adblock-warning-text">
             <span>⚠️</span>
-            <span><strong>Adblocker Warning:</strong> External video servers may display popups. We strongly recommend using an adblocker.</span>
+            <span><strong>Adblocker Warning:</strong> External video servers may display popups. We strongly recommend
+              using an adblocker.</span>
           </div>
-          <a href="../../tools/adblocker/tutorial.html" target="_blank" class="adblock-tutorial-btn">How to Install &rarr;</a>
+          <a href="../../tools/adblocker/tutorial.html" target="_blank" class="adblock-tutorial-btn">How to Install
+            &rarr;</a>
         </div>
 
         <div class="player-container">
@@ -827,7 +891,8 @@
       <h3>Add Custom Server Source</h3>
       <input type="text" id="customSourceName" placeholder="Server Name (e.g. My Server)" />
       <input type="text" id="customMovieUrl" placeholder="Movie Embed URL (e.g. https://site.com/embed/movie/{id})" />
-      <input type="text" id="customTvUrl" placeholder="TV Embed URL (optional, e.g. https://site.com/embed/tv/{id}/{season}/{episode})" />
+      <input type="text" id="customTvUrl"
+        placeholder="TV Embed URL (optional, e.g. https://site.com/embed/tv/{id}/{season}/{episode})" />
       <div class="add-source-actions">
         <button class="btn-cancel" onclick="closeAddSourceModal()">Cancel</button>
         <button class="btn-save" onclick="saveCustomSource()">Save Source</button>
@@ -840,21 +905,21 @@
     const apiEndpoint = "https://api.themoviedb.org/3";
     const imgPath = "https://image.tmdb.org/t/p/w500";
     const imgOriginal = "https://image.tmdb.org/t/p/original";
-    
+
     const GENRES = [
-        { id: 28, name: "Action" },
-        { id: 16, name: "Animation" },
-        { id: 35, name: "Comedy" },
-        { id: 80, name: "Crime" },
-        { id: 99, name: "Documentary" },
-        { id: 18, name: "Drama" },
-        { id: 10751, name: "Family" },
-        { id: 14, name: "Fantasy" },
-        { id: 27, name: "Horror" },
-        { id: 10749, name: "Romance" },
-        { id: 878, name: "Sci-Fi" },
+      { id: 28, name: "Action" },
+      { id: 16, name: "Animation" },
+      { id: 35, name: "Comedy" },
+      { id: 80, name: "Crime" },
+      { id: 99, name: "Documentary" },
+      { id: 18, name: "Drama" },
+      { id: 10751, name: "Family" },
+      { id: 14, name: "Fantasy" },
+      { id: 27, name: "Horror" },
+      { id: 10749, name: "Romance" },
+      { id: 878, name: "Sci-Fi" },
     ];
-    
+
     let currentContentType = 'movie';
     let currentMediaId = null;
     let currentSeason = 1;
@@ -910,12 +975,12 @@
 
       addCustomProvider(name, movieUrl, tvUrl);
       initServerSelect();
-      
+
       const serverSelect = document.getElementById('serverSelect');
       const providers = getAllProviders();
       serverSelect.value = providers.length - 1;
       updatePlayerUrl();
-      
+
       closeAddSourceModal();
     }
 
@@ -1000,12 +1065,12 @@
     function buildCard(m) {
       const mediaType = m.media_type || (m.first_air_date ? 'tv' : 'movie');
       const title = m.title || m.name;
-      const rating = m.vote_average ? `${Math.round(m.vote_average * 10)}% Match` : '';
+      const rating = m.vote_average ? `★ ${m.vote_average.toFixed(1)}/10` : '★ -';
 
       return `
-        <div class="movie-card" onclick="openInfo(${m.id}, '${mediaType}')">
+        <div class="movie-card" onclick="openInfo(${m.id}, '${mediaType}')" title="${title}">
           <img class="movie-poster" src="${imgPath + m.poster_path}" alt="${title}" onerror="this.onerror=null;this.src='https://placehold.co/170x240/1f1f1f/ffffff?text=No+Poster'" />
-          <div class="movie-card-overlay">
+          <div class="movie-card-info">
             <div class="card-title">${title}</div>
             <div class="card-rating">${rating}</div>
           </div>
@@ -1022,23 +1087,23 @@
           // Pick a random top 5 item
           const topItems = data.results.filter(i => i.backdrop_path && i.overview);
           featuredItem = topItems[Math.floor(Math.random() * Math.min(5, topItems.length))];
-          
+
           const billboard = document.getElementById('billboard');
           billboard.style.backgroundImage = `url('${imgOriginal + featuredItem.backdrop_path}')`;
 
           const title = featuredItem.title || featuredItem.name;
           document.getElementById('billboardTitle').textContent = title;
-          
-          const rating = featuredItem.vote_average ? `${Math.round(featuredItem.vote_average * 10)}% Match` : '98% Match';
+
+          const rating = featuredItem.vote_average ? `${Math.round(featuredItem.vote_average * 10)}% Rating` : '98% Rating';
           document.getElementById('billboardMatch').textContent = rating;
-          
+
           const date = featuredItem.release_date || featuredItem.first_air_date || '2026';
           document.getElementById('billboardYear').textContent = new Date(date).getFullYear();
           document.getElementById('billboardType').textContent = featuredItem.media_type === 'tv' ? 'TV Series' : 'Movie';
           document.getElementById('billboardOverview').textContent = featuredItem.overview;
 
           const mediaType = featuredItem.media_type || (featuredItem.first_air_date ? 'tv' : 'movie');
-          
+
           document.getElementById('billboardPlayBtn').onclick = () => openInfo(featuredItem.id, mediaType);
           document.getElementById('billboardInfoBtn').onclick = () => openInfo(featuredItem.id, mediaType);
         }
@@ -1207,24 +1272,24 @@
         const info = await res.json();
 
         titleEl.textContent = info.title || info.name;
-        
+
         if (info.poster_path) {
           posterImg.src = imgPath + info.poster_path;
           posterImg.style.display = 'block';
         } else {
           posterImg.style.display = 'none';
         }
-        
+
         if (info.vote_average) {
           ratingEl.textContent = `★ ${info.vote_average.toFixed(1)}/10`;
         }
-        
+
         const releaseDate = info.release_date || info.first_air_date;
         if (releaseDate) {
           const year = new Date(releaseDate).getFullYear();
           releaseEl.textContent = year;
         }
-        
+
         if (type === 'movie' && info.runtime) {
           const hours = Math.floor(info.runtime / 60);
           const mins = info.runtime % 60;
@@ -1232,7 +1297,7 @@
         } else if (type === 'tv' && info.episode_run_time && info.episode_run_time.length > 0) {
           runtimeEl.textContent = `${info.episode_run_time[0]}m per episode`;
         }
-        
+
         overviewEl.textContent = info.overview || 'No description available.';
 
         if (type === 'movie') {
@@ -1243,14 +1308,14 @@
           episodeSelect.innerHTML = '';
 
           const viewableSeasons = info.seasons ? info.seasons.filter(s => s.season_number > 0) : [];
-          
+
           if (viewableSeasons.length === 0) {
-             titleEl.textContent += " (No viewable season data)";
-             tvSelectors.style.display = 'none';
-             player.src = 'about:blank';
-             return;
+            titleEl.textContent += " (No viewable season data)";
+            tvSelectors.style.display = 'none';
+            player.src = 'about:blank';
+            return;
           }
-          
+
           const initialSeason = viewableSeasons[0].season_number;
           currentSeason = initialSeason;
 
@@ -1260,16 +1325,16 @@
             opt.textContent = s.name && s.name !== `Season ${s.season_number}` ? `${s.name} (S${s.season_number})` : `Season ${s.season_number}`;
             seasonSelect.appendChild(opt);
           });
-          
+
           seasonSelect.value = initialSeason;
 
           async function loadEpisodes(season) {
             episodeSelect.innerHTML = '<option>Loading episodes...</option>';
             player.src = 'about:blank';
-            
+
             const epRes = await fetch(`${apiEndpoint}/tv/${currentMediaId}/season/${season}?api_key=${apikey}`);
             const epData = await epRes.json();
-            
+
             episodeSelect.innerHTML = '';
 
             if (epData.episodes && epData.episodes.length > 0) {
@@ -1279,7 +1344,7 @@
                 opt.textContent = `E${ep.episode_number}: ${ep.name || 'Untitled Episode'}`;
                 episodeSelect.appendChild(opt);
               });
-              
+
               const firstEpisodeNumber = epData.episodes[0].episode_number;
               episodeSelect.value = firstEpisodeNumber;
               currentEpisode = firstEpisodeNumber;
@@ -1316,13 +1381,14 @@
       player.src = '';
       currentMediaId = null;
     }
-    
-    window.onload = function() {
-        initServerSelect();
-        setupCategories();
-        loadBillboard();
-        loadNetflixRows();
+
+    window.onload = function () {
+      initServerSelect();
+      setupCategories();
+      loadBillboard();
+      loadNetflixRows();
     }
   </script>
 </body>
+
 </html>

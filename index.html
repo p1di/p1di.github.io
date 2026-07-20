@@ -8,10 +8,19 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
+    /* Hide scrollbars globally */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -ms-overflow-style: none !important;
+      scrollbar-width: none !important;
+    }
+
+    ::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
     }
 
     body {
@@ -380,6 +389,48 @@
       color: #ffffff;
     }
 
+    /* Opening Animation & Overlay */
+    .app-card.opening {
+      transform: scale(1.12) translateY(-4px) !important;
+      border-color: #6366f1 !important;
+      box-shadow: 0 0 25px rgba(99, 102, 241, 0.4) !important;
+      z-index: 50 !important;
+      transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    .page-launch-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(13, 13, 14, 0.75);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.24s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .page-launch-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .launch-spinner {
+      width: 44px;
+      height: 44px;
+      border: 3px solid rgba(255, 255, 255, 0.15);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
     @media (max-width: 480px) {
       body {
         padding: 2.5rem 1rem;
@@ -391,6 +442,11 @@
   </style>
 </head>
 <body>
+
+  <!-- Launch Transition Overlay -->
+  <div id="pageLaunchOverlay" class="page-launch-overlay">
+    <div class="launch-spinner"></div>
+  </div>
 
   <div class="container">
     <header>
@@ -529,6 +585,20 @@
       return lines.join('');
     }
 
+    // Smooth Launch Function
+    function launchApp(targetUrl, cardElement) {
+      if (cardElement) {
+        cardElement.classList.add('opening');
+      }
+      const overlay = document.getElementById('pageLaunchOverlay');
+      if (overlay) {
+        overlay.classList.add('active');
+      }
+      setTimeout(() => {
+        window.location.href = targetUrl;
+      }, 240);
+    }
+
     // Open Info Modal
     async function openAppInfo(app, e) {
       e.preventDefault();
@@ -540,6 +610,11 @@
       modalIcon.onerror = function() { this.style.display = 'none'; };
       modalIcon.style.display = 'block';
       modalLaunchBtn.href = `apps/${app.name}/index.html`;
+      modalLaunchBtn.onclick = (e) => {
+        e.preventDefault();
+        closeModal();
+        launchApp(`apps/${app.name}/index.html`);
+      };
 
       modalBody.innerHTML = '<em>Loading app info...</em>';
       infoModal.classList.add('active');
@@ -600,6 +675,13 @@
           </div>
           <div class="app-name">${title}</div>
         `;
+
+        // Attach card launch animation click handler
+        card.addEventListener('click', (e) => {
+          if (e.target.closest('.info-btn')) return;
+          e.preventDefault();
+          launchApp(`apps/${app.name}/index.html`, card);
+        });
 
         // Attach info button click handler
         const infoBtn = card.querySelector('.info-btn');

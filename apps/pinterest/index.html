@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  <meta name="description" content="A privacy respecting Pinterest image search" />
+  <meta name="referrer" content="no-referrer" />
+  <title>Binternet — Pinterest Search</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -ms-overflow-style: none !important;
+      scrollbar-width: none !important;
+    }
+    ::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+      background-color: #0d1117;
+      color: #c9d1d9;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Floating Transparent Back Arrow Overlay */
+    .p1di-back-overlay {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: rgba(20, 20, 24, 0.55);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 30px;
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .p1di-back-overlay:hover {
+      background: rgba(35, 35, 42, 0.85);
+      border-color: rgba(255, 255, 255, 0.35);
+      color: #ffffff;
+      transform: scale(1.05) translateX(-2px);
+    }
+
+    .p1di-back-arrow {
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    /* Landing Container */
+    .landing-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      position: relative;
+    }
+
+    .mainContainer {
+      position: relative;
+      width: 100%;
+      max-width: 580px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* Header Container with Overlay */
+    .header-box {
+      position: relative;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    h1#bodyHeader {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    /* Heading Image Overlay */
+    .heading-overlay {
+      position: absolute;
+      inset: -12px -24px;
+      background: #ffffff;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      transition: opacity 0.35s ease, visibility 0.35s ease;
+      padding: 16px 28px;
+      overflow: hidden;
+    }
+
+    .heading-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .heading-overlay img {
+      max-width: 90%;
+      max-height: 55px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    p.subtitle {
+      font-size: 0.95rem;
+      color: #8b949e;
+    }
+
+    /* Search Form */
+    form.searchContainer {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    #inputWrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 30px;
+      padding: 4px 6px 4px 18px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    #inputWrapper:focus-within {
+      border-color: #58a6ff;
+      box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.15);
+    }
+
+    #inputWrapper input[type="text"] {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #f0f6fc;
+      font-size: 1rem;
+      font-family: inherit;
+      padding: 10px 0;
+    }
+
+    /* Red Search Button Overlay Style */
+    #inputWrapper button[type="submit"] {
+      background-color: #e60023 !important;
+      color: #ffffff !important;
+      border: none !important;
+      border-radius: 24px !important;
+      padding: 10px 24px !important;
+      font-size: 0.92rem !important;
+      font-weight: 600 !important;
+      font-family: inherit !important;
+      cursor: pointer !important;
+      transition: background-color 0.2s ease, transform 0.15s ease !important;
+      box-shadow: 0 4px 12px rgba(230, 0, 35, 0.4) !important;
+      pointer-events: auto;
+    }
+
+    #inputWrapper button[type="submit"]:hover {
+      background-color: #ad081b !important;
+      transform: scale(1.03);
+    }
+
+    #inputWrapper button[type="submit"]:active {
+      transform: scale(0.98);
+    }
+
+    /* Results Frame */
+    .results-container {
+      position: fixed;
+      inset: 0;
+      top: 0;
+      background: #0d1117;
+      z-index: 50;
+      display: none;
+    }
+
+    .results-container.active {
+      display: block;
+    }
+
+    iframe#resultsFrame {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    footer {
+      margin-top: 40px;
+      display: flex;
+      gap: 20px;
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: #58a6ff;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="../../" class="p1di-back-overlay" title="Back to p1di Hub">
+    <span class="p1di-back-arrow">&larr;</span>
+    <span>Apps</span>
+  </a>
+
+  <!-- Results Frame View -->
+  <div class="results-container" id="resultsContainer">
+    <iframe id="resultsFrame" src="about:blank" allowfullscreen></iframe>
+  </div>
+
+  <!-- Landing View -->
+  <div class="landing-wrapper" id="landingWrapper">
+    <div class="mainContainer centered">
+      
+      <div class="header-box">
+        <!-- White Background Overlay with pinterest-wide.png -->
+        <div class="heading-overlay" id="headingOverlay">
+          <img src="pinterest-wide.png" alt="Pinterest" />
+        </div>
+        <h1 id="bodyHeader">Binternet</h1>
+      </div>
+
+      <p class="subtitle">A privacy respecting Pinterest image search</p>
+
+      <form class="searchContainer" id="searchForm" onsubmit="handleSearch(event)">
+        <div id="inputWrapper">
+          <input type="text" id="searchInput" name="q" placeholder="Search for ideas, photos, pins..." autofocus autocomplete="off" />
+          <button type="submit" id="searchBtn">Search</button>
+        </div>
+      </form>
+
+      <footer>
+        <a href="https://github.com/Ahwxorg/binternet/" target="_blank">Source code</a>
+        <a href="https://github.com/Ahwxorg/binternet#legal-notice" target="_blank">Legal notice</a>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    function handleSearch(event) {
+      event.preventDefault();
+      const query = document.getElementById('searchInput').value.trim();
+      
+      // Hide heading image overlay
+      const overlay = document.getElementById('headingOverlay');
+      if (overlay) {
+        overlay.classList.add('hidden');
+      }
+
+      if (!query) return;
+
+      // Load Binternet / Pinterest Search Results
+      const resultsContainer = document.getElementById('resultsContainer');
+      const resultsFrame = document.getElementById('resultsFrame');
+      
+      const searchUrl = `https://bn.opnxng.com/search.php?q=${encodeURIComponent(query)}`;
+      resultsFrame.src = searchUrl;
+      resultsContainer.classList.add('active');
+    }
+
+    // Also hide overlay on direct click on search button
+    document.getElementById('searchBtn').addEventListener('click', () => {
+      document.getElementById('headingOverlay').classList.add('hidden');
+    });
+  </script>
+
+</body>
+</html>

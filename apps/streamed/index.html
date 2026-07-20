@@ -41,16 +41,56 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
         }
 
-        .banner a {
+        /* Floating Transparent Back Arrow Overlay */
+        .p1di-back-overlay {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            background: rgba(20, 20, 24, 0.55);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 30px;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .p1di-back-overlay:hover {
+            background: rgba(35, 35, 42, 0.85);
+            border-color: rgba(255, 255, 255, 0.35);
             color: #ffffff;
-            text-decoration: underline;
-            margin-left: 6px;
+            transform: scale(1.05) translateX(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .p1di-back-arrow {
+            font-size: 15px;
+            line-height: 1;
+            transition: transform 0.2s ease;
+        }
+
+        .p1di-back-overlay:hover .p1di-back-arrow {
+            transform: translateX(-3px);
         }
     </style>
 </head>
 
 <body>
-    <iframe src="https://streamed.pk" allowfullscreen></iframe>
+    <a href="../../" class="p1di-back-overlay" title="Back to p1di Hub">
+        <span class="p1di-back-arrow">&larr;</span>
+        <span>Apps</span>
+    </a>
     <div id="banner" class="banner">
         Links failed, choose a new one here <a href="https://strmd.link" target="_blank"
             rel="noopener noreferrer">strmd.link</a>

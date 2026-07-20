@@ -1,11 +1,9 @@
 # Streamed
 
-Free live sports streaming.
+Free live sports streaming platform.
 
 ### Features:
-
-* **Free:** absolutely free, no signup streaming
-* **Quality:** Streams actively monitored by admins
-* **Design**: good, intuitive design
-* ***!!!contains MANY ads -> use adblocker!!!***
-
+- **Free:** Absolutely free live sports streaming, no signup required.
+- **Quality:** Streams actively monitored and updated.
+- **Clean Design:** Simple sports schedule and player interface.
+- ***Adblocker Recommended:*** Contains external ads; use an adblocker for best experience.

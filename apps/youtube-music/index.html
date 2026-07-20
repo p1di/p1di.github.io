@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YouTube Music — p1di</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600&display=swap" rel="stylesheet">
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: #030303;
+}
+iframe {
+  border: none;
+  width: 100%;
+  height: 100%;
+}
+
+/* Floating Transparent Back Arrow Overlay */
+.p1di-back-overlay {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(20, 20, 24, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  user-select: none;
+}
+
+.p1di-back-overlay:hover {
+  background: rgba(35, 35, 42, 0.85);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  transform: scale(1.05) translateX(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+}
+
+.p1di-back-arrow {
+  font-size: 15px;
+  line-height: 1;
+}
+</style>
+</head>
+<body>
+
+<a href="../../" class="p1di-back-overlay" title="Back to p1di Hub">
+  <span class="p1di-back-arrow">&larr;</span>
+  <span>Apps</span>
+</a>
+
+<iframe src="https://playlistsound.com" allowfullscreen></iframe>
+</body>
+</html>

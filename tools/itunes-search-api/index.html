@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>App Icon Search</title>
+  <style>
+    :root {
+      --bg: #09090b;
+      --card-bg: #18181b;
+      --text: #f4f4f5;
+      --text-muted: #a1a1aa;
+      --border: #27272a;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 4rem 1.5rem;
+    }
+
+    /* Minimal Search Bar */
+    .search-container {
+      width: 100%;
+      max-width: 540px;
+      margin-bottom: 3rem;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      font-size: 1.1rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      outline: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    }
+
+    .search-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    /* Results Grid */
+    .results-grid {
+      width: 100%;
+      max-width: 900px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* App Card */
+    .app-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .app-card:hover {
+      transform: translateY(-2px);
+      border-color: #3f3f46;
+    }
+
+    .icon-wrapper {
+      width: 128px;
+      height: 128px;
+      margin-bottom: 1rem;
+      border-radius: 28px;
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .app-icon {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .app-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+    }
+
+    .app-artist {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+    }
+
+    .download-btn {
+      margin-top: auto;
+      width: 100%;
+      padding: 0.6rem 1rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s ease;
+    }
+
+    .download-btn:hover {
+      background: var(--accent-hover);
+    }
+
+    /* Helper States */
+    .status-msg {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="search-container">
+    <input 
+      type="text" 
+      id="searchInput" 
+      class="search-input" 
+      placeholder="Search for an app..." 
+      autocomplete="off"
+      autofocus
+    >
+  </div>
+
+  <div id="results" class="results-grid"></div>
+  <div id="status" class="status-msg"></div>
+
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const resultsContainer = document.getElementById('results');
+    const statusContainer = document.getElementById('status');
+
+    let debounceTimer;
+
+    // Listen for input with a slight delay to avoid over-querying the API
+    searchInput.addEventListener('input', (e) => {
+      clearTimeout(debounceTimer);
+      const query = e.target.value.trim();
+
+      if (!query) {
+        resultsContainer.innerHTML = '';
+        statusContainer.textContent = '';
+        return;
+      }
+
+      debounceTimer = setTimeout(() => {
+        searchApps(query);
+      }, 300);
+    });
+
+    async function searchApps(query) {
+      statusContainer.textContent = 'Searching...';
+      resultsContainer.innerHTML = '';
+
+      try {
+        // Search for software across iOS and Mac platforms
+        const response = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=software,macSoftware&limit=12`);
+        const data = await response.json();
+
+        statusContainer.textContent = '';
+
+        if (data.results.length === 0) {
+          statusContainer.textContent = 'No apps found.';
+          return;
+        }
+
+        renderResults(data.results);
+      } catch (error) {
+        console.error('API Error:', error);
+        statusContainer.textContent = 'Failed to fetch results. Please try again.';
+      }
+    }
+
+    // Convert standard artwork URL into the maximum resolution image (1024x1024 / 512x512)
+    function getHighResIconUrl(url) {
+      if (!url) return '';
+      // Replace standard dimensions (e.g. 512x512bb.jpg or 100x100bb.jpg) with 1024x1024
+      return url.replace(/\/\d+x\d+bb\./, '/1024x1024bb.');
+    }
+
+    function renderResults(apps) {
+      apps.forEach(app => {
+        const iconUrl = getHighResIconUrl(app.artworkUrl512 || app.artworkUrl100);
+
+        const card = document.createElement('div');
+        card.className = 'app-card';
+
+        card.innerHTML = `
+          <div class="icon-wrapper">
+            <img class="app-icon" src="${iconUrl}" alt="${app.trackName} icon" loading="lazy">
+          </div>
+          <div class="app-title" title="${app.trackName}">${app.trackName}</div>
+          <div class="app-artist" title="${app.artistName}">${app.artistName}</div>
+          <button class="download-btn" onclick="downloadIcon('${iconUrl}', '${app.trackName}')">Download HD Icon</button>
+        `;
+
+        resultsContainer.appendChild(card);
+      });
+    }
+
+    // Force browser to download the high-res file directly
+    async function downloadIcon(url, filename) {
+      try {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        // Clean filename for saving
+        const safeName = filename.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        a.download = `${safeName}_icon.jpg`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(blobUrl);
+      } catch (err) {
+        // Fallback: Open in new tab if CORS blocks Blob creation
+        window.open(url, '_blank');
+      }
+    }
+  </script>
+</body>
+</html>

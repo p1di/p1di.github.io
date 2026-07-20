@@ -1,18 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Startpage</title>
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f1015; color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-    h1 { font-weight: 600; font-size: 2rem; margin-bottom: 0.5rem; }
-    p { color: #888; }
-    a { color: #6366f1; text-decoration: none; margin-top: 1.5rem; }
-  </style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+iframe {
+  border: none;
+  width: 100%;
+  height: 100%;
+}
+</style>
 </head>
 <body>
-  <h1>Startpage App</h1>
-  <p>Standard app path: /apps/startpage/index.html</p>
-  <a href="../../index.html">&larr; Back to Apps Launcher</a>
+<iframe src="https://startpage.com" allowfullscreen></iframe>
 </body>
 </html>

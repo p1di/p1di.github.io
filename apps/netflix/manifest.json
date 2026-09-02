@@ -1,0 +1,26 @@
+{
+  "name": "Netflix — Stream Movies & TV Shows",
+  "short_name": "Netflix",
+  "description": "Stream popular movies and TV series with real-time server switching.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#141414",
+  "theme_color": "#E50914",
+  "orientation": "any",
+  "categories": ["entertainment", "video"],
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

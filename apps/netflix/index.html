@@ -9,12 +9,11 @@
   <link rel="apple-touch-icon" href="ios%20home%20screen%20icon.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="ios%20home%20screen%20icon.png" />
   <link rel="shortcut icon" href="icon.png" />
-  <!-- iOS Web App Native Meta Tags -->
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Netflix" />
-  <meta name="theme-color" content="#141414" />
+  <!-- Android PWA & Web App Manifest -->
+  <link rel="manifest" href="manifest.json" />
   <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="application-name" content="Netflix" />
+  <meta name="theme-color" content="#E50914" />
   <meta name="format-detection" content="telephone=no" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
   <style>
@@ -1443,6 +1442,80 @@
       animation: spin 1s linear infinite;
     }
 
+    /* Android PWA Install Banner */
+    .pwa-install-banner {
+      position: fixed;
+      top: max(68px, calc(env(safe-area-inset-top) + 55px));
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      background: rgba(24, 24, 24, 0.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--netflix-red);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.85);
+      border-radius: 10px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 440px;
+      width: 90%;
+      animation: toastSlideIn 0.3s ease;
+    }
+
+    .pwa-banner-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      flex-shrink: 0;
+      object-fit: cover;
+    }
+
+    .pwa-banner-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+      font-size: 0.8rem;
+    }
+
+    .pwa-banner-text strong {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .pwa-banner-text span {
+      color: #aaa;
+      font-size: 0.72rem;
+    }
+
+    .pwa-banner-btn {
+      background: var(--netflix-red);
+      color: #fff;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+
+    .pwa-banner-btn:hover {
+      background: var(--netflix-red-hover);
+    }
+
+    .pwa-banner-close {
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 2px;
+    }
+
     /* iOS & Mobile Global Enhancements */
     * {
       -webkit-tap-highlight-color: transparent;
@@ -2096,6 +2169,17 @@
         <button class="btn-save" onclick="saveCustomSource()">Save Source</button>
       </div>
     </div>
+  </div>
+
+  <!-- Android PWA Install Banner -->
+  <div class="pwa-install-banner" id="pwaInstallBanner" style="display: none;">
+    <img src="icon.png" alt="Netflix App" class="pwa-banner-icon" />
+    <div class="pwa-banner-text">
+      <strong>Install Netflix Web App</strong>
+      <span>Add to Android Home Screen for full app experience</span>
+    </div>
+    <button class="pwa-banner-btn" onclick="triggerPwaInstall()">Install</button>
+    <button class="pwa-banner-close" onclick="document.getElementById('pwaInstallBanner').style.display='none'">&times;</button>
   </div>
 
   <!-- =========================================================
@@ -2996,6 +3080,36 @@
       player.src = 'about:blank';
       currentMediaId = null;
       updateBodyScrollLock();
+    }
+
+    // PWA Service Worker Registration & Android Install Prompt
+    let deferredPrompt = null;
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('Netflix PWA Service Worker registered:', reg.scope))
+          .catch(err => console.log('Netflix PWA Service Worker registration error:', err));
+      });
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const installBanner = document.getElementById('pwaInstallBanner');
+      if (installBanner) {
+        installBanner.style.display = 'flex';
+      }
+    });
+
+    async function triggerPwaInstall() {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`PWA install choice: ${outcome}`);
+      deferredPrompt = null;
+      const banner = document.getElementById('pwaInstallBanner');
+      if (banner) banner.style.display = 'none';
     }
 
     window.onload = function() {

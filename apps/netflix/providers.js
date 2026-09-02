@@ -29,31 +29,6 @@ const DEFAULT_PROVIDERS = [
     tv: "https://primesrc.me/embed/tv?tmdb={id}&season={season}&episode={episode}"
   },
   {
-    name: "MultiEmbed",
-    movie: "https://multiembed.mov/?video_id={id}&tmdb=1",
-    tv: "https://multiembed.mov/?video_id={id}&tmdb=1&s={season}&e={episode}&server=2"
-  },
-  {
-    name: "GoDrivePlayer",
-    movie: "https://godriveplayer.com/player.php?type=movie&tmdb={id}",
-    tv: "https://godriveplayer.com/player.php?type=series&tmdb={id}&season={season}&episode={episode}"
-  },
-  {
-    name: "MoviesAPI Club",
-    movie: "https://moviesapi.club/movie/{id}",
-    tv: "https://moviesapi.club/tv/{id}-{season}-{episode}"
-  },
-  {
-    name: "Filmku",
-    movie: "https://filmku.stream/embed/movie/{id}",
-    tv: "https://filmku.stream/embed/{id}/{season}/{episode}"
-  },
-  {
-    name: "Vid.Techneo",
-    movie: "https://vid.techneo.fun/tmdb/movie/{id}",
-    tv: "https://vid.techneo.fun/tmdb/tv/{id}/{season}/{episode}"
-  },
-  {
     name: "SmashyStream",
     movie: "https://embed.smashystream.com/playere.php?tmdb={id}",
     tv: "https://embed.smashystream.com/playere.php?tmdb={id}&season={season}&episode={episode}&btPosition=10"
@@ -62,11 +37,6 @@ const DEFAULT_PROVIDERS = [
     name: "123Embed",
     movie: "https://play2.123embed.net/movie/{id}",
     tv: "https://play2.123embed.net/tv/{id}/{season}/{episode}"
-  },
-  {
-    name: "VidSrc.vip",
-    movie: "https://vidsrc.vip/embed/movie/{id}",
-    tv: "https://vidsrc.vip/embed/tv/{id}/{season}/{episode}"
   },
   {
     name: "111Movies",
@@ -84,24 +54,9 @@ const DEFAULT_PROVIDERS = [
     tv: "https://rgshows.ru/player/series/api4/index.html?id={id}&s={season}&e={episode}"
   },
   {
-    name: "FrEmbed (French)",
-    movie: "https://frembed.club/api/film.php?id={id}",
-    tv: "https://frembed.club/api/serie.php?id={id}&sa={season}&epi={episode}"
-  },
-  {
-    name: "Superflix (Portuguese)",
-    movie: "https://superflixapi.digital/filme/{id}",
-    tv: "https://superflixapi.digital/serie/{id}/{season}/{episode}"
-  },
-  {
     name: "2Embed",
     movie: "https://www.2embed.cc/embed/{id}",
     tv: "https://www.2embed.cc/embedtv/{id}&s={season}&e={episode}"
-  },
-  {
-    name: "Vidora",
-    movie: "https://vidora.su/movie/{id}&autoplay=true",
-    tv: "https://vidora.su/tv/{id}/{season}/{episode}&autoplay=true"
   },
   {
     name: "VidFast",
@@ -112,11 +67,6 @@ const DEFAULT_PROVIDERS = [
     name: "VidSrc.su",
     movie: "https://vidsrc.su/embed/movie/{id}",
     tv: "https://vidsrc.su/embed/tv/{id}/{season}/{episode}"
-  },
-  {
-    name: "PStream",
-    movie: "https://iframe.pstream.mov/embed/tmdb-movie-{id}",
-    tv: "https://iframe.pstream.mov/embed/tmdb-tv-{id}/{season}/{episode}"
   }
 ];
 
@@ -176,7 +126,7 @@ function addCustomProvider(name, movieUrlPattern, tvUrlPattern) {
   if (!name || !movieUrlPattern) return false;
   const custom = getCustomProviders();
   custom.push({
-    name: `⭐ ${name}`,
+    name: `[Custom] ${name}`,
     movie: movieUrlPattern,
     tv: tvUrlPattern || movieUrlPattern
   });

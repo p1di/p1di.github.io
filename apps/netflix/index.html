@@ -2976,7 +2976,7 @@
               </span>
               Play
             </button>
-            <button class="modal-btn-download" id="modalHeroDownloadBtn" onclick="downloadCurrentMedia(event)" title="Download on VidVault">
+            <button class="modal-btn-download" id="modalHeroDownloadBtn" onclick="downloadCurrentMedia(event)" title="Download">
               <span class="svg-icon">
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -3012,7 +3012,7 @@
           </svg>
           Back to Details
         </button>
-        <button class="modal-player-download" onclick="downloadCurrentMedia(event)" title="Download on VidVault">
+        <button class="modal-player-download" onclick="downloadCurrentMedia(event)" title="Download">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
             <polyline points="7 10 12 15 17 10"></polyline>
@@ -3065,7 +3065,7 @@
           Add Source
         </button>
 
-        <button id="modalServerDownloadBtn" class="modal-server-btn" onclick="downloadCurrentMedia(event)" title="Download on VidVault">
+        <button id="modalServerDownloadBtn" class="modal-server-btn" onclick="downloadCurrentMedia(event)" title="Download">
           <span class="svg-icon">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -3285,7 +3285,7 @@
           </div>
 
           <!-- Download Button inside Cinema -->
-          <button class="cinema-tool-btn" id="cinemaDownloadBtn" onclick="downloadCurrentMedia(event)" title="Download on VidVault">
+          <button class="cinema-tool-btn" id="cinemaDownloadBtn" onclick="downloadCurrentMedia(event)" title="Download">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="7 10 12 15 17 10"></polyline>
@@ -4077,18 +4077,19 @@
       }
     }
 
-    // VidVault Download Functions
-    function getVidVaultUrl(type, id, season = 1, episode = 1) {
+    // Download Functions
+    function getDownloadUrl(type, id, season = 1, episode = 1) {
       if (type === 'movie') {
-        return `https://vidvault.ru/movie/${id}`;
+        return `https://downloadeverythingfromeverywhere.com/m/${id}`;
       } else {
-        return `https://vidvault.ru/tv/${id}/${season || 1}/${episode || 1}`;
+        return `https://downloadeverythingfromeverywhere.com/s/${id}`;
       }
     }
+    const getVidVaultUrl = getDownloadUrl;
 
     function downloadMedia(type, id, season = 1, episode = 1) {
       if (!id) return;
-      const url = getVidVaultUrl(type, id, season, episode);
+      const url = getDownloadUrl(type, id, season, episode);
       window.open(url, '_blank', 'noopener,noreferrer');
     }
 
@@ -4104,12 +4105,12 @@
       if (!btn) return;
       if (currentContentType === 'movie') {
         if (text) text.textContent = 'Download Movie';
-        btn.title = 'Download Whole Movie (VidVault)';
+        btn.title = 'Download Whole Movie';
       } else {
         const s = currentSeason || 1;
         const e = currentEpisode || 1;
         if (text) text.textContent = `Download S${s}:E${e}`;
-        btn.title = `Download S${s}:E${e} (VidVault)`;
+        btn.title = `Download S${s}:E${e}`;
       }
     }
 
@@ -4822,7 +4823,7 @@
                   </div>
                   <p class="episode-overview">${epOverview}</p>
                 </div>
-                <button class="episode-download-btn" title="Download Episode ${epNum} (VidVault)" onclick="event.stopPropagation(); downloadMedia('tv', currentMediaId, ${seasonNumber}, ${epNum});" aria-label="Download Episode ${epNum}">
+                <button class="episode-download-btn" title="Download Episode ${epNum}" onclick="event.stopPropagation(); downloadMedia('tv', currentMediaId, ${seasonNumber}, ${epNum});" aria-label="Download Episode ${epNum}">
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                     <polyline points="7 10 12 15 17 10"></polyline>

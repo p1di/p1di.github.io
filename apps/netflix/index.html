@@ -17,6 +17,38 @@
   <meta name="format-detection" content="telephone=no" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
   <style>
+    /* Netflix Sans Typography with System & Web Font Fallback */
+    @font-face {
+      font-family: 'Netflix Sans';
+      font-weight: 300;
+      font-display: swap;
+      src: local('Netflix Sans Light'), local('NetflixSans-Light'), local('Netflix Sans');
+    }
+    @font-face {
+      font-family: 'Netflix Sans';
+      font-weight: 400;
+      font-display: swap;
+      src: local('Netflix Sans Regular'), local('NetflixSans-Regular'), local('Netflix Sans');
+    }
+    @font-face {
+      font-family: 'Netflix Sans';
+      font-weight: 500;
+      font-display: swap;
+      src: local('Netflix Sans Medium'), local('NetflixSans-Medium'), local('Netflix Sans');
+    }
+    @font-face {
+      font-family: 'Netflix Sans';
+      font-weight: 700;
+      font-display: swap;
+      src: local('Netflix Sans Bold'), local('NetflixSans-Bold'), local('Netflix Sans');
+    }
+    @font-face {
+      font-family: 'Netflix Sans';
+      font-weight: 900;
+      font-display: swap;
+      src: local('Netflix Sans Black'), local('NetflixSans-Black'), local('Netflix Sans');
+    }
+
     :root {
       --netflix-red: #E50914;
       --netflix-red-hover: #F40612;
@@ -34,6 +66,10 @@
       padding: 0;
     }
 
+    button, input, select, textarea {
+      font-family: inherit;
+    }
+
     html {
       scrollbar-width: thin;
       scrollbar-color: #383838 #141414;
@@ -42,11 +78,12 @@
     html, body {
       background-color: var(--bg-dark);
       color: var(--text-main);
-      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: 'Netflix Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       overflow-x: hidden;
       width: 100%;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     body.modal-open {
@@ -738,6 +775,28 @@
       transform: scale(1.03);
     }
 
+    .modal-btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      background: rgba(109, 109, 110, 0.7);
+      backdrop-filter: blur(4px);
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .modal-btn-download:hover {
+      background: var(--netflix-red);
+      border-color: var(--netflix-red);
+      transform: scale(1.03);
+    }
+
     .modal-circle-btn {
       width: 42px;
       height: 42px;
@@ -807,6 +866,92 @@
 
     .modal-player-close:hover {
       background: var(--netflix-red);
+    }
+
+    .modal-player-download {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .modal-player-download:hover {
+      background: var(--netflix-red);
+      border-color: var(--netflix-red);
+    }
+
+    /* Stream Embed Loading Overlay */
+    .player-loading-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(12, 12, 12, 0.95);
+      backdrop-filter: blur(8px);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      z-index: 25;
+      transition: opacity 0.35s ease;
+    }
+
+    .player-loading-overlay.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .player-loader-spinner {
+      width: 46px;
+      height: 46px;
+      border: 3.5px solid rgba(255, 255, 255, 0.15);
+      border-top-color: var(--netflix-red);
+      border-radius: 50%;
+      animation: netflixSpin 0.85s linear infinite;
+    }
+
+    @keyframes netflixSpin {
+      to { transform: rotate(360deg); }
+    }
+
+    .player-loader-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+    }
+
+    .player-loader-server {
+      font-size: 0.86rem;
+      color: #ffffff;
+      font-weight: 600;
+      background: rgba(229, 9, 20, 0.2);
+      border: 1px solid rgba(229, 9, 20, 0.5);
+      padding: 5px 16px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .player-loader-hint {
+      font-size: 0.8rem;
+      color: #888888;
+      max-width: 320px;
+      text-align: center;
+      line-height: 1.4;
     }
 
     /* =========================================================
@@ -1164,6 +1309,31 @@
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
+    }
+
+    .episode-download-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: #e5e5e5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-left: 12px;
+      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+      z-index: 5;
+    }
+
+    .episode-download-btn:hover {
+      background: var(--netflix-red);
+      border-color: var(--netflix-red);
+      color: #ffffff;
+      transform: scale(1.12);
+      box-shadow: 0 4px 14px rgba(229, 9, 20, 0.45);
     }
 
     /* "More Like This" Section */
@@ -1657,6 +1827,27 @@
         font-size: 0.92rem;
       }
 
+      .modal-btn-download {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+      }
+
+      .episode-card {
+        gap: 12px;
+        padding: 12px 10px;
+      }
+
+      .episode-thumbnail-wrap {
+        width: 110px;
+        height: 62px;
+      }
+
+      .episode-download-btn {
+        width: 36px;
+        height: 36px;
+        margin-left: 8px;
+      }
+
       .content-container {
         margin-top: -50px;
         gap: 32px;
@@ -1805,6 +1996,738 @@
       from { transform: translateY(100%); }
       to { transform: translateY(0); }
     }
+
+    /* =========================================================
+       MODAL EXIT & CLOSING ANIMATIONS
+       ========================================================= */
+    #info-overlay.closing {
+      animation: overlayFadeOut 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+      pointer-events: none;
+    }
+
+    #info-overlay.closing .info-modal {
+      animation: modalFadeOut 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+    }
+
+    #explore-modal.closing {
+      animation: overlayFadeOut 0.25s ease forwards !important;
+      pointer-events: none;
+    }
+
+    #explore-modal.closing .explore-container {
+      animation: exploreFadeOut 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+    }
+
+    @keyframes overlayFadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+
+    @keyframes modalFadeOut {
+      from { opacity: 1; transform: scale(1) translateY(0); }
+      to { opacity: 0; transform: scale(0.95) translateY(24px); }
+    }
+
+    @keyframes exploreFadeOut {
+      from { opacity: 1; transform: scale(1) translateY(0); }
+      to { opacity: 0; transform: scale(0.95) translateY(24px); }
+    }
+
+    /* =========================================================
+       CINEMATIC PLAY PULSE OVERLAY & EXPANDING FLARE
+       ========================================================= */
+    #cinemaPlayOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2150;
+      pointer-events: none;
+      display: none;
+      background: radial-gradient(circle at center, rgba(229, 9, 20, 0.45) 0%, rgba(14, 14, 14, 0.9) 60%, rgba(0,0,0,0.98) 100%);
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+    }
+
+    #cinemaPlayOverlay.active {
+      display: flex;
+      animation: cinemaPulseFlare 0.36s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    @keyframes cinemaPulseFlare {
+      0% { opacity: 0; transform: scale(0.92); }
+      40% { opacity: 1; transform: scale(1.02); }
+      100% { opacity: 0; transform: scale(1.08); }
+    }
+
+    .play-flare-ring {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      border: 3px solid #E50914;
+      box-shadow: 0 0 60px #E50914, inset 0 0 40px #E50914;
+      animation: flareRingExpand 0.36s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    @keyframes flareRingExpand {
+      0% { transform: scale(0.4); opacity: 0.2; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(2.6); opacity: 0; }
+    }
+
+    /* =========================================================
+       NEAR FULL-SCREEN CINEMA PLAYER THEATER MODAL
+       ========================================================= */
+    #cinema-player-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2200;
+      background: rgba(0, 0, 0, 0.94);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      align-items: center;
+      justify-content: center;
+      padding: 2.5vh 2.5vw;
+      animation: cinemaOverlayFadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    #cinema-player-modal.closing {
+      animation: overlayFadeOut 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      pointer-events: none;
+    }
+
+    @keyframes cinemaOverlayFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .cinema-ambient-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(229, 9, 20, 0.22) 0%, transparent 65%);
+      pointer-events: none;
+      filter: blur(50px);
+      z-index: 1;
+    }
+
+    .cinema-container {
+      width: 96vw;
+      height: 94vh;
+      max-width: 1780px;
+      background: #080808;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 100px rgba(229, 9, 20, 0.35), 0 30px 80px rgba(0, 0, 0, 0.98);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      position: relative;
+      z-index: 2;
+      animation: cinemaContainerZoomIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    #cinema-player-modal.closing .cinema-container {
+      animation: cinemaContainerZoomOut 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes cinemaContainerZoomIn {
+      from { opacity: 0; transform: scale(0.92) translateY(24px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    @keyframes cinemaContainerZoomOut {
+      from { opacity: 1; transform: scale(1) translateY(0); }
+      to { opacity: 0; transform: scale(0.94) translateY(24px); }
+    }
+
+    .cinema-top-bar {
+      height: 56px;
+      background: linear-gradient(180deg, rgba(22, 22, 22, 0.98) 0%, rgba(14, 14, 14, 0.95) 100%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      gap: 12px;
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    .cinema-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .cinema-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .cinema-back-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: #fff;
+      transform: translateX(-2px);
+    }
+
+    .cinema-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .cinema-main-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cinema-meta-tag {
+      background: var(--netflix-red);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .cinema-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .cinema-tool-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #eaeaea;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      height: 34px;
+    }
+
+    .cinema-tool-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border-color: #fff;
+    }
+
+    .cinema-close-circle {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .cinema-close-circle:hover {
+      background: var(--netflix-red);
+      border-color: var(--netflix-red);
+      transform: scale(1.08);
+    }
+
+    .cinema-video-body {
+      flex: 1;
+      width: 100%;
+      height: calc(100% - 56px);
+      position: relative;
+      background: #000;
+    }
+
+    #cinemaPlayerFrame {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      background: #000;
+    }
+
+    /* =========================================================
+       STORAGE WARNING NOTICE & BACKUP BANNER
+       ========================================================= */
+    .storage-warning-banner {
+      background: linear-gradient(90deg, rgba(38, 24, 6, 0.95) 0%, rgba(26, 17, 8, 0.92) 100%);
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      border-radius: 10px;
+      padding: 14px 20px;
+      margin: 15px auto 25px;
+      width: 100%;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      animation: bannerSlideDown 0.3s ease;
+      position: relative;
+    }
+
+    @keyframes bannerSlideDown {
+      from { opacity: 0; transform: translateY(-12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .storage-warning-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .storage-warning-icon {
+      color: #f59e0b;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: rgba(245, 158, 11, 0.16);
+      border-radius: 50%;
+    }
+
+    .storage-warning-text {
+      font-size: 0.88rem;
+      line-height: 1.45;
+      color: #eaeaea;
+    }
+
+    .storage-warning-text strong {
+      color: #fbbf24;
+    }
+
+    .storage-warning-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .btn-storage-export {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 15px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      border: none;
+      background: #f59e0b;
+      color: #000;
+    }
+
+    .btn-storage-export:hover {
+      background: #fbbf24;
+      transform: translateY(-1px);
+    }
+
+    .btn-storage-import {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-storage-import:hover {
+      background: rgba(255, 255, 255, 0.22);
+      border-color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .storage-warning-close {
+      background: transparent;
+      border: none;
+      color: #888;
+      font-size: 22px;
+      cursor: pointer;
+      padding: 2px 6px;
+      line-height: 1;
+      border-radius: 4px;
+      transition: color 0.2s;
+    }
+
+    .storage-warning-close:hover {
+      color: #fff;
+    }
+
+    /* Backup Modal */
+    #backup-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 2300;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    #backup-modal.closing {
+      animation: overlayFadeOut 0.22s ease forwards;
+    }
+
+    .backup-card {
+      background: #181818;
+      border-radius: 12px;
+      max-width: 580px;
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+      overflow: hidden;
+      animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .backup-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid #282828;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e1e1e;
+    }
+
+    .backup-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .backup-title-wrap h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .backup-close-btn {
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 24px;
+      cursor: pointer;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+
+    .backup-close-btn:hover {
+      color: #fff;
+    }
+
+    .backup-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .backup-storage-warning {
+      background: rgba(245, 158, 11, 0.1);
+      border-left: 4px solid #f59e0b;
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: #ddd;
+    }
+
+    .backup-stats-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .backup-stat-box {
+      background: #222;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .backup-stat-val {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--netflix-red);
+    }
+
+    .backup-stat-lbl {
+      font-size: 0.78rem;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .backup-section {
+      background: #202020;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .backup-section h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .backup-section p {
+      font-size: 0.82rem;
+      color: #999;
+      line-height: 1.4;
+    }
+
+    .btn-backup-export, .btn-backup-import {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 100%;
+      border: none;
+    }
+
+    .btn-backup-export {
+      background: var(--netflix-red);
+      color: #fff;
+    }
+
+    .btn-backup-export:hover {
+      background: var(--netflix-red-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-backup-import {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    .btn-backup-import:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .import-mode-select {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: #ccc;
+      margin: 4px 0;
+    }
+
+    .import-mode-select label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    /* Universal Toast */
+    #universalToast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(20, 20, 20, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      padding: 12px 24px;
+      border-radius: 30px;
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 500;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      z-index: 3000;
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    #universalToast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .btn-nav-backup {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #eaeaea;
+      padding: 7px 12px;
+      border-radius: 4px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-nav-backup:hover {
+      background: rgba(255, 255, 255, 0.18);
+      color: #fff;
+      border-color: #fff;
+    }
+
+    .row-actions-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .row-sub-btn {
+      background: none;
+      border: none;
+      color: #aaa;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .row-sub-btn:hover {
+      color: #fff;
+    }
+
+    .card-actions-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .card-action-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.95);
+      border: none;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.15s, background-color 0.15s;
+    }
+
+    .card-action-circle:hover {
+      transform: scale(1.1);
+      background: #fff;
+    }
+
+    .card-action-circle.subtle {
+      background: rgba(40, 40, 40, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: #fff;
+    }
+
+    .card-action-circle.subtle:hover {
+      background: rgba(60, 60, 60, 0.9);
+      border-color: #fff;
+    }
+
+    .card-badge-ep {
+      background: var(--netflix-red);
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 3px;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 768px) {
+      .cinema-container {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+        border: none;
+      }
+      #cinema-player-modal {
+        padding: 0;
+      }
+      .storage-warning-banner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .storage-warning-actions {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+      .btn-nav-backup span {
+        display: none;
+      }
+    }
   </style>
   <script src="providers.js"></script>
 </head>
@@ -1825,6 +2748,8 @@
         <li><a href="javascript:void(0)" onclick="openExploreModal('movie')">Movies</a></li>
         <li><a href="javascript:void(0)" onclick="openExploreModal('tv')">TV Shows</a></li>
         <li><a href="javascript:void(0)" onclick="openExploreModal('genres')">Categories</a></li>
+        <li><a href="javascript:void(0)" onclick="openExploreModal('watchlist')">My List</a></li>
+        <li><a href="javascript:void(0)" onclick="openExploreModal('history')">History</a></li>
       </ul>
     </div>
     <div class="header-right">
@@ -1837,6 +2762,13 @@
           </svg>
         </button>
       </div>
+      <button class="btn-nav-backup" onclick="openBackupModal()" title="Settings & Local Storage">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+        <span>Settings</span>
+      </button>
     </div>
   </header>
 
@@ -1886,6 +2818,43 @@
 
   <!-- Main Content Rows Container -->
   <main class="content-container">
+
+    <!-- Row: Continue Watching / Watch History -->
+    <section class="row-section" id="rowHistorySection" style="display: none;">
+      <div class="row-header">
+        <h2 class="row-title">
+          <span class="svg-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#E50914" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </span>
+          Continue Watching
+        </h2>
+        <div class="row-actions-group">
+          <button class="row-sub-btn" onclick="openExploreModal('history')">See All</button>
+        </div>
+      </div>
+      <div class="row-carousel" id="rowHistory"></div>
+    </section>
+
+    <!-- Row: My Watchlist -->
+    <section class="row-section" id="rowWatchlistSection" style="display: none;">
+      <div class="row-header">
+        <h2 class="row-title">
+          <span class="svg-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#E50914" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </span>
+          My List
+        </h2>
+        <div class="row-actions-group">
+          <button class="row-sub-btn" onclick="openExploreModal('watchlist')">See All</button>
+        </div>
+      </div>
+      <div class="row-carousel" id="rowWatchlist"></div>
+    </section>
 
     <!-- Row 1: Trending Now -->
     <section class="row-section" id="rowTrendingSection">
@@ -2001,11 +2970,21 @@
         <div class="modal-hero-content">
           <h1 class="modal-hero-title" id="infoTitle">Loading Title...</h1>
           <div class="modal-hero-actions">
-            <button class="modal-btn-play" id="modalHeroPlayBtn" onclick="togglePlayerView(true)">
+            <button class="modal-btn-play" id="modalHeroPlayBtn" onclick="triggerPlayWithAnimation(event, currentMediaId, currentContentType, currentSeason, currentEpisode, currentItemDetails?.title || currentItemDetails?.name, currentItemDetails)">
               <span class="svg-icon">
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6 4l15 8-15 8V4z"/></svg>
               </span>
               Play
+            </button>
+            <button class="modal-btn-download" id="modalHeroDownloadBtn" onclick="downloadCurrentMedia(event)" title="Download on VidVault">
+              <span class="svg-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+              </span>
+              <span id="modalHeroDownloadText">Download</span>
             </button>
             <button class="modal-circle-btn" id="modalAddListBtn" title="Add to My List" onclick="toggleMyList()">
               <svg id="addListIcon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -2033,6 +3012,20 @@
           </svg>
           Back to Details
         </button>
+        <button class="modal-player-download" onclick="downloadCurrentMedia(event)" title="Download on VidVault">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Download
+        </button>
+        <div class="player-loading-overlay" id="modalPlayerLoader">
+          <div class="player-loader-spinner"></div>
+          <div class="player-loader-title">Loading Stream</div>
+          <div class="player-loader-server" id="modalLoaderServerText">Connecting to server...</div>
+          <div class="player-loader-hint">If playback doesn't start, try switching servers from the toolbar below</div>
+        </div>
         <iframe id="infoPlayerFrame" src="" allowfullscreen allow="encrypted-media"></iframe>
       </div>
 
@@ -2070,6 +3063,17 @@
             </svg>
           </span>
           Add Source
+        </button>
+
+        <button id="modalServerDownloadBtn" class="modal-server-btn" onclick="downloadCurrentMedia(event)" title="Download on VidVault">
+          <span class="svg-icon">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </span>
+          Download
         </button>
         
         <span id="serverStatusBadge" class="server-status-pill"></span>
@@ -2214,6 +3218,189 @@
     </button>
   </div>
 
+  <!-- =========================================================
+       CINEMA PLAY TRANSITION PULSE OVERLAY
+       ========================================================= -->
+  <div id="cinemaPlayOverlay">
+    <div class="play-flare-ring">
+      <svg viewBox="0 0 24 24" width="48" height="48" fill="#ffffff">
+        <path d="M6 4l15 8-15 8V4z"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       NEAR FULL-SCREEN CINEMA PLAYER THEATER MODAL
+       ========================================================= -->
+  <div id="cinema-player-modal" onclick="if(event.target === this) closeCinemaPlayer()">
+    <div class="cinema-ambient-glow"></div>
+    <div class="cinema-container">
+      
+      <!-- Top Control Bar -->
+      <div class="cinema-top-bar">
+        <div class="cinema-bar-left">
+          <button class="cinema-back-btn" onclick="closeCinemaPlayer()" title="Back to Netflix">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Exit Player</span>
+          </button>
+          
+          <div class="cinema-title-group">
+            <span class="cinema-main-title" id="cinemaTitle">Loading...</span>
+            <span class="cinema-meta-tag" id="cinemaMetaTag">Movie</span>
+          </div>
+        </div>
+
+        <div class="cinema-bar-right">
+          <!-- TV Series Episode Selector (Only visible for TV) -->
+          <div class="netflix-dropdown" id="cinemaEpisodeDropdownWrap" style="display:none;">
+            <button type="button" class="cinema-tool-btn" id="cinemaEpisodeDropdownBtn" onclick="toggleCinemaEpisodeDropdown(event)">
+              <span id="cinemaEpisodeLabel">Episode 1</span>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="netflix-dropdown-menu" id="cinemaEpisodeList"></div>
+          </div>
+
+          <button class="cinema-tool-btn" id="cinemaNextEpBtn" style="display:none;" onclick="playNextEpisode()" title="Next Episode">
+            <span>Next Ep</span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="5 4 15 12 5 20 5 4"></polygon>
+              <line x1="19" y1="5" x2="19" y2="19"></line>
+            </svg>
+          </button>
+
+          <!-- Server Selector Dropdown inside Cinema -->
+          <div class="netflix-dropdown" id="cinemaServerDropdownWrap">
+            <button type="button" class="cinema-tool-btn" id="cinemaServerDropdownBtn" onclick="toggleCinemaServerDropdown(event)">
+              <span id="cinemaServerLabel">Videasy (Default)</span>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="netflix-dropdown-menu" id="cinemaServerList"></div>
+          </div>
+
+          <!-- Download Button inside Cinema -->
+          <button class="cinema-tool-btn" id="cinemaDownloadBtn" onclick="downloadCurrentMedia(event)" title="Download on VidVault">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span style="font-size: 13px; font-weight: 600;">Download</span>
+          </button>
+
+          <!-- Fullscreen Toggle -->
+          <button class="cinema-tool-btn" onclick="toggleHardwareFullscreen()" title="Toggle True Fullscreen">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+            </svg>
+          </button>
+
+          <!-- Close Player Button -->
+          <button class="cinema-close-circle" onclick="closeCinemaPlayer()" title="Close Player">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Iframe Video Container -->
+      <div class="cinema-video-body">
+        <div class="player-loading-overlay" id="cinemaPlayerLoader">
+          <div class="player-loader-spinner"></div>
+          <div class="player-loader-title">Loading Stream</div>
+          <div class="player-loader-server" id="cinemaLoaderServerText">Connecting to server...</div>
+          <div class="player-loader-hint">If playback doesn't start, try switching servers from the top bar</div>
+        </div>
+        <iframe id="cinemaPlayerFrame" src="about:blank" allowfullscreen allow="encrypted-media; autoplay; fullscreen"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       SETTINGS & DATA BACKUP MODAL
+       ========================================================= -->
+  <div id="backup-modal" onclick="if(event.target === this) closeBackupModal()">
+    <div class="backup-card">
+      <div class="backup-header">
+        <div class="backup-title-wrap">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#E50914" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          <h3>Settings & Local Storage</h3>
+        </div>
+        <button class="backup-close-btn" onclick="closeBackupModal()" title="Close">&times;</button>
+      </div>
+
+      <div class="backup-body">
+        <div class="backup-storage-warning">
+          <strong>⚠️ Browser Storage Notice:</strong>
+          Your Watchlist and Watch History are saved strictly on this device in your browser's local cache. They are <strong>not synced to an online cloud account</strong>. Clearing browsing data or using private/incognito browsing will wipe your saved items.
+          <br><br>
+          We recommend downloading a JSON backup below periodically to preserve your saved titles!
+        </div>
+
+        <div class="backup-stats-row">
+          <div class="backup-stat-box">
+            <span class="backup-stat-val" id="statWatchlistCount">0</span>
+            <span class="backup-stat-lbl">My List Titles</span>
+          </div>
+          <div class="backup-stat-box">
+            <span class="backup-stat-val" id="statHistoryCount">0</span>
+            <span class="backup-stat-lbl">History Titles</span>
+          </div>
+        </div>
+
+        <!-- Export Action -->
+        <div class="backup-section">
+          <h4>Export Data</h4>
+          <p>Download your Watchlist, Watch History, and custom server sources as a JSON file.</p>
+          <button class="btn-backup-export" onclick="UserDataManager.exportData()">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Download JSON Backup
+          </button>
+        </div>
+
+        <!-- Import Action -->
+        <div class="backup-section">
+          <h4>Import Data</h4>
+          <p>Restore or merge your previously exported Netflix JSON backup file.</p>
+          <div class="import-mode-select">
+            <label>
+              <input type="radio" name="importMode" id="importModeMerge" value="merge" checked />
+              <span>Merge with current data (Keep existing)</span>
+            </label>
+            <label>
+              <input type="radio" name="importMode" id="importModeReplace" value="replace" />
+              <span>Replace current data</span>
+            </label>
+          </div>
+          <input type="file" id="backupFileInput" accept=".json,application/json" style="display:none;" onchange="handleBackupFileSelect(event)" />
+          <button class="btn-backup-import" onclick="document.getElementById('backupFileInput').click()">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            Select JSON File to Restore
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Universal Notification Toast -->
+  <div id="universalToast">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#E50914" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+    <span id="universalToastMsg">Action completed</span>
+  </div>
+
   <script>
     const apikey = "e950e51d5d49e85f7c2f17f01eb23ba3";
     const apiEndpoint = "https://api.themoviedb.org/3";
@@ -2243,8 +3430,331 @@
     let currentItemDetails = null;
     let featuredItem = null;
     let activeGenreId = null;
+    let activeExploreType = 'all';
     let currentServerIndex = 0;
     let serverStatuses = {};
+
+    // Guaranteed Fallback Streaming Providers
+    const FALLBACK_PROVIDERS = [
+      {
+        name: "Videasy (Default)",
+        movie: "https://player.videasy.net/movie/{id}?overlay=true&color=E50914",
+        tv: "https://player.videasy.net/tv/{id}/{season}/{episode}?overlay=true&episodeSelector=true&autoplayNextEpisode=true&color=E50914"
+      },
+      {
+        name: "VidKing (Own)",
+        movie: "https://www.vidking.net/embed/movie/{id}",
+        tv: "https://www.vidking.net/embed/tv/{id}/{season}/{episode}"
+      },
+      {
+        name: "VidSrc.me",
+        movie: "https://vidsrc.me/embed/movie/{id}",
+        tv: "https://vidsrc.me/embed/tv/{id}/{season}/{episode}"
+      },
+      {
+        name: "VidLink",
+        movie: "https://vidlink.pro/movie/{id}?ads=0",
+        tv: "https://vidlink.pro/tv/{id}/{season}/{episode}?ads=0"
+      },
+      {
+        name: "PrimeSrc",
+        movie: "https://primesrc.me/embed/movie?tmdb={id}",
+        tv: "https://primesrc.me/embed/tv?tmdb={id}&season={season}&episode={episode}"
+      }
+    ];
+
+    function getSafeProviders() {
+      if (typeof getAllProviders === 'function') {
+        try {
+          const list = getAllProviders();
+          if (Array.isArray(list) && list.length > 0) return list;
+        } catch(e) {}
+      }
+      if (typeof DEFAULT_PROVIDERS !== 'undefined' && Array.isArray(DEFAULT_PROVIDERS) && DEFAULT_PROVIDERS.length > 0) {
+        return DEFAULT_PROVIDERS;
+      }
+      return FALLBACK_PROVIDERS;
+    }
+
+    // Universal Toast Notification Helper
+    let toastHideTimeout = null;
+    function showToast(message) {
+      const toast = document.getElementById('universalToast');
+      const msgEl = document.getElementById('universalToastMsg');
+      if (!toast || !msgEl) return;
+
+      msgEl.textContent = message;
+      toast.classList.add('show');
+
+      if (toastHideTimeout) clearTimeout(toastHideTimeout);
+      toastHideTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2600);
+    }
+
+    // =========================================================
+    // USER DATA MANAGER (Watchlist, History, Export/Import)
+    // =========================================================
+    const UserDataManager = {
+      WATCHLIST_KEY: 'netflix_watchlist',
+      HISTORY_KEY: 'netflix_history',
+      DISMISSED_WARNING_KEY: 'netflix_dismiss_storage_warning',
+
+      getWatchlist() {
+        try {
+          const data = localStorage.getItem(this.WATCHLIST_KEY);
+          return data ? JSON.parse(data) : [];
+        } catch(e) {
+          console.warn('Error reading watchlist from storage:', e);
+          return [];
+        }
+      },
+
+      isInWatchlist(id) {
+        if (!id) return false;
+        const list = this.getWatchlist();
+        return list.some(item => String(item.id) === String(id));
+      },
+
+      addToWatchlist(item) {
+        if (!item || !item.id) return;
+        let list = this.getWatchlist();
+        if (!list.some(i => String(i.id) === String(item.id))) {
+          const title = item.title || item.name || 'Untitled';
+          list.unshift({
+            id: item.id,
+            title: title,
+            name: item.name || item.title,
+            media_type: item.media_type || (item.first_air_date ? 'tv' : 'movie'),
+            poster_path: item.poster_path || '',
+            backdrop_path: item.backdrop_path || '',
+            vote_average: item.vote_average || 0,
+            release_date: item.release_date || item.first_air_date || '',
+            first_air_date: item.first_air_date || '',
+            overview: item.overview || '',
+            addedAt: Date.now()
+          });
+          try {
+            localStorage.setItem(this.WATCHLIST_KEY, JSON.stringify(list));
+          } catch(e) {}
+          showToast(`Added "${title}" to My List`);
+          this.refreshUI();
+        }
+      },
+
+      removeFromWatchlist(id) {
+        let list = this.getWatchlist().filter(i => String(i.id) !== String(id));
+        try {
+          localStorage.setItem(this.WATCHLIST_KEY, JSON.stringify(list));
+        } catch(e) {}
+        showToast('Removed from My List');
+        this.refreshUI();
+      },
+
+      toggleWatchlist(item) {
+        if (!item || !item.id) return false;
+        if (this.isInWatchlist(item.id)) {
+          this.removeFromWatchlist(item.id);
+          return false;
+        } else {
+          this.addToWatchlist(item);
+          return true;
+        }
+      },
+
+      getHistory() {
+        try {
+          const data = localStorage.getItem(this.HISTORY_KEY);
+          return data ? JSON.parse(data) : [];
+        } catch(e) {
+          return [];
+        }
+      },
+
+      addToHistory(item, season = 1, episode = 1) {
+        if (!item || !item.id) return;
+        let hist = this.getHistory();
+        hist = hist.filter(h => String(h.id) !== String(item.id));
+        const title = item.title || item.name || 'Title';
+        hist.unshift({
+          id: item.id,
+          title: title,
+          name: item.name || item.title,
+          media_type: item.media_type || (item.first_air_date ? 'tv' : 'movie'),
+          poster_path: item.poster_path || '',
+          backdrop_path: item.backdrop_path || '',
+          vote_average: item.vote_average || 0,
+          release_date: item.release_date || item.first_air_date || '',
+          overview: item.overview || '',
+          season: season || 1,
+          episode: episode || 1,
+          lastWatched: Date.now()
+        });
+        if (hist.length > 60) hist = hist.slice(0, 60);
+        try {
+          localStorage.setItem(this.HISTORY_KEY, JSON.stringify(hist));
+        } catch(e) {}
+        this.refreshUI();
+      },
+
+      removeFromHistory(id) {
+        let hist = this.getHistory().filter(h => String(h.id) !== String(id));
+        try {
+          localStorage.setItem(this.HISTORY_KEY, JSON.stringify(hist));
+        } catch(e) {}
+        showToast('Removed from History');
+        this.refreshUI();
+      },
+
+      clearHistory() {
+        if (confirm('Are you sure you want to clear your entire watching history?')) {
+          localStorage.removeItem(this.HISTORY_KEY);
+          showToast('Watching history cleared');
+          this.refreshUI();
+        }
+      },
+
+      exportData() {
+        const watchlist = this.getWatchlist();
+        const history = this.getHistory();
+        const customProviders = (typeof getCustomProviders === 'function') ? getCustomProviders() : [];
+
+        const exportObject = {
+          app: 'Netflix-Streamer',
+          version: 1.1,
+          exportedAt: new Date().toISOString(),
+          metadata: {
+            watchlistCount: watchlist.length,
+            historyCount: history.length
+          },
+          watchlist: watchlist,
+          history: history,
+          customProviders: customProviders
+        };
+
+        const blob = new Blob([JSON.stringify(exportObject, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        const dateStr = new Date().toISOString().slice(0, 10);
+        a.href = url;
+        a.download = `netflix_backup_${dateStr}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('User data backup exported as JSON!');
+      },
+
+      importData(jsonString, replaceMode = false) {
+        try {
+          const data = JSON.parse(jsonString);
+          if (!data || typeof data !== 'object') {
+            throw new Error('Invalid JSON structure');
+          }
+
+          const importedWatchlist = Array.isArray(data.watchlist) ? data.watchlist : [];
+          const importedHistory = Array.isArray(data.history) ? data.history : [];
+
+          if (replaceMode) {
+            localStorage.setItem(this.WATCHLIST_KEY, JSON.stringify(importedWatchlist));
+            localStorage.setItem(this.HISTORY_KEY, JSON.stringify(importedHistory));
+          } else {
+            // Merge Watchlist
+            const currentWl = this.getWatchlist();
+            const wlMap = new Map();
+            [...importedWatchlist, ...currentWl].forEach(item => {
+              if (item && item.id) wlMap.set(String(item.id), item);
+            });
+            localStorage.setItem(this.WATCHLIST_KEY, JSON.stringify(Array.from(wlMap.values())));
+
+            // Merge History
+            const currentHist = this.getHistory();
+            const histMap = new Map();
+            [...importedHistory, ...currentHist].forEach(item => {
+              if (item && item.id) histMap.set(String(item.id), item);
+            });
+            localStorage.setItem(this.HISTORY_KEY, JSON.stringify(Array.from(histMap.values())));
+          }
+
+          if (Array.isArray(data.customProviders) && typeof saveCustomProviders === 'function') {
+            saveCustomProviders(data.customProviders);
+          }
+
+          showToast(`Restored ${importedWatchlist.length} in List & ${importedHistory.length} in History!`);
+          this.refreshUI();
+          closeBackupModal();
+          return true;
+        } catch(err) {
+          console.error('Import error:', err);
+          alert('Error importing file: Please choose a valid Netflix backup JSON file.');
+          return false;
+        }
+      },
+
+      refreshUI() {
+        renderHomeHistoryRow();
+        renderHomeWatchlistRow();
+        if (activeExploreType === 'watchlist') {
+          loadExploreWatchlist();
+        } else if (activeExploreType === 'history') {
+          loadExploreHistory();
+        }
+        if (currentMediaId) {
+          updateInfoModalListButton(currentMediaId);
+        }
+      }
+    };
+
+    function dismissStorageBanner() {
+      const banner = document.getElementById('storageWarningBanner');
+      if (banner) {
+        banner.style.display = 'none';
+        sessionStorage.setItem(UserDataManager.DISMISSED_WARNING_KEY, 'true');
+      }
+    }
+
+    function checkStorageWarningVisibility() {
+      if (sessionStorage.getItem(UserDataManager.DISMISSED_WARNING_KEY) === 'true') {
+        const banner = document.getElementById('storageWarningBanner');
+        if (banner) banner.style.display = 'none';
+      }
+    }
+
+    let isClosingBackup = false;
+    function openBackupModal() {
+      const modal = document.getElementById('backup-modal');
+      if (!modal) return;
+      document.getElementById('statWatchlistCount').textContent = UserDataManager.getWatchlist().length;
+      document.getElementById('statHistoryCount').textContent = UserDataManager.getHistory().length;
+      modal.style.display = 'flex';
+      updateBodyScrollLock();
+    }
+
+    function closeBackupModal() {
+      if (isClosingBackup) return;
+      const modal = document.getElementById('backup-modal');
+      if (!modal) return;
+      isClosingBackup = true;
+      modal.classList.add('closing');
+      setTimeout(() => {
+        modal.style.display = 'none';
+        modal.classList.remove('closing');
+        isClosingBackup = false;
+        updateBodyScrollLock();
+      }, 220);
+    }
+
+    function handleBackupFileSelect(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const replaceMode = document.getElementById('importModeReplace')?.checked || false;
+        UserDataManager.importData(e.target.result, replaceMode);
+        event.target.value = '';
+      };
+      reader.readAsText(file);
+    }
 
     // Toast Timer Management (10 seconds, pause on hover)
     let toastTimeout = null;
@@ -2304,6 +3814,8 @@
     function resetToHome() {
       closeExploreModal();
       closeInfo();
+      closeCinemaPlayer();
+      closeBackupModal();
       setMobNavActive(document.getElementById('mobNavHome'));
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -2317,12 +3829,20 @@
     document.addEventListener('click', (e) => {
       const serverContainer = document.getElementById('serverDropdownContainer');
       const seasonContainer = document.getElementById('seasonDropdownContainer');
+      const cinemaServerContainer = document.getElementById('cinemaServerDropdownWrap');
+      const cinemaEpisodeContainer = document.getElementById('cinemaEpisodeDropdownWrap');
 
       if (serverContainer && !serverContainer.contains(e.target)) {
-        document.getElementById('serverDropdownList').classList.remove('open');
+        document.getElementById('serverDropdownList')?.classList.remove('open');
       }
       if (seasonContainer && !seasonContainer.contains(e.target)) {
-        document.getElementById('seasonDropdownList').classList.remove('open');
+        document.getElementById('seasonDropdownList')?.classList.remove('open');
+      }
+      if (cinemaServerContainer && !cinemaServerContainer.contains(e.target)) {
+        document.getElementById('cinemaServerList')?.classList.remove('open');
+      }
+      if (cinemaEpisodeContainer && !cinemaEpisodeContainer.contains(e.target)) {
+        document.getElementById('cinemaEpisodeList')?.classList.remove('open');
       }
     });
 
@@ -2340,7 +3860,7 @@
     }
 
     function renderServerDropdown() {
-      const providers = getAllProviders();
+      const providers = getSafeProviders();
       const list = document.getElementById('serverDropdownList');
       const label = document.getElementById('selectedServerLabel');
 
@@ -2409,7 +3929,7 @@
       }
 
       addCustomProvider(name, movieUrl, tvUrl);
-      const providers = getAllProviders();
+      const providers = getSafeProviders();
       currentServerIndex = providers.length - 1;
       renderServerDropdown();
       updatePlayerUrl();
@@ -2438,7 +3958,7 @@
       const iconEl = document.getElementById('checkServersIcon');
       const textEl = document.getElementById('checkServersText');
       const statusBadge = document.getElementById('serverStatusBadge');
-      const providers = getAllProviders();
+      const providers = getSafeProviders();
 
       checkBtn.disabled = true;
       iconEl.innerHTML = `
@@ -2483,9 +4003,35 @@
       statusBadge.innerHTML = `<span class="status-dot online"></span> ${onlineCount}/${providers.length} Online`;
     }
 
+    // Stream Embed Loading Controllers
+    let modalLoaderTimeout = null;
+    let cinemaLoaderTimeout = null;
+
+    function showPlayerLoader(loaderId, textId, serverName) {
+      const loader = document.getElementById(loaderId);
+      if (!loader) return;
+      const textEl = document.getElementById(textId);
+      if (textEl) {
+        textEl.textContent = `Connecting to ${serverName || 'server'}...`;
+      }
+      loader.classList.remove('fade-out');
+      loader.style.display = 'flex';
+      loader.style.opacity = '1';
+    }
+
+    function hidePlayerLoader(loaderId) {
+      const loader = document.getElementById(loaderId);
+      if (!loader || loader.style.display === 'none') return;
+      loader.classList.add('fade-out');
+      setTimeout(() => {
+        loader.style.display = 'none';
+        loader.classList.remove('fade-out');
+      }, 350);
+    }
+
     function updatePlayerUrl() {
       const player = document.getElementById('infoPlayerFrame');
-      const providers = getAllProviders();
+      const providers = getSafeProviders();
       const provider = providers[currentServerIndex] || providers[0];
 
       if (!currentMediaId) {
@@ -2493,11 +4039,22 @@
         return;
       }
 
+      showPlayerLoader('modalPlayerLoader', 'modalLoaderServerText', provider?.name);
+
       let template = currentContentType === 'movie' ? provider.movie : provider.tv;
       let finalUrl = template
         .replace('{id}', currentMediaId)
         .replace('{season}', currentSeason)
         .replace('{episode}', currentEpisode);
+
+      player.onload = () => {
+        hidePlayerLoader('modalPlayerLoader');
+      };
+
+      if (modalLoaderTimeout) clearTimeout(modalLoaderTimeout);
+      modalLoaderTimeout = setTimeout(() => {
+        hidePlayerLoader('modalPlayerLoader');
+      }, 5500);
 
       player.src = finalUrl;
     }
@@ -2513,22 +4070,70 @@
       } else {
         const player = document.getElementById('infoPlayerFrame');
         player.src = 'about:blank';
+        if (modalLoaderTimeout) clearTimeout(modalLoaderTimeout);
+        hidePlayerLoader('modalPlayerLoader');
         playerWrap.style.display = 'none';
         heroBanner.style.display = 'flex';
       }
     }
 
+    // VidVault Download Functions
+    function getVidVaultUrl(type, id, season = 1, episode = 1) {
+      if (type === 'movie') {
+        return `https://vidvault.ru/movie/${id}`;
+      } else {
+        return `https://vidvault.ru/tv/${id}/${season || 1}/${episode || 1}`;
+      }
+    }
+
+    function downloadMedia(type, id, season = 1, episode = 1) {
+      if (!id) return;
+      const url = getVidVaultUrl(type, id, season, episode);
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    function downloadCurrentMedia(event) {
+      if (event) event.stopPropagation();
+      if (!currentMediaId) return;
+      downloadMedia(currentContentType, currentMediaId, currentSeason, currentEpisode);
+    }
+
+    function updateModalDownloadBtn() {
+      const btn = document.getElementById('modalHeroDownloadBtn');
+      const text = document.getElementById('modalHeroDownloadText');
+      if (!btn) return;
+      if (currentContentType === 'movie') {
+        if (text) text.textContent = 'Download Movie';
+        btn.title = 'Download Whole Movie (VidVault)';
+      } else {
+        const s = currentSeason || 1;
+        const e = currentEpisode || 1;
+        if (text) text.textContent = `Download S${s}:E${e}`;
+        btn.title = `Download S${s}:E${e} (VidVault)`;
+      }
+    }
+
     function toggleMyList() {
+      if (!currentItemDetails) return;
+      UserDataManager.toggleWatchlist(currentItemDetails);
+      updateInfoModalListButton(currentItemDetails.id);
+    }
+
+    function updateInfoModalListButton(id) {
       const btn = document.getElementById('modalAddListBtn');
-      const isAdded = btn.classList.toggle('added');
-      if (isAdded) {
+      if (!btn) return;
+      const inList = UserDataManager.isInWatchlist(id);
+      if (inList) {
+        btn.classList.add('added');
         btn.innerHTML = `
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#46d369" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
         `;
         btn.style.borderColor = '#46d369';
+        btn.title = 'Remove from My List';
       } else {
+        btn.classList.remove('added');
         btn.innerHTML = `
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -2536,6 +4141,7 @@
           </svg>
         `;
         btn.style.borderColor = 'rgba(255,255,255,0.3)';
+        btn.title = 'Add to My List';
       }
     }
 
@@ -2549,21 +4155,76 @@
       const exploreOpen = document.getElementById('explore-modal').style.display === 'flex';
       const infoOpen = document.getElementById('info-overlay').style.display === 'flex';
       const addSourceOpen = document.getElementById('add-source-modal').style.display === 'flex';
+      const cinemaOpen = document.getElementById('cinema-player-modal').style.display === 'flex';
+      const backupOpen = document.getElementById('backup-modal').style.display === 'flex';
 
-      if (exploreOpen || infoOpen || addSourceOpen) {
+      if (exploreOpen || infoOpen || addSourceOpen || cinemaOpen || backupOpen) {
         document.body.classList.add('modal-open');
       } else {
         document.body.classList.remove('modal-open');
       }
     }
 
+    function renderHomeHistoryRow() {
+      const section = document.getElementById('rowHistorySection');
+      const container = document.getElementById('rowHistory');
+      if (!section || !container) return;
+
+      const history = UserDataManager.getHistory();
+      if (history.length === 0) {
+        section.style.display = 'none';
+        container.innerHTML = '';
+      } else {
+        section.style.display = 'flex';
+        container.innerHTML = history.map(item => buildCard(item, true)).join('');
+      }
+    }
+
+    function renderHomeWatchlistRow() {
+      const section = document.getElementById('rowWatchlistSection');
+      const container = document.getElementById('rowWatchlist');
+      if (!section || !container) return;
+
+      const list = UserDataManager.getWatchlist();
+      if (list.length === 0) {
+        section.style.display = 'none';
+        container.innerHTML = '';
+      } else {
+        section.style.display = 'flex';
+        container.innerHTML = list.map(item => buildCard(item, false)).join('');
+      }
+    }
+
+    function toggleCardWatchlist(e, id, type, title, poster_path, backdrop_path, vote_average, release_date) {
+      if (e) e.stopPropagation();
+      UserDataManager.toggleWatchlist({
+        id,
+        title,
+        media_type: type,
+        poster_path,
+        backdrop_path,
+        vote_average,
+        release_date
+      });
+    }
+
     // Build Movie/Show Card HTML
-    function buildCard(m) {
+    function buildCard(m, isHistory = false) {
       const mediaType = m.media_type || (m.first_air_date ? 'tv' : 'movie');
-      const title = m.title || m.name;
+      const title = m.title || m.name || 'Untitled';
       const rating = m.vote_average ? `${Math.round(m.vote_average * 10)}% Match` : '95% Match';
       const poster = m.poster_path ? (imgPath + m.poster_path) : 'https://placehold.co/180x255/1f1f1f/ffffff?text=No+Poster';
       const overview = m.overview ? m.overview : 'Tap to stream now on Netflix.';
+      const safeTitle = title.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      const seasonNum = m.season || 1;
+      const epNum = m.episode || 1;
+
+      let historyBadgeHtml = '';
+      if (isHistory && mediaType === 'tv') {
+        historyBadgeHtml = `<span class="card-badge-ep">S${seasonNum}:E${epNum}</span>`;
+      }
+
+      const inList = UserDataManager.isInWatchlist(m.id);
 
       return `
         <div class="movie-card" onclick="openInfo(${m.id}, '${mediaType}')">
@@ -2573,14 +4234,41 @@
             <div class="card-meta-row">
               <span class="card-rating">${rating}</span>
               <span class="card-type-badge">${mediaType === 'tv' ? 'Series' : 'Movie'}</span>
+              ${historyBadgeHtml}
             </div>
             <p class="card-desc">${overview}</p>
+            <div class="card-actions-bar" onclick="event.stopPropagation()">
+              <button class="card-action-circle" onclick="triggerPlayWithAnimation(event, ${m.id}, '${mediaType}', ${seasonNum}, ${epNum}, '${safeTitle}')" title="Play Now">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M6 4l15 8-15 8V4z"/></svg>
+              </button>
+              <button class="card-action-circle subtle" onclick="toggleCardWatchlist(event, ${m.id}, '${mediaType}', '${safeTitle}', '${m.poster_path || ''}', '${m.backdrop_path || ''}', ${m.vote_average || 0}, '${m.release_date || m.first_air_date || ''}')" title="${inList ? 'In My List' : 'Add to My List'}">
+                ${inList ? `
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#46d369" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                ` : `
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                `}
+              </button>
+              ${isHistory ? `
+                <button class="card-action-circle subtle" onclick="event.stopPropagation(); UserDataManager.removeFromHistory(${m.id})" title="Remove from History">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              ` : ''}
+            </div>
           </div>
           <div class="mobile-card-details">
             <div class="mobile-card-title">${title}</div>
             <div class="mobile-card-meta">
               <span class="card-rating">${rating}</span>
               <span class="card-type-badge">${mediaType === 'tv' ? 'Series' : 'Movie'}</span>
+              ${historyBadgeHtml}
             </div>
             <p class="mobile-card-desc">${overview}</p>
           </div>
@@ -2613,8 +4301,8 @@
 
           const mediaType = featuredItem.media_type || (featuredItem.first_air_date ? 'tv' : 'movie');
           
-          document.getElementById('billboardPlayBtn').onclick = () => {
-            openInfo(featuredItem.id, mediaType, true);
+          document.getElementById('billboardPlayBtn').onclick = (e) => {
+            triggerPlayWithAnimation(e, featuredItem.id, mediaType, 1, 1, featuredItem.title || featuredItem.name, featuredItem);
           };
           document.getElementById('billboardInfoBtn').onclick = () => {
             openInfo(featuredItem.id, mediaType, false);
@@ -2622,36 +4310,56 @@
         }
       } catch (err) {
         console.error('Error loading billboard:', err);
+        const billboardTitle = document.getElementById('billboardTitle');
+        if (billboardTitle && billboardTitle.textContent === 'Loading...') {
+          billboardTitle.textContent = 'Explore Unlimited Movies & TV';
+        }
       }
     }
 
     // Load Netflix Row Carousels
     async function loadNetflixRows() {
-      try {
-        // Trending Row
-        const trendingRes = await fetch(`${apiEndpoint}/trending/all/week?api_key=${apikey}`);
-        const trendingData = await trendingRes.json();
-        document.getElementById('rowTrending').innerHTML = (trendingData.results || [])
+      const renderCards = (results) => {
+        return (results || [])
           .filter(m => m.poster_path)
-          .map(buildCard).join('');
+          .map(m => buildCard(m, false))
+          .join('');
+      };
 
-        // Popular Movies Row
-        const moviesRes = await fetch(`${apiEndpoint}/movie/popular?api_key=${apikey}`);
-        const moviesData = await moviesRes.json();
-        document.getElementById('rowMovies').innerHTML = (moviesData.results || [])
-          .filter(m => m.poster_path)
-          .map(buildCard).join('');
+      const fetchTrending = async () => {
+        try {
+          const res = await fetch(`${apiEndpoint}/trending/all/week?api_key=${apikey}`);
+          const data = await res.json();
+          const target = document.getElementById('rowTrending');
+          if (target) target.innerHTML = renderCards(data.results);
+        } catch (err) {
+          console.error('Error loading trending:', err);
+        }
+      };
 
-        // Top TV Shows Row
-        const tvRes = await fetch(`${apiEndpoint}/tv/top_rated?api_key=${apikey}`);
-        const tvData = await tvRes.json();
-        document.getElementById('rowTv').innerHTML = (tvData.results || [])
-          .filter(m => m.poster_path)
-          .map(buildCard).join('');
+      const fetchMovies = async () => {
+        try {
+          const res = await fetch(`${apiEndpoint}/movie/popular?api_key=${apikey}`);
+          const data = await res.json();
+          const target = document.getElementById('rowMovies');
+          if (target) target.innerHTML = renderCards(data.results);
+        } catch (err) {
+          console.error('Error loading movies:', err);
+        }
+      };
 
-      } catch (err) {
-        console.error('Error loading rows:', err);
-      }
+      const fetchTv = async () => {
+        try {
+          const res = await fetch(`${apiEndpoint}/tv/top_rated?api_key=${apikey}`);
+          const data = await res.json();
+          const target = document.getElementById('rowTv');
+          if (target) target.innerHTML = renderCards(data.results);
+        } catch (err) {
+          console.error('Error loading TV shows:', err);
+        }
+      };
+
+      await Promise.allSettled([fetchTrending(), fetchMovies(), fetchTv()]);
     }
 
     // =========================================================
@@ -2660,7 +4368,9 @@
     function initGenrePills() {
       const container = document.getElementById('genrePillsRow');
       container.innerHTML = `
-        <button class="genre-pill ${activeGenreId === null ? 'active' : ''}" onclick="selectGenrePill(null, 'All Genres')">All</button>
+        <button class="genre-pill ${activeGenreId === null && activeExploreType === 'all' ? 'active' : ''}" onclick="selectGenrePill(null, 'All Content')">All</button>
+        <button class="genre-pill ${activeExploreType === 'watchlist' ? 'active' : ''}" onclick="openExploreModal('watchlist')">My List</button>
+        <button class="genre-pill ${activeExploreType === 'history' ? 'active' : ''}" onclick="openExploreModal('history')">History</button>
       `;
 
       GENRES.forEach(g => {
@@ -2674,6 +4384,7 @@
 
     function selectGenrePill(genreId, genreName) {
       activeGenreId = genreId;
+      activeExploreType = 'genre';
       document.querySelectorAll('.genre-pill').forEach(b => b.classList.remove('active'));
       event.target.classList.add('active');
 
@@ -2692,6 +4403,7 @@
       const input = document.getElementById('modalSearchInput');
       input.value = '';
       activeGenreId = null;
+      activeExploreType = type;
       initGenrePills();
 
       modal.style.display = 'flex';
@@ -2706,15 +4418,69 @@
       } else if (type === 'genres') {
         titleEl.textContent = 'Browse by Category';
         loadExploreDefault();
+      } else if (type === 'watchlist') {
+        titleEl.textContent = 'My Watchlist';
+        loadExploreWatchlist();
+      } else if (type === 'history') {
+        titleEl.textContent = 'Watch History';
+        loadExploreHistory();
       } else {
         titleEl.textContent = 'Explore Titles';
         loadExploreDefault();
       }
     }
 
+    let isClosingExplore = false;
     function closeExploreModal() {
-      document.getElementById('explore-modal').style.display = 'none';
-      updateBodyScrollLock();
+      if (isClosingExplore) return;
+      const modal = document.getElementById('explore-modal');
+      isClosingExplore = true;
+      modal.classList.add('closing');
+
+      setTimeout(() => {
+        modal.style.display = 'none';
+        modal.classList.remove('closing');
+        isClosingExplore = false;
+        updateBodyScrollLock();
+      }, 240);
+    }
+
+    function loadExploreWatchlist() {
+      const grid = document.getElementById('exploreGrid');
+      const items = UserDataManager.getWatchlist();
+
+      if (items.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column:1/-1; padding:60px 20px; text-align:center; color:#888;">
+            <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#555" stroke-width="1.8" style="margin-bottom:14px;"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+            <h3 style="color:#fff; margin-bottom:8px; font-size:1.2rem;">Your Watchlist is Empty</h3>
+            <p style="max-width:400px; margin:0 auto 20px;">Explore popular titles and tap "Add to My List" on any movie or series to save it here.</p>
+            <button class="btn-storage-export" onclick="openExploreModal('movie')" style="background:var(--netflix-red); color:#fff; padding:10px 20px; font-size:0.9rem;">Browse Movies</button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = items.map(m => buildCard(m, false)).join('');
+    }
+
+    function loadExploreHistory() {
+      const grid = document.getElementById('exploreGrid');
+      const items = UserDataManager.getHistory();
+
+      if (items.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column:1/-1; padding:60px 20px; text-align:center; color:#888;">
+            <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#555" stroke-width="1.8" style="margin-bottom:14px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <h3 style="color:#fff; margin-bottom:8px; font-size:1.2rem;">No Watching History</h3>
+            <p style="max-width:400px; margin:0 auto 20px;">Titles and episodes you play will automatically appear here so you can pick up where you left off.</p>
+            <button class="btn-storage-export" onclick="openExploreModal('tv')" style="background:var(--netflix-red); color:#fff; padding:10px 20px; font-size:0.9rem;">Browse TV Series</button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = items.map(m => buildCard(m, false, true)).join('');
     }
 
     async function loadExploreDefault() {
@@ -2724,7 +4490,7 @@
       try {
         const res = await fetch(`${apiEndpoint}/trending/all/week?api_key=${apikey}`);
         const data = await res.json();
-        grid.innerHTML = (data.results || []).filter(m => m.poster_path).map(buildCard).join('');
+        grid.innerHTML = (data.results || []).filter(m => m.poster_path).map(m => buildCard(m, false)).join('');
       } catch (e) {
         grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center;">Error loading items.</div>';
       }
@@ -2737,7 +4503,7 @@
       try {
         const res = await fetch(`${apiEndpoint}/${type}/popular?api_key=${apikey}`);
         const data = await res.json();
-        grid.innerHTML = (data.results || []).filter(m => m.poster_path).map(buildCard).join('');
+        grid.innerHTML = (data.results || []).filter(m => m.poster_path).map(m => buildCard(m, false)).join('');
       } catch (e) {
         grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center;">Error loading items.</div>';
       }
@@ -2848,6 +4614,7 @@
       currentContentType = type;
       currentSeason = 1;
       currentEpisode = 1;
+      updateModalDownloadBtn();
 
       // Reset states
       togglePlayerView(false);
@@ -2865,6 +4632,8 @@
         const res = await fetch(`${apiEndpoint}/${type}/${id}?api_key=${apikey}&language=en-US&append_to_response=credits,similar,recommendations`);
         const info = await res.json();
         currentItemDetails = info;
+        updateInfoModalListButton(id);
+        updateModalDownloadBtn();
 
         const title = info.title || info.name;
         titleEl.textContent = title;
@@ -2971,7 +4740,7 @@
         }
 
         if (autoPlay) {
-          togglePlayerView(true);
+          triggerPlayWithAnimation(null, id, type, currentSeason, currentEpisode, title, info);
         }
 
       } catch (err) {
@@ -3007,9 +4776,11 @@
         item.onclick = async (e) => {
           e.stopPropagation();
           currentSeason = s.season_number;
+          currentEpisode = 1;
           label.textContent = sName;
           document.getElementById('seasonDropdownList').classList.remove('open');
           renderSeasonDropdown(seasons, currentSeason);
+          updateModalDownloadBtn();
           await loadSeasonEpisodes(currentSeason);
         };
 
@@ -3051,11 +4822,19 @@
                   </div>
                   <p class="episode-overview">${epOverview}</p>
                 </div>
+                <button class="episode-download-btn" title="Download Episode ${epNum} (VidVault)" onclick="event.stopPropagation(); downloadMedia('tv', currentMediaId, ${seasonNumber}, ${epNum});" aria-label="Download Episode ${epNum}">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                </button>
               </div>
             `;
           }).join('');
 
           currentEpisode = data.episodes[0].episode_number;
+          updateModalDownloadBtn();
         } else {
           episodesList.innerHTML = '<div style="color:#888; padding:20px;">No episodes found for this season.</div>';
         }
@@ -3069,17 +4848,248 @@
       document.querySelectorAll('.episode-card').forEach(card => card.classList.remove('active'));
       const activeCard = document.getElementById(`ep-card-${epNum}`);
       if (activeCard) activeCard.classList.add('active');
+      updateModalDownloadBtn();
 
-      togglePlayerView(true);
+      const title = currentItemDetails?.name || currentItemDetails?.title || 'TV Series';
+      triggerPlayWithAnimation(null, currentMediaId, 'tv', currentSeason, epNum, title, currentItemDetails);
     }
 
+    let isClosingInfo = false;
     function closeInfo() {
+      if (isClosingInfo) return;
       const overlay = document.getElementById('info-overlay');
+      const modal = overlay?.querySelector('.info-modal');
       const player = document.getElementById('infoPlayerFrame');
-      overlay.style.display = 'none';
-      player.src = 'about:blank';
-      currentMediaId = null;
+
+      isClosingInfo = true;
+      overlay.classList.add('closing');
+      if (modal) modal.classList.add('closing');
+
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        overlay.classList.remove('closing');
+        if (modal) modal.classList.remove('closing');
+        player.src = 'about:blank';
+        currentMediaId = null;
+        isClosingInfo = false;
+        updateBodyScrollLock();
+      }, 240);
+    }
+
+    // =========================================================
+    // CINEMA PLAYER CONTROLLER & PLAY ANIMATION
+    // =========================================================
+    let currentCinemaEpisodes = [];
+    let isClosingCinema = false;
+
+    function triggerPlayWithAnimation(event, id, type, season = 1, episode = 1, title = '', details = null) {
+      if (event) {
+        event.stopPropagation();
+      }
+
+      const overlay = document.getElementById('cinemaPlayOverlay');
+      if (overlay) {
+        overlay.classList.remove('active');
+        void overlay.offsetWidth; // trigger CSS reflow for animation restart
+        overlay.classList.add('active');
+      }
+
+      setTimeout(() => {
+        if (overlay) overlay.classList.remove('active');
+        openCinemaPlayer(id, type, season, episode, title, details);
+      }, 280);
+    }
+
+    async function openCinemaPlayer(id, type, season = 1, episode = 1, title = '', details = null) {
+      const modal = document.getElementById('cinema-player-modal');
+      const titleEl = document.getElementById('cinemaTitle');
+      const tagEl = document.getElementById('cinemaMetaTag');
+      const epWrap = document.getElementById('cinemaEpisodeDropdownWrap');
+      const nextBtn = document.getElementById('cinemaNextEpBtn');
+
+      currentMediaId = id;
+      currentContentType = type;
+      currentSeason = season || 1;
+      currentEpisode = episode || 1;
+
+      titleEl.textContent = title || 'Streaming Title...';
+      tagEl.textContent = type === 'tv' ? `S${currentSeason}:E${currentEpisode}` : 'Movie';
+
+      modal.style.display = 'flex';
       updateBodyScrollLock();
+
+      if (!details && id) {
+        try {
+          const res = await fetch(`${apiEndpoint}/${type}/${id}?api_key=${apikey}&language=en-US`);
+          details = await res.json();
+          currentItemDetails = details;
+        } catch(e) {}
+      } else if (details) {
+        currentItemDetails = details;
+      }
+
+      const finalTitle = (details && (details.title || details.name)) || title || 'Streaming';
+      titleEl.textContent = finalTitle;
+
+      // Automatically register to Watching History
+      UserDataManager.addToHistory(details || { id, title: finalTitle, type }, currentSeason, currentEpisode);
+
+      // Render Cinema Server Selector
+      renderCinemaServerDropdown();
+
+      // TV Show episode dropdown & Next Ep button
+      if (type === 'tv') {
+        epWrap.style.display = 'block';
+        nextBtn.style.display = 'inline-flex';
+        document.getElementById('cinemaEpisodeLabel').textContent = `S${currentSeason}:E${currentEpisode}`;
+        loadCinemaEpisodes(currentSeason);
+      } else {
+        epWrap.style.display = 'none';
+        nextBtn.style.display = 'none';
+      }
+
+      updateCinemaPlayerUrl();
+    }
+
+    function closeCinemaPlayer() {
+      if (isClosingCinema) return;
+      const modal = document.getElementById('cinema-player-modal');
+      const iframe = document.getElementById('cinemaPlayerFrame');
+
+      isClosingCinema = true;
+      modal.classList.add('closing');
+      if (cinemaLoaderTimeout) clearTimeout(cinemaLoaderTimeout);
+      hidePlayerLoader('cinemaPlayerLoader');
+
+      setTimeout(() => {
+        modal.style.display = 'none';
+        modal.classList.remove('closing');
+        iframe.src = 'about:blank';
+        isClosingCinema = false;
+        updateBodyScrollLock();
+      }, 240);
+    }
+
+    function updateCinemaPlayerUrl() {
+      const iframe = document.getElementById('cinemaPlayerFrame');
+      const providers = (typeof getAllProviders === 'function') ? getAllProviders() : DEFAULT_PROVIDERS;
+      const provider = providers[currentServerIndex] || providers[0];
+
+      if (!currentMediaId) {
+        iframe.src = 'about:blank';
+        return;
+      }
+
+      showPlayerLoader('cinemaPlayerLoader', 'cinemaLoaderServerText', provider?.name);
+
+      let template = currentContentType === 'movie' ? provider.movie : provider.tv;
+      let finalUrl = template
+        .replace('{id}', currentMediaId)
+        .replace('{season}', currentSeason)
+        .replace('{episode}', currentEpisode);
+
+      iframe.onload = () => {
+        hidePlayerLoader('cinemaPlayerLoader');
+      };
+
+      if (cinemaLoaderTimeout) clearTimeout(cinemaLoaderTimeout);
+      cinemaLoaderTimeout = setTimeout(() => {
+        hidePlayerLoader('cinemaPlayerLoader');
+      }, 5500);
+
+      iframe.src = finalUrl;
+    }
+
+    function toggleCinemaServerDropdown(event) {
+      if (event) event.stopPropagation();
+      const menu = document.getElementById('cinemaServerList');
+      menu.classList.toggle('open');
+    }
+
+    function toggleCinemaEpisodeDropdown(event) {
+      if (event) event.stopPropagation();
+      const menu = document.getElementById('cinemaEpisodeList');
+      menu.classList.toggle('open');
+    }
+
+    function renderCinemaServerDropdown() {
+      const providers = (typeof getAllProviders === 'function') ? getAllProviders() : DEFAULT_PROVIDERS;
+      const list = document.getElementById('cinemaServerList');
+      const label = document.getElementById('cinemaServerLabel');
+
+      list.innerHTML = '';
+      label.textContent = providers[currentServerIndex]?.name || 'Server';
+
+      providers.forEach((provider, index) => {
+        const item = document.createElement('div');
+        item.className = `netflix-dropdown-item ${index === currentServerIndex ? 'selected' : ''}`;
+        item.textContent = provider.name;
+        item.onclick = (e) => {
+          e.stopPropagation();
+          currentServerIndex = index;
+          label.textContent = provider.name;
+          list.classList.remove('open');
+          renderServerDropdown();
+          updateCinemaPlayerUrl();
+        };
+        list.appendChild(item);
+      });
+    }
+
+    async function loadCinemaEpisodes(seasonNumber) {
+      const list = document.getElementById('cinemaEpisodeList');
+      list.innerHTML = '<div style="padding:10px; color:#888;">Loading episodes...</div>';
+
+      try {
+        const res = await fetch(`${apiEndpoint}/tv/${currentMediaId}/season/${seasonNumber}?api_key=${apikey}&language=en-US`);
+        const data = await res.json();
+        currentCinemaEpisodes = data.episodes || [];
+
+        list.innerHTML = '';
+        currentCinemaEpisodes.forEach(ep => {
+          const item = document.createElement('div');
+          item.className = `netflix-dropdown-item ${ep.episode_number === currentEpisode ? 'selected' : ''}`;
+          item.textContent = `E${ep.episode_number}: ${ep.name || 'Episode ' + ep.episode_number}`;
+          item.onclick = (e) => {
+            e.stopPropagation();
+            selectCinemaEpisode(ep.episode_number);
+          };
+          list.appendChild(item);
+        });
+      } catch(e) {
+        list.innerHTML = '<div style="padding:10px; color:#888;">Could not load episodes</div>';
+      }
+    }
+
+    function selectCinemaEpisode(epNum) {
+      currentEpisode = epNum;
+      document.getElementById('cinemaEpisodeLabel').textContent = `S${currentSeason}:E${epNum}`;
+      document.getElementById('cinemaMetaTag').textContent = `S${currentSeason}:E${epNum}`;
+      document.getElementById('cinemaEpisodeList').classList.remove('open');
+      updateModalDownloadBtn();
+
+      UserDataManager.addToHistory(currentItemDetails || { id: currentMediaId, type: 'tv' }, currentSeason, currentEpisode);
+      updateCinemaPlayerUrl();
+    }
+
+    function playNextEpisode() {
+      if (currentContentType !== 'tv') return;
+      selectCinemaEpisode(currentEpisode + 1);
+    }
+
+    function toggleHardwareFullscreen() {
+      const container = document.querySelector('.cinema-container');
+      if (!document.fullscreenElement) {
+        if (container.requestFullscreen) {
+          container.requestFullscreen().catch(() => {});
+        } else if (container.webkitRequestFullscreen) {
+          container.webkitRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
     }
 
     // PWA Service Worker Registration & Android Install Prompt
@@ -3112,12 +5122,25 @@
       if (banner) banner.style.display = 'none';
     }
 
-    window.onload = function() {
-      initServerSelect();
-      initAdblockToast();
-      loadBillboard();
-      loadNetflixRows();
+    let isAppInitialized = false;
+    function initApp() {
+      if (isAppInitialized) return;
+      isAppInitialized = true;
+      try { initServerSelect(); } catch(e) { console.error('initServerSelect err:', e); }
+      try { initAdblockToast(); } catch(e) { console.error('initAdblockToast err:', e); }
+      try { checkStorageWarningVisibility(); } catch(e) { console.error('checkStorageWarning err:', e); }
+      try { renderHomeHistoryRow(); } catch(e) { console.error('renderHomeHistory err:', e); }
+      try { renderHomeWatchlistRow(); } catch(e) { console.error('renderHomeWatchlist err:', e); }
+      try { loadBillboard(); } catch(e) { console.error('loadBillboard err:', e); }
+      try { loadNetflixRows(); } catch(e) { console.error('loadNetflixRows err:', e); }
     }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
+    window.addEventListener('load', initApp);
   </script>
 
   <!-- iOS Native Mobile Bottom Navigation Bar -->
@@ -3151,6 +5174,12 @@
         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
       </svg>
       <span>Search</span>
+    </a>
+    <a href="javascript:void(0)" class="mob-nav-item" id="mobNavWatchlist" onclick="openExploreModal('watchlist'); setMobNavActive(this)">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+      </svg>
+      <span>My List</span>
     </a>
     <a href="javascript:void(0)" class="mob-nav-item" id="mobNavCategories" onclick="openExploreModal('genres'); setMobNavActive(this)">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">

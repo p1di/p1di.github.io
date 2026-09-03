@@ -2586,6 +2586,298 @@
       cursor: pointer;
     }
 
+    /* Direct Download Modal */
+    #download-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 2400;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    #download-modal.closing {
+      animation: overlayFadeOut 0.22s ease forwards;
+    }
+
+    .download-card {
+      background: #181818;
+      border-radius: 12px;
+      max-width: 640px;
+      width: 100%;
+      max-height: 85vh;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .download-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid #282828;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e1e1e;
+      flex-shrink: 0;
+    }
+
+    .download-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .download-icon-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(229, 9, 20, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #E50914;
+      flex-shrink: 0;
+    }
+
+    .download-header h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 0;
+      color: #fff;
+    }
+
+    .download-header p {
+      font-size: 0.8rem;
+      color: #999;
+      margin: 2px 0 0;
+    }
+
+    .download-close-btn {
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 26px;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+      transition: color 0.2s;
+    }
+
+    .download-close-btn:hover {
+      color: #fff;
+    }
+
+    .download-body {
+      padding: 20px 24px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .download-body::-webkit-scrollbar {
+      width: 6px;
+    }
+    .download-body::-webkit-scrollbar-thumb {
+      background: #444;
+      border-radius: 3px;
+    }
+
+    .download-links-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .download-link-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 12px 14px;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    }
+
+    .download-link-row:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .download-link-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      overflow: hidden;
+      flex: 1;
+    }
+
+    .download-badges-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .badge-quality {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .badge-q-4k {
+      background: linear-gradient(135deg, #e50914, #990000);
+      color: #fff;
+    }
+
+    .badge-q-1080 {
+      background: rgba(0, 113, 227, 0.25);
+      color: #5ac8fa;
+      border: 1px solid rgba(90, 200, 250, 0.35);
+    }
+
+    .badge-q-720 {
+      background: rgba(52, 199, 89, 0.2);
+      color: #34c759;
+      border: 1px solid rgba(52, 199, 89, 0.3);
+    }
+
+    .badge-q-sd {
+      background: rgba(255, 255, 255, 0.1);
+      color: #aaa;
+    }
+
+    .badge-size {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #e2e2e2;
+    }
+
+    .badge-source {
+      font-size: 0.72rem;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #8e8e93;
+    }
+
+    .badge-extra {
+      font-size: 0.7rem;
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: rgba(245, 166, 35, 0.2);
+      color: #f5a623;
+      font-weight: 600;
+    }
+
+    .download-link-name {
+      font-size: 0.82rem;
+      color: #d1d1d1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .btn-download-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #E50914;
+      color: #fff;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 14px;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-download-action:hover {
+      background: #f40612;
+      transform: scale(1.03);
+    }
+
+    .btn-download-action:active {
+      transform: scale(0.97);
+    }
+
+    .download-loading-box, .download-empty-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      text-align: center;
+      gap: 14px;
+      color: #aaa;
+    }
+
+    .download-empty-box h4 {
+      color: #fff;
+      font-size: 1.05rem;
+      margin: 0;
+    }
+
+    .download-empty-box p {
+      color: #888;
+      font-size: 0.85rem;
+      margin: 0;
+      max-width: 360px;
+    }
+
+    .download-footer-fallback {
+      margin-top: 6px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 0.8rem;
+      color: #888;
+      flex-shrink: 0;
+    }
+
+    .btn-fallback-link {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #ddd;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .btn-fallback-link:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
     /* Universal Toast */
     #universalToast {
       position: fixed;
@@ -3393,6 +3685,32 @@
     </div>
   </div>
 
+  <!-- Direct Download Sources Modal -->
+  <div id="download-modal" onclick="if(event.target === this) closeDownloadModal()">
+    <div class="download-card">
+      <div class="download-header">
+        <div class="download-title-wrap">
+          <div class="download-icon-circle">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </div>
+          <div>
+            <h3 id="downloadModalTitle">Download Media</h3>
+            <p id="downloadModalSubtitle">Select a source and quality</p>
+          </div>
+        </div>
+        <button class="download-close-btn" onclick="closeDownloadModal()" title="Close">&times;</button>
+      </div>
+
+      <div class="download-body" id="downloadModalBody">
+        <!-- Populated via JavaScript -->
+      </div>
+    </div>
+  </div>
+
   <!-- Universal Notification Toast -->
   <div id="universalToast">
     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#E50914" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -3846,6 +4164,15 @@
       }
     });
 
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const downloadModal = document.getElementById('download-modal');
+        if (downloadModal && downloadModal.style.display === 'flex') {
+          closeDownloadModal();
+        }
+      }
+    });
+
     // =========================================================
     // CUSTOM NETFLIX SERVER DROPDOWN
     // =========================================================
@@ -4077,20 +4404,214 @@
       }
     }
 
-    // Download Functions
-    function getDownloadUrl(type, id, season = 1, episode = 1) {
+    // =========================================================
+    // DOWNLOAD MANAGER (Shegu API & Fallback)
+    // =========================================================
+    let isClosingDownloadModal = false;
+
+    function getFallbackDownloadUrl(type, id, season = 1, episode = 1) {
       if (type === 'movie') {
         return `https://downloadeverythingfromeverywhere.com/m/${id}`;
       } else {
         return `https://downloadeverythingfromeverywhere.com/s/${id}`;
       }
     }
-    const getVidVaultUrl = getDownloadUrl;
+    const getDownloadUrl = getFallbackDownloadUrl;
+    const getVidVaultUrl = getFallbackDownloadUrl;
 
-    function downloadMedia(type, id, season = 1, episode = 1) {
+    function closeDownloadModal() {
+      if (isClosingDownloadModal) return;
+      const modal = document.getElementById('download-modal');
+      if (!modal) return;
+      isClosingDownloadModal = true;
+      modal.classList.add('closing');
+      setTimeout(() => {
+        modal.style.display = 'none';
+        modal.classList.remove('closing');
+        isClosingDownloadModal = false;
+        updateBodyScrollLock();
+      }, 220);
+    }
+
+    async function downloadMedia(type, id, season = 1, episode = 1) {
       if (!id) return;
-      const url = getDownloadUrl(type, id, season, episode);
-      window.open(url, '_blank', 'noopener,noreferrer');
+      openDownloadModal(type, id, season, episode);
+    }
+
+    async function openDownloadModal(type, id, season = 1, episode = 1) {
+      const modal = document.getElementById('download-modal');
+      const titleEl = document.getElementById('downloadModalTitle');
+      const subtitleEl = document.getElementById('downloadModalSubtitle');
+      const bodyEl = document.getElementById('downloadModalBody');
+      if (!modal || !bodyEl) return;
+
+      // Determine display title & subtitle
+      let mediaTitle = 'Download Media';
+      if (currentItemDetails && (currentItemDetails.id == id || !id)) {
+        mediaTitle = currentItemDetails.title || currentItemDetails.name || 'Download Media';
+      }
+      titleEl.textContent = mediaTitle;
+
+      if (type === 'tv') {
+        subtitleEl.textContent = `Season ${season}, Episode ${episode} • Direct Sources`;
+      } else {
+        subtitleEl.textContent = 'Movie • Direct Sources';
+      }
+
+      // Show modal in loading state
+      modal.style.display = 'flex';
+      updateBodyScrollLock();
+
+      bodyEl.innerHTML = `
+        <div class="download-loading-box">
+          <div class="player-loader-spinner" style="width:38px; height:38px; border-top-color:#E50914;"></div>
+          <div style="font-weight:600; color:#fff;">Fetching available download links...</div>
+          <div style="font-size:0.8rem; color:#888;">Querying Shegu download network</div>
+        </div>
+      `;
+
+      const apiUrl = type === 'movie'
+        ? `https://downloads.shegu.st/movie/${id}`
+        : `https://downloads.shegu.st/tv/${id}/${season || 1}/${episode || 1}`;
+
+      const fallbackUrl = getFallbackDownloadUrl(type, id, season, episode);
+
+      try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+
+        if (!data || !Array.isArray(data.links) || data.links.length === 0) {
+          renderDownloadEmptyState(bodyEl, fallbackUrl);
+          return;
+        }
+
+        renderDownloadLinks(bodyEl, data.links, mediaTitle, fallbackUrl);
+      } catch (err) {
+        console.warn('Download API failed, falling back:', err);
+        renderDownloadErrorState(bodyEl, fallbackUrl, err.message);
+      }
+    }
+
+    function renderDownloadLinks(container, links, mediaTitle, fallbackUrl) {
+      // Sort links by quality descending (2160 -> 1080 -> 720 ...)
+      const sorted = [...links].sort((a, b) => (Number(b.quality) || 0) - (Number(a.quality) || 0));
+
+      let rowsHtml = sorted.map((item) => {
+        const q = Number(item.quality) || 1080;
+        let qBadgeClass = 'badge-q-sd';
+        let qLabel = `${q}p`;
+        if (q >= 2160) {
+          qBadgeClass = 'badge-q-4k';
+          qLabel = '4K UHD';
+        } else if (q >= 1080) {
+          qBadgeClass = 'badge-q-1080';
+          qLabel = '1080p FHD';
+        } else if (q >= 720) {
+          qBadgeClass = 'badge-q-720';
+          qLabel = '720p HD';
+        }
+
+        const rawName = item.name || item.filename || '';
+        let extraBadge = '';
+        if (/dolbyvision|dv/i.test(rawName)) {
+          extraBadge += '<span class="badge-extra">Dolby Vision</span> ';
+        }
+        if (/hdr/i.test(rawName)) {
+          extraBadge += '<span class="badge-extra">HDR</span> ';
+        }
+
+        const sizeStr = item.size ? `<span class="badge-size">${item.size}</span>` : '';
+        const sourceStr = item.source ? `<span class="badge-source">${item.source}</span>` : (item.provider ? `<span class="badge-source">${item.provider}</span>` : '');
+        const displayName = item.filename || item.name || `${mediaTitle} (${qLabel})`;
+        const safeDisplayName = displayName.replace(/"/g, '&quot;').replace(/'/g, "\\'");
+        const safeUrl = (item.url || '').replace(/"/g, '&quot;');
+
+        return `
+          <div class="download-link-row">
+            <div class="download-link-info">
+              <div class="download-badges-row">
+                <span class="badge-quality ${qBadgeClass}">${qLabel}</span>
+                ${sizeStr}
+                ${sourceStr}
+                ${extraBadge}
+              </div>
+              <div class="download-link-name" title="${safeDisplayName}">${displayName}</div>
+            </div>
+            <button class="btn-download-action" onclick="handleLinkDownloadClick('${safeUrl}', '${safeDisplayName}')">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Download
+            </button>
+          </div>
+        `;
+      }).join('');
+
+      container.innerHTML = `
+        <div class="download-links-list">
+          ${rowsHtml}
+        </div>
+        <div class="download-footer-fallback">
+          <span>Looking for external mirrors?</span>
+          <a class="btn-fallback-link" href="${fallbackUrl}" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            External Downloader
+          </a>
+        </div>
+      `;
+    }
+
+    function renderDownloadEmptyState(container, fallbackUrl) {
+      container.innerHTML = `
+        <div class="download-empty-box">
+          <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="#666" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <h4>No Direct Download Links Found</h4>
+          <p>The direct download network hasn't cached links for this title yet. You can still try the external downloader mirror.</p>
+          <a class="btn-download-action" style="margin-top:8px; text-decoration:none;" href="${fallbackUrl}" target="_blank" rel="noopener noreferrer">
+            Open External Downloader
+          </a>
+        </div>
+      `;
+    }
+
+    function renderDownloadErrorState(container, fallbackUrl, errorMsg) {
+      container.innerHTML = `
+        <div class="download-empty-box">
+          <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="#e50914" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <h4>Unable to Load Direct Links</h4>
+          <p>Could not retrieve direct download links (${errorMsg || 'Network error'}). You can open the external mirror directly.</p>
+          <a class="btn-download-action" style="margin-top:8px; text-decoration:none;" href="${fallbackUrl}" target="_blank" rel="noopener noreferrer">
+            Open External Downloader
+          </a>
+        </div>
+      `;
+    }
+
+    function handleLinkDownloadClick(url, fileName) {
+      if (!url) return;
+      // In-app notification
+      showToast(`Downloading: ${fileName || 'Media file'}...`);
+
+      // Open the URL provided
+      const a = document.createElement('a');
+      a.href = url;
+      if (fileName) a.download = fileName;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     }
 
     function downloadCurrentMedia(event) {
@@ -4158,8 +4679,9 @@
       const addSourceOpen = document.getElementById('add-source-modal').style.display === 'flex';
       const cinemaOpen = document.getElementById('cinema-player-modal').style.display === 'flex';
       const backupOpen = document.getElementById('backup-modal').style.display === 'flex';
+      const downloadOpen = document.getElementById('download-modal')?.style.display === 'flex';
 
-      if (exploreOpen || infoOpen || addSourceOpen || cinemaOpen || backupOpen) {
+      if (exploreOpen || infoOpen || addSourceOpen || cinemaOpen || backupOpen || downloadOpen) {
         document.body.classList.add('modal-open');
       } else {
         document.body.classList.remove('modal-open');

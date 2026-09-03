@@ -2412,7 +2412,10 @@
       z-index: 2300;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 16px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      cursor: pointer;
     }
 
     #backup-modal.closing {
@@ -2421,22 +2424,31 @@
 
     .backup-card {
       background: #181818;
-      border-radius: 12px;
+      border-radius: 14px;
       max-width: 580px;
       width: 100%;
+      max-height: 90vh;
+      max-height: 90dvh;
+      display: flex;
+      flex-direction: column;
       border: 1px solid rgba(255, 255, 255, 0.15);
       box-shadow: 0 20px 60px rgba(0,0,0,0.9);
       overflow: hidden;
+      cursor: default;
       animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .backup-header {
-      padding: 18px 24px;
+      padding: 16px 20px;
       border-bottom: 1px solid #282828;
       display: flex;
       align-items: center;
       justify-content: space-between;
       background: #1e1e1e;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
     .backup-title-wrap {
@@ -2448,27 +2460,79 @@
     .backup-title-wrap h3 {
       font-size: 1.15rem;
       font-weight: 700;
+      margin: 0;
     }
 
     .backup-close-btn {
-      background: none;
-      border: none;
-      color: #888;
-      font-size: 24px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      min-height: 40px;
+      color: #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
       line-height: 1;
-      transition: color 0.2s;
+      padding: 0;
+      transition: all 0.2s;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0;
     }
 
-    .backup-close-btn:hover {
+    .backup-close-btn:hover, .backup-close-btn:active {
       color: #fff;
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
     }
 
     .backup-body {
-      padding: 24px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 18px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      flex: 1;
+    }
+
+    .backup-body::-webkit-scrollbar {
+      width: 6px;
+    }
+    .backup-body::-webkit-scrollbar-thumb {
+      background: #444;
+      border-radius: 3px;
+    }
+
+    .backup-footer {
+      padding: 12px 20px;
+      border-top: 1px solid #282828;
+      background: #1a1a1a;
+      display: flex;
+      justify-content: flex-end;
+      flex-shrink: 0;
+    }
+
+    .btn-backup-close-footer {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn-backup-close-footer:hover, .btn-backup-close-footer:active {
+      background: rgba(255, 255, 255, 0.2);
     }
 
     .backup-storage-warning {
@@ -3018,6 +3082,36 @@
       }
       .btn-nav-backup span {
         display: none;
+      }
+      #backup-modal {
+        padding: 10px;
+        align-items: center;
+      }
+      .backup-card {
+        max-height: 92vh;
+        max-height: 92dvh;
+        border-radius: 14px;
+      }
+      .backup-header {
+        padding: 14px 16px;
+      }
+      .backup-close-btn {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
+      }
+      .backup-body {
+        padding: 16px;
+        gap: 14px;
+      }
+      .backup-footer {
+        padding: 12px 16px;
+      }
+      .btn-backup-close-footer {
+        width: 100%;
+        padding: 12px;
+        font-size: 0.95rem;
       }
     }
   </style>
@@ -3629,7 +3723,12 @@
           </svg>
           <h3>Settings & Local Storage</h3>
         </div>
-        <button class="backup-close-btn" onclick="closeBackupModal()" title="Close">&times;</button>
+        <button class="backup-close-btn" onclick="closeBackupModal()" title="Close Settings" aria-label="Close Settings">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
       </div>
 
       <div class="backup-body">
@@ -3681,6 +3780,9 @@
             Select JSON File to Restore
           </button>
         </div>
+      </div>
+      <div class="backup-footer">
+        <button type="button" class="btn-backup-close-footer" onclick="closeBackupModal()">Close Settings</button>
       </div>
     </div>
   </div>
@@ -4042,6 +4144,8 @@
     function openBackupModal() {
       const modal = document.getElementById('backup-modal');
       if (!modal) return;
+      isClosingBackup = false;
+      modal.classList.remove('closing');
       document.getElementById('statWatchlistCount').textContent = UserDataManager.getWatchlist().length;
       document.getElementById('statHistoryCount').textContent = UserDataManager.getHistory().length;
       modal.style.display = 'flex';
@@ -4059,7 +4163,7 @@
         modal.classList.remove('closing');
         isClosingBackup = false;
         updateBodyScrollLock();
-      }, 220);
+      }, 200);
     }
 
     function handleBackupFileSelect(event) {
@@ -4169,6 +4273,10 @@
         const downloadModal = document.getElementById('download-modal');
         if (downloadModal && downloadModal.style.display === 'flex') {
           closeDownloadModal();
+        }
+        const backupModal = document.getElementById('backup-modal');
+        if (backupModal && backupModal.style.display === 'flex') {
+          closeBackupModal();
         }
       }
     });

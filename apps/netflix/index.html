@@ -3114,6 +3114,173 @@
         font-size: 0.95rem;
       }
     }
+
+    /* =========================================================
+       LANDSCAPE ROTATION NOTICE MODAL (Android & Mobile)
+       ========================================================= */
+    #landscape-notice-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.92);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .landscape-notice-card {
+      background: #181818;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 18px;
+      padding: 30px 24px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95), 0 0 35px rgba(229, 9, 20, 0.25);
+    }
+
+    .landscape-phone-animation {
+      position: relative;
+      width: 84px;
+      height: 84px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 4px;
+    }
+
+    .phone-svg {
+      animation: rotatePhonePrompt 2.5s ease-in-out infinite;
+      transform-origin: center center;
+    }
+
+    .rotate-arrow-svg {
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      animation: pulseGlow 1.8s ease-in-out infinite alternate;
+    }
+
+    @keyframes rotatePhonePrompt {
+      0%, 25% { transform: rotate(0deg); }
+      55%, 80% { transform: rotate(90deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    @keyframes pulseGlow {
+      from { transform: scale(0.92); opacity: 0.8; }
+      to { transform: scale(1.1); opacity: 1; }
+    }
+
+    .landscape-notice-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+    }
+
+    .landscape-notice-desc {
+      font-size: 0.9rem;
+      color: #bbbbbb;
+      line-height: 1.55;
+    }
+
+    .landscape-notice-desc strong {
+      color: #ffffff;
+    }
+
+    .landscape-notice-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      margin-top: 6px;
+    }
+
+    .btn-landscape-action {
+      width: 100%;
+      padding: 13px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      border: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn-landscape-action.primary {
+      background: var(--netflix-red);
+      color: #ffffff;
+      box-shadow: 0 4px 18px rgba(229, 9, 20, 0.45);
+    }
+
+    .btn-landscape-action.primary:hover, .btn-landscape-action.primary:active {
+      background: var(--netflix-red-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-landscape-action.secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: #e5e5e5;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .btn-landscape-action.secondary:hover, .btn-landscape-action.secondary:active {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .btn-landscape-action.cancel {
+      background: transparent;
+      color: #888888;
+      padding: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .btn-landscape-action.cancel:hover, .btn-landscape-action.cancel:active {
+      color: #ffffff;
+    }
+
+    /* Mobile portrait cinema video body aspect-ratio fix */
+    @media (max-width: 768px) and (orientation: portrait) {
+      .cinema-container {
+        justify-content: center !important;
+        background: #000 !important;
+      }
+      .cinema-video-body {
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 16 / 9 !important;
+        max-height: 56.25vw !important;
+        flex: none !important;
+      }
+    }
+
+    @media (max-width: 950px) and (orientation: landscape) {
+      .cinema-top-bar {
+        height: 44px;
+        padding: 0 12px;
+      }
+      .cinema-video-body {
+        height: calc(100% - 44px);
+      }
+      .cinema-title-group {
+        max-width: 260px;
+      }
+    }
   </style>
   <script src="providers.js"></script>
 </head>
@@ -3634,7 +3801,7 @@
           <div class="player-loader-server" id="modalLoaderServerText">Connecting to server...</div>
           <div class="player-loader-hint">If playback doesn't start, try switching servers from the toolbar below</div>
         </div>
-        <iframe id="infoPlayerFrame" src="" allowfullscreen allow="encrypted-media"></iframe>
+        <iframe id="infoPlayerFrame" src="" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"></iframe>
       </div>
 
       <!-- Custom Netflix Server Selector Toolbar -->
@@ -3838,6 +4005,42 @@
   </div>
 
   <!-- =========================================================
+       LANDSCAPE ROTATION NOTICE MODAL (Android & Mobile)
+       ========================================================= -->
+  <div id="landscape-notice-modal" style="display: none;">
+    <div class="landscape-notice-card">
+      <div class="landscape-phone-animation">
+        <svg class="phone-svg" viewBox="0 0 48 48" width="64" height="64" fill="none" stroke="currentColor" stroke-width="2.4">
+          <rect x="14" y="6" width="20" height="36" rx="3" stroke="#ffffff" />
+          <line x1="21" y1="37" x2="27" y2="37" stroke="#ffffff" stroke-linecap="round" />
+          <circle cx="24" cy="11" r="1.2" fill="#ffffff" />
+        </svg>
+        <svg class="rotate-arrow-svg" viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#E50914" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+        </svg>
+      </div>
+      <h3 class="landscape-notice-title">Rotate to Landscape</h3>
+      <p class="landscape-notice-desc">
+        Mobile video players are optimized for <strong>Landscape mode</strong>. Turn your device horizontally for full widescreen playback and glitch-free controls.
+      </p>
+      <div class="landscape-notice-actions">
+        <button class="btn-landscape-action primary" onclick="forceLandscapeAndPlay()">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+          Enter Fullscreen Landscape
+        </button>
+        <button class="btn-landscape-action secondary" onclick="proceedInPortrait()">
+          Continue in Portrait
+        </button>
+        <button class="btn-landscape-action cancel" onclick="closeLandscapeNotice()">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
        NEAR FULL-SCREEN CINEMA PLAYER THEATER MODAL
        ========================================================= -->
   <div id="cinema-player-modal" onclick="if(event.target === this) closeCinemaPlayer()">
@@ -3927,7 +4130,7 @@
           <div class="player-loader-server" id="cinemaLoaderServerText">Connecting to server...</div>
           <div class="player-loader-hint">If playback doesn't start, try switching servers from the top bar</div>
         </div>
-        <iframe id="cinemaPlayerFrame" src="about:blank" allowfullscreen allow="encrypted-media; autoplay; fullscreen"></iframe>
+        <iframe id="cinemaPlayerFrame" src="about:blank" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"></iframe>
       </div>
     </div>
   </div>
@@ -4462,6 +4665,7 @@
       closeExploreModal();
       closeInfo();
       closeCinemaPlayer();
+      if (typeof closeLandscapeNotice === 'function') closeLandscapeNotice();
       closeBackupModal();
       setMobNavActive(document.getElementById('mobNavHome'));
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -4495,6 +4699,16 @@
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
+        const landscapeModal = document.getElementById('landscape-notice-modal');
+        if (landscapeModal && landscapeModal.style.display === 'flex') {
+          if (typeof closeLandscapeNotice === 'function') closeLandscapeNotice();
+          return;
+        }
+        const cinemaModal = document.getElementById('cinema-player-modal');
+        if (cinemaModal && cinemaModal.style.display === 'flex') {
+          closeCinemaPlayer();
+          return;
+        }
         const downloadModal = document.getElementById('download-modal');
         if (downloadModal && downloadModal.style.display === 'flex') {
           closeDownloadModal();
@@ -5013,8 +5227,9 @@
       const cinemaOpen = document.getElementById('cinema-player-modal').style.display === 'flex';
       const backupOpen = document.getElementById('backup-modal').style.display === 'flex';
       const downloadOpen = document.getElementById('download-modal')?.style.display === 'flex';
+      const landscapeNoticeOpen = document.getElementById('landscape-notice-modal')?.style.display === 'flex';
 
-      if (exploreOpen || infoOpen || addSourceOpen || cinemaOpen || backupOpen || downloadOpen) {
+      if (exploreOpen || infoOpen || addSourceOpen || cinemaOpen || backupOpen || downloadOpen || landscapeNoticeOpen) {
         document.body.classList.add('modal-open');
       } else {
         document.body.classList.remove('modal-open');
@@ -5799,12 +6014,127 @@
     }
 
     // =========================================================
-    // CINEMA PLAYER CONTROLLER & PLAY ANIMATION
+    // CINEMA PLAYER CONTROLLER & PLAY ANIMATION & ORIENTATION
     // =========================================================
     let currentCinemaEpisodes = [];
     let isClosingCinema = false;
+    let pendingPlaybackArgs = null;
 
-    function triggerPlayWithAnimation(event, id, type, season = 1, episode = 1, title = '', details = null) {
+    function isMobilePortrait() {
+      // Mobile / tablet check: touch device or narrow screen width <= 900
+      const isTouchOrMobile = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.innerWidth <= 900);
+      if (!isTouchOrMobile) return false;
+
+      // Check orientation API if supported
+      if (window.screen && window.screen.orientation && window.screen.orientation.type) {
+        return window.screen.orientation.type.startsWith('portrait');
+      }
+      // Fallback to media query
+      if (window.matchMedia && window.matchMedia('(orientation: portrait)').matches) {
+        return true;
+      }
+      // Fallback to window dimensions
+      return window.innerHeight > window.innerWidth;
+    }
+
+    async function attemptLandscapeLock() {
+      try {
+        if (screen.orientation && screen.orientation.lock) {
+          // On many Android Chrome versions, orientation lock requires fullscreen or returns a promise
+          if (!document.fullscreenElement) {
+            const el = document.documentElement;
+            if (el.requestFullscreen) {
+              await el.requestFullscreen().catch(() => {});
+            }
+          }
+          await screen.orientation.lock('landscape');
+          return true;
+        }
+      } catch (err) {
+        console.log('Orientation lock attempt note:', err);
+      }
+      return false;
+    }
+
+    function showLandscapeNotice(args) {
+      pendingPlaybackArgs = args;
+      const modal = document.getElementById('landscape-notice-modal');
+      if (modal) {
+        modal.style.display = 'flex';
+      }
+      updateBodyScrollLock();
+    }
+
+    function closeLandscapeNotice() {
+      const modal = document.getElementById('landscape-notice-modal');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+      pendingPlaybackArgs = null;
+      updateBodyScrollLock();
+    }
+
+    async function forceLandscapeAndPlay() {
+      const args = pendingPlaybackArgs;
+      if (!args) {
+        closeLandscapeNotice();
+        return;
+      }
+      const modal = document.getElementById('landscape-notice-modal');
+      if (modal) modal.style.display = 'none';
+      updateBodyScrollLock();
+
+      try {
+        const container = document.querySelector('.cinema-container') || document.documentElement;
+        if (container.requestFullscreen) {
+          await container.requestFullscreen().catch(() => {});
+        } else if (container.webkitRequestFullscreen) {
+          await container.webkitRequestFullscreen();
+        }
+        if (screen.orientation && screen.orientation.lock) {
+          await screen.orientation.lock('landscape').catch(() => {});
+        }
+      } catch (err) {
+        console.warn('Orientation lock error:', err);
+      }
+
+      openCinemaPlayer(args.id, args.type, args.season, args.episode, args.title, args.details);
+      pendingPlaybackArgs = null;
+    }
+
+    function proceedInPortrait() {
+      const args = pendingPlaybackArgs;
+      closeLandscapeNotice();
+      if (args) {
+        openCinemaPlayer(args.id, args.type, args.season, args.episode, args.title, args.details);
+      }
+    }
+
+    // Auto-detect when phone rotates to landscape and resume playback seamlessly
+    function handleScreenRotationCheck() {
+      if (!pendingPlaybackArgs) return;
+      if (!isMobilePortrait()) {
+        const args = pendingPlaybackArgs;
+        closeLandscapeNotice();
+        openCinemaPlayer(args.id, args.type, args.season, args.episode, args.title, args.details);
+      }
+    }
+
+    window.addEventListener('orientationchange', () => {
+      setTimeout(handleScreenRotationCheck, 200);
+    });
+    if (window.screen && window.screen.orientation) {
+      window.screen.orientation.addEventListener('change', () => {
+        setTimeout(handleScreenRotationCheck, 200);
+      });
+    }
+    window.addEventListener('resize', () => {
+      if (pendingPlaybackArgs) {
+        setTimeout(handleScreenRotationCheck, 150);
+      }
+    });
+
+    async function triggerPlayWithAnimation(event, id, type, season = 1, episode = 1, title = '', details = null) {
       if (event) {
         event.stopPropagation();
       }
@@ -5816,6 +6146,29 @@
         overlay.classList.add('active');
       }
 
+      const playbackPayload = { id, type, season, episode, title, details };
+
+      // Check if user is on mobile/tablet in portrait mode
+      if (isMobilePortrait()) {
+        // Try auto-switching to landscape via screen orientation lock API
+        const locked = await attemptLandscapeLock();
+        if (locked && !isMobilePortrait()) {
+          setTimeout(() => {
+            if (overlay) overlay.classList.remove('active');
+            openCinemaPlayer(id, type, season, episode, title, details);
+          }, 280);
+          return;
+        }
+
+        // If auto-switch was blocked by browser or device remained portrait, show landscape notice
+        setTimeout(() => {
+          if (overlay) overlay.classList.remove('active');
+          showLandscapeNotice(playbackPayload);
+        }, 280);
+        return;
+      }
+
+      // Normal flow (desktop or already in landscape mode)
       setTimeout(() => {
         if (overlay) overlay.classList.remove('active');
         openCinemaPlayer(id, type, season, episode, title, details);
@@ -5882,6 +6235,18 @@
       modal.classList.add('closing');
       if (cinemaLoaderTimeout) clearTimeout(cinemaLoaderTimeout);
       hidePlayerLoader('cinemaPlayerLoader');
+
+      // Release orientation lock and exit fullscreen if active
+      try {
+        if (screen.orientation && screen.orientation.unlock) {
+          screen.orientation.unlock();
+        }
+      } catch(e) {}
+      try {
+        if (document.fullscreenElement && document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        }
+      } catch(e) {}
 
       setTimeout(() => {
         modal.style.display = 'none';
@@ -6002,14 +6367,33 @@
     function toggleHardwareFullscreen() {
       const container = document.querySelector('.cinema-container');
       if (!document.fullscreenElement) {
-        if (container.requestFullscreen) {
-          container.requestFullscreen().catch(() => {});
-        } else if (container.webkitRequestFullscreen) {
-          container.webkitRequestFullscreen();
+        const req = container.requestFullscreen ? container.requestFullscreen() : (container.webkitRequestFullscreen ? container.webkitRequestFullscreen() : null);
+        if (req && req.then) {
+          req.then(() => {
+            if (screen.orientation && screen.orientation.lock) {
+              screen.orientation.lock('landscape').catch(() => {});
+            }
+          }).catch(() => {});
+        } else {
+          if (screen.orientation && screen.orientation.lock) {
+            screen.orientation.lock('landscape').catch(() => {});
+          }
         }
       } else {
         if (document.exitFullscreen) {
-          document.exitFullscreen().catch(() => {});
+          document.exitFullscreen().then(() => {
+            if (screen.orientation && screen.orientation.unlock) {
+              try { screen.orientation.unlock(); } catch(e) {}
+            }
+          }).catch(() => {
+            if (screen.orientation && screen.orientation.unlock) {
+              try { screen.orientation.unlock(); } catch(e) {}
+            }
+          });
+        } else {
+          if (screen.orientation && screen.orientation.unlock) {
+            try { screen.orientation.unlock(); } catch(e) {}
+          }
         }
       }
     }

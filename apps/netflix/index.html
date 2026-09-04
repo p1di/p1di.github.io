@@ -441,71 +441,19 @@
       gap: 10px;
     }
 
-    .row-carousel-wrapper {
-      position: relative;
-      width: 100%;
-    }
-
     .row-carousel {
       display: flex;
       gap: 14px;
       overflow-x: auto;
-      scroll-behavior: smooth;
+      scroll-behavior: auto;
       padding: 12px 0 24px;
-    }
-
-    /* Netflix Desktop Carousel Arrows */
-    .carousel-btn {
-      position: absolute;
-      top: calc(50% - 6px);
-      transform: translateY(-50%);
-      width: 44px;
-      height: 120px;
-      background: rgba(20, 20, 20, 0.75);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 35;
-      opacity: 0;
-      transition: opacity 0.22s ease, background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
-      border-radius: 6px;
-      padding: 0;
+      -webkit-overflow-scrolling: touch;
+      cursor: grab;
       user-select: none;
-      -webkit-tap-highlight-color: transparent;
     }
 
-    .carousel-btn:hover {
-      background: rgba(28, 28, 28, 0.95);
-      border-color: rgba(255, 255, 255, 0.35);
-      transform: translateY(-50%) scale(1.04);
-      color: var(--netflix-red);
-    }
-
-    .carousel-btn-prev {
-      left: 0;
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-    }
-
-    .carousel-btn-next {
-      right: 0;
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-
-    .row-carousel-wrapper:hover .carousel-btn {
-      opacity: 1;
-    }
-
-    @media (max-width: 768px) {
-      .carousel-btn {
-        display: none !important;
-      }
+    .row-carousel:active {
+      cursor: grabbing;
     }
 
     /* Movie Card */
@@ -3280,19 +3228,7 @@
           <button class="row-sub-btn" onclick="openExploreModal('history')">See All</button>
         </div>
       </div>
-      <div class="row-carousel-wrapper">
-        <button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel('rowHistory', -1)" aria-label="Previous">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
-        <div class="row-carousel" id="rowHistory"></div>
-        <button class="carousel-btn carousel-btn-next" onclick="scrollCarousel('rowHistory', 1)" aria-label="Next">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
-      </div>
+      <div class="row-carousel" id="rowHistory"></div>
     </section>
 
     <!-- Row: My Watchlist -->
@@ -3310,19 +3246,7 @@
           <button class="row-sub-btn" onclick="openExploreModal('watchlist')">See All</button>
         </div>
       </div>
-      <div class="row-carousel-wrapper">
-        <button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel('rowWatchlist', -1)" aria-label="Previous">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
-        <div class="row-carousel" id="rowWatchlist"></div>
-        <button class="carousel-btn carousel-btn-next" onclick="scrollCarousel('rowWatchlist', 1)" aria-label="Next">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
-      </div>
+      <div class="row-carousel" id="rowWatchlist"></div>
     </section>
 
     <!-- Row: Dynamic Personalized Recommendations ("Because You Watched" or "Top Picks For You") -->
@@ -3340,19 +3264,7 @@
           <button class="row-sub-btn" onclick="openExploreModal('all')">See All</button>
         </div>
       </div>
-      <div class="row-carousel-wrapper">
-        <button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel('rowRecommended', -1)" aria-label="Previous">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
-        <div class="row-carousel" id="rowRecommended"></div>
-        <button class="carousel-btn carousel-btn-next" onclick="scrollCarousel('rowRecommended', 1)" aria-label="Next">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
-      </div>
+      <div class="row-carousel" id="rowRecommended"></div>
     </section>
 
     <!-- Row 1: Trending Now -->
@@ -3370,19 +3282,7 @@
           <button class="row-sub-btn" onclick="openExploreModal('all')">See All</button>
         </div>
       </div>
-      <div class="row-carousel-wrapper">
-        <button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel('rowTrending', -1)" aria-label="Previous">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
-        <div class="row-carousel" id="rowTrending"></div>
-        <button class="carousel-btn carousel-btn-next" onclick="scrollCarousel('rowTrending', 1)" aria-label="Next">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
-      </div>
+      <div class="row-carousel" id="rowTrending"></div>
     </section>
 
     <!-- Row: New & Upcoming Releases -->
@@ -3401,19 +3301,7 @@
           <button class="row-sub-btn" onclick="openExploreModal('movie')">See All</button>
         </div>
       </div>
-      <div class="row-carousel-wrapper">
-        <button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel('rowNowPlaying', -1)" aria-label="Previous">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
-        <div class="row-carousel" id="rowNowPlaying"></div>
-        <button class="carousel-btn carousel-btn-next" onclick="scrollCarousel('rowNowPlaying', 1)" aria-label="Next">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
-      </div>
+      <div class="row-carousel" id="rowNowPlaying"></div>
     </section>
 
     <!-- Row 2: Popular Movies -->
@@ -3438,19 +3326,7 @@
           <button class="row-sub-btn" onclick="openExploreModal('movie')">See All</button>
         </div>
       </div>
-      <div class="row-carousel-wrapper">
-        <button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel('rowMovies', -1)" aria-label="Previous">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
-        <div class="row-carousel" id="rowMovies"></div>
-        <button class="carousel-btn carousel-btn-next" onclick="scrollCarousel('rowMovies', 1)" aria-label="Next">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
-      </div>
+      <div class="row-carousel" id="rowMovies"></div>
     </section>
 
     <!-- Row 3: Top Rated TV Shows -->
@@ -3469,19 +3345,7 @@
           <button class="row-sub-btn" onclick="openExploreModal('tv')">See All</button>
         </div>
       </div>
-      <div class="row-carousel-wrapper">
-        <button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel('rowTv', -1)" aria-label="Previous">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
-        <div class="row-carousel" id="rowTv"></div>
-        <button class="carousel-btn carousel-btn-next" onclick="scrollCarousel('rowTv', 1)" aria-label="Next">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
-      </div>
+      <div class="row-carousel" id="rowTv"></div>
     </section>
 
     <!-- Row: Action & Adventure Blockbusters -->
@@ -3499,19 +3363,7 @@
           <button class="row-sub-btn" onclick="openExploreGenre(28, 'Action')">See All</button>
         </div>
       </div>
-      <div class="row-carousel-wrapper">
-        <button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel('rowAction', -1)" aria-label="Previous">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
-        <div class="row-carousel" id="rowAction"></div>
-        <button class="carousel-btn carousel-btn-next" onclick="scrollCarousel('rowAction', 1)" aria-label="Next">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
-      </div>
+      <div class="row-carousel" id="rowAction"></div>
     </section>
 
     <!-- Row: Binge-Worthy TV Dramas -->
@@ -3529,19 +3381,7 @@
           <button class="row-sub-btn" onclick="openExploreGenre(18, 'Drama')">See All</button>
         </div>
       </div>
-      <div class="row-carousel-wrapper">
-        <button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel('rowDramas', -1)" aria-label="Previous">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
-        <div class="row-carousel" id="rowDramas"></div>
-        <button class="carousel-btn carousel-btn-next" onclick="scrollCarousel('rowDramas', 1)" aria-label="Next">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
-      </div>
+      <div class="row-carousel" id="rowDramas"></div>
     </section>
 
     <!-- Row: Critically Acclaimed Cinema -->
@@ -3560,19 +3400,7 @@
           <button class="row-sub-btn" onclick="openExploreModal('movie')">See All</button>
         </div>
       </div>
-      <div class="row-carousel-wrapper">
-        <button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel('rowTopRatedMovies', -1)" aria-label="Previous">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
-        <div class="row-carousel" id="rowTopRatedMovies"></div>
-        <button class="carousel-btn carousel-btn-next" onclick="scrollCarousel('rowTopRatedMovies', 1)" aria-label="Next">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
-      </div>
+      <div class="row-carousel" id="rowTopRatedMovies"></div>
     </section>
 
     <!-- Row: Sci-Fi & Cosmic Adventures -->
@@ -3594,19 +3422,7 @@
           <button class="row-sub-btn" onclick="openExploreGenre(878, 'Sci-Fi')">See All</button>
         </div>
       </div>
-      <div class="row-carousel-wrapper">
-        <button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel('rowSciFi', -1)" aria-label="Previous">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
-        <div class="row-carousel" id="rowSciFi"></div>
-        <button class="carousel-btn carousel-btn-next" onclick="scrollCarousel('rowSciFi', 1)" aria-label="Next">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
-      </div>
+      <div class="row-carousel" id="rowSciFi"></div>
     </section>
 
     <!-- Row: Laugh-Out-Loud Comedies -->
@@ -3627,19 +3443,7 @@
           <button class="row-sub-btn" onclick="openExploreGenre(35, 'Comedy')">See All</button>
         </div>
       </div>
-      <div class="row-carousel-wrapper">
-        <button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel('rowComedy', -1)" aria-label="Previous">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
-        <div class="row-carousel" id="rowComedy"></div>
-        <button class="carousel-btn carousel-btn-next" onclick="scrollCarousel('rowComedy', 1)" aria-label="Next">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
-      </div>
+      <div class="row-carousel" id="rowComedy"></div>
     </section>
 
     <!-- Row: Edge-of-Your-Seat Thrillers -->
@@ -3662,19 +3466,7 @@
           <button class="row-sub-btn" onclick="openExploreGenre(53, 'Thriller')">See All</button>
         </div>
       </div>
-      <div class="row-carousel-wrapper">
-        <button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel('rowThrillers', -1)" aria-label="Previous">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
-        <div class="row-carousel" id="rowThrillers"></div>
-        <button class="carousel-btn carousel-btn-next" onclick="scrollCarousel('rowThrillers', 1)" aria-label="Next">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
-      </div>
+      <div class="row-carousel" id="rowThrillers"></div>
     </section>
 
     <!-- Row: Animation & Anime Spotlight -->
@@ -3692,19 +3484,7 @@
           <button class="row-sub-btn" onclick="openExploreGenre(16, 'Animation')">See All</button>
         </div>
       </div>
-      <div class="row-carousel-wrapper">
-        <button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel('rowAnimation', -1)" aria-label="Previous">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
-        <div class="row-carousel" id="rowAnimation"></div>
-        <button class="carousel-btn carousel-btn-next" onclick="scrollCarousel('rowAnimation', 1)" aria-label="Next">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
-      </div>
+      <div class="row-carousel" id="rowAnimation"></div>
     </section>
 
     <!-- Row: Chilling Horror Hits -->
@@ -3722,19 +3502,7 @@
           <button class="row-sub-btn" onclick="openExploreGenre(27, 'Horror')">See All</button>
         </div>
       </div>
-      <div class="row-carousel-wrapper">
-        <button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel('rowHorror', -1)" aria-label="Previous">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
-        <div class="row-carousel" id="rowHorror"></div>
-        <button class="carousel-btn carousel-btn-next" onclick="scrollCarousel('rowHorror', 1)" aria-label="Next">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
-      </div>
+      <div class="row-carousel" id="rowHorror"></div>
     </section>
 
     <!-- Row: Documentaries & Real Stories -->
@@ -3753,19 +3521,7 @@
           <button class="row-sub-btn" onclick="openExploreGenre(99, 'Documentary')">See All</button>
         </div>
       </div>
-      <div class="row-carousel-wrapper">
-        <button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel('rowDoc', -1)" aria-label="Previous">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
-        <div class="row-carousel" id="rowDoc"></div>
-        <button class="carousel-btn carousel-btn-next" onclick="scrollCarousel('rowDoc', 1)" aria-label="Next">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
-      </div>
+      <div class="row-carousel" id="rowDoc"></div>
     </section>
 
   </main>
@@ -5283,7 +5039,7 @@
         container.innerHTML = '';
       } else {
         section.style.display = 'flex';
-        container.innerHTML = history.map(item => buildCard(item, true)).join('');
+        renderInfiniteCards(history, container, true);
       }
     }
 
@@ -5298,7 +5054,7 @@
         container.innerHTML = '';
       } else {
         section.style.display = 'flex';
-        container.innerHTML = list.map(item => buildCard(item, false)).join('');
+        renderInfiniteCards(list, container, false);
       }
     }
 
@@ -5424,17 +5180,6 @@
       }
     }
 
-    // Carousel Scroll Navigation Helper
-    function scrollCarousel(carouselId, direction) {
-      const carousel = document.getElementById(carouselId);
-      if (!carousel) return;
-      const scrollStep = Math.max(300, Math.floor(carousel.clientWidth * 0.75));
-      carousel.scrollBy({
-        left: direction * scrollStep,
-        behavior: 'smooth'
-      });
-    }
-
     // Direct Genre Explore Helper from Row "See All" buttons
     function openExploreGenre(genreId, genreName) {
       openExploreModal('genres');
@@ -5448,12 +5193,121 @@
       }, 60);
     }
 
-    // Helper to safely render card markup
-    function renderMovieCards(results) {
-      return (results || [])
-        .filter(m => m.poster_path)
-        .map(m => buildCard(m, false))
-        .join('');
+    // Setup seamless infinite scroll wrap and horizontal mouse drag & wheel for carousels
+    function setupInfiniteCarousel(carousel) {
+      if (!carousel || carousel._infiniteAttached) return;
+      carousel._infiniteAttached = true;
+
+      // Center initial scroll position on the middle set
+      const centerMiddleSet = () => {
+        const sets = carousel._setCount || 3;
+        if (sets <= 1) return;
+        const setWidth = carousel.scrollWidth / sets;
+        if (setWidth > 0 && carousel.scrollLeft === 0) {
+          carousel._singleSetWidth = setWidth;
+          carousel.scrollLeft = setWidth;
+        }
+      };
+
+      requestAnimationFrame(() => {
+        centerMiddleSet();
+        setTimeout(centerMiddleSet, 200);
+      });
+
+      // Seamless infinite wrapping on horizontal scroll
+      let isLooping = false;
+      carousel.addEventListener('scroll', () => {
+        if (isLooping) return;
+        const sets = carousel._setCount || 3;
+        if (sets <= 1) return;
+        const setWidth = carousel._singleSetWidth || (carousel.scrollWidth / sets);
+        if (!setWidth || setWidth <= 50) return;
+
+        // When user scrolls towards the right end (entering set 3)
+        if (carousel.scrollLeft >= setWidth * (sets - 1)) {
+          isLooping = true;
+          carousel.scrollLeft -= setWidth;
+          requestAnimationFrame(() => { isLooping = false; });
+        }
+        // When user scrolls towards the left end (entering set 1)
+        else if (carousel.scrollLeft <= 20) {
+          isLooping = true;
+          carousel.scrollLeft += setWidth;
+          requestAnimationFrame(() => { isLooping = false; });
+        }
+      }, { passive: true });
+
+      // Enable horizontal mouse wheel scrolling over carousels
+      carousel.addEventListener('wheel', (e) => {
+        if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && e.deltaY !== 0) {
+          e.preventDefault();
+          carousel.scrollLeft += e.deltaY * 1.2;
+        }
+      }, { passive: false });
+
+      // Click-and-drag to scroll horizontally for desktop users
+      let isMouseDown = false;
+      let startMouseX = 0;
+      let startScrollLeft = 0;
+      let userHasDragged = false;
+
+      carousel.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return; // Only left click
+        isMouseDown = true;
+        userHasDragged = false;
+        startMouseX = e.pageX - carousel.offsetLeft;
+        startScrollLeft = carousel.scrollLeft;
+      });
+
+      window.addEventListener('mouseup', () => {
+        isMouseDown = false;
+      });
+
+      carousel.addEventListener('mousemove', (e) => {
+        if (!isMouseDown) return;
+        const currentX = e.pageX - carousel.offsetLeft;
+        const walk = (currentX - startMouseX) * 1.4;
+        if (Math.abs(walk) > 4) {
+          userHasDragged = true;
+          carousel.scrollLeft = startScrollLeft - walk;
+        }
+      });
+
+      // Prevent card click if mouse was used to drag
+      carousel.addEventListener('click', (e) => {
+        if (userHasDragged) {
+          e.stopPropagation();
+          e.preventDefault();
+          userHasDragged = false;
+        }
+      }, true);
+    }
+
+    // Render cards and clone for seamless infinite repeating
+    function renderInfiniteCards(results, target, isHistory = false) {
+      if (!results || results.length === 0) return '';
+      const valid = results.filter(m => m.poster_path);
+      if (valid.length === 0) return '';
+
+      // Create 3 identical sets of cards for continuous infinite wrapping
+      const sets = valid.length >= 3 ? 3 : 1;
+      if (target) {
+        target._setCount = sets;
+      }
+
+      const singleSet = valid.map(m => buildCard(m, isHistory)).join('');
+      let fullHtml = '';
+      for (let i = 0; i < sets; i++) {
+        fullHtml += singleSet;
+      }
+
+      if (target) {
+        target.innerHTML = fullHtml;
+        if (sets > 1) {
+          setupInfiniteCarousel(target);
+        }
+      }
+      return fullHtml;
     }
 
     // Dynamic Personalized Recommendations ("Because You Watched" or "Top Picks For You")
@@ -5493,11 +5347,8 @@
           results = data?.results || [];
         }
 
-        const cards = renderMovieCards(results);
-        if (cards) {
-          target.innerHTML = cards;
-          if (section) section.style.display = 'flex';
-        }
+        renderInfiniteCards(results, target, false);
+        if (section) section.style.display = 'flex';
       } catch (err) {
         console.error('Error loading recommendations:', err);
       }
@@ -5511,7 +5362,7 @@
           const data = await res.json();
           const target = document.getElementById(targetId);
           if (target && data.results) {
-            target.innerHTML = renderMovieCards(data.results);
+            renderInfiniteCards(data.results, target, false);
           }
         } catch (err) {
           console.error(`Error loading row [${targetId}]:`, err);

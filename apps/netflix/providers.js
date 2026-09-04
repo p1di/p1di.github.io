@@ -4,7 +4,12 @@ const STORAGE_KEY = 'pd4k_custom_providers';
 
 const DEFAULT_PROVIDERS = [
   {
-    name: "Videasy (Default)",
+    name: "PrimeSrc (Default)",
+    movie: "https://primesrc.me/embed/movie?tmdb={id}",
+    tv: "https://primesrc.me/embed/tv?tmdb={id}&season={season}&episode={episode}"
+  },
+  {
+    name: "Videasy",
     movie: "https://player.videasy.net/movie/{id}?overlay=true&color=E50914",
     tv: "https://player.videasy.net/tv/{id}/{season}/{episode}?overlay=true&episodeSelector=true&autoplayNextEpisode=true&color=E50914"
   },
@@ -22,11 +27,6 @@ const DEFAULT_PROVIDERS = [
     name: "VidLink",
     movie: "https://vidlink.pro/movie/{id}?ads=0",
     tv: "https://vidlink.pro/tv/{id}/{season}/{episode}?ads=0"
-  },
-  {
-    name: "PrimeSrc",
-    movie: "https://primesrc.me/embed/movie?tmdb={id}",
-    tv: "https://primesrc.me/embed/tv?tmdb={id}&season={season}&episode={episode}"
   },
   {
     name: "SmashyStream",

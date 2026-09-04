@@ -4062,7 +4062,7 @@
         <!-- Custom Server Dropdown -->
         <div class="netflix-dropdown" id="serverDropdownContainer">
           <button type="button" class="netflix-dropdown-btn" id="serverDropdownBtn" onclick="toggleServerDropdown(event)">
-            <span id="selectedServerLabel">Videasy (Default)</span>
+            <span id="selectedServerLabel">PrimeSrc (Default)</span>
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="6 9 12 15 18 9"></polyline>
             </svg>
@@ -4338,7 +4338,7 @@
           <!-- Server Selector Dropdown inside Cinema -->
           <div class="netflix-dropdown" id="cinemaServerDropdownWrap">
             <button type="button" class="cinema-tool-btn" id="cinemaServerDropdownBtn" onclick="toggleCinemaServerDropdown(event)">
-              <span id="cinemaServerLabel">Videasy (Default)</span>
+              <span id="cinemaServerLabel">PrimeSrc (Default)</span>
               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="6 9 12 15 18 9"></polyline>
               </svg>
@@ -4603,7 +4603,12 @@
     // Guaranteed Fallback Streaming Providers
     const FALLBACK_PROVIDERS = [
       {
-        name: "Videasy (Default)",
+        name: "PrimeSrc (Default)",
+        movie: "https://primesrc.me/embed/movie?tmdb={id}",
+        tv: "https://primesrc.me/embed/tv?tmdb={id}&season={season}&episode={episode}"
+      },
+      {
+        name: "Videasy",
         movie: "https://player.videasy.net/movie/{id}?overlay=true&color=E50914",
         tv: "https://player.videasy.net/tv/{id}/{season}/{episode}?overlay=true&episodeSelector=true&autoplayNextEpisode=true&color=E50914"
       },
@@ -4621,11 +4626,6 @@
         name: "VidLink",
         movie: "https://vidlink.pro/movie/{id}?ads=0",
         tv: "https://vidlink.pro/tv/{id}/{season}/{episode}?ads=0"
-      },
-      {
-        name: "PrimeSrc",
-        movie: "https://primesrc.me/embed/movie?tmdb={id}",
-        tv: "https://primesrc.me/embed/tv?tmdb={id}&season={season}&episode={episode}"
       }
     ];
 

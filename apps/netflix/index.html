@@ -409,10 +409,10 @@
 
     /* Main Content Sections */
     .content-container {
-      padding: 0 4% 80px;
+      padding: 0 4% 60px;
       display: flex;
       flex-direction: column;
-      gap: 45px;
+      gap: 24px;
       margin-top: -70px;
       position: relative;
       z-index: 20;
@@ -422,7 +422,7 @@
     .row-section {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 8px;
     }
 
     .row-header {
@@ -432,7 +432,7 @@
     }
 
     .row-title {
-      font-size: 1.4rem;
+      font-size: 1.35rem;
       font-weight: 700;
       letter-spacing: -0.01em;
       color: #e5e5e5;
@@ -445,15 +445,9 @@
       display: flex;
       gap: 14px;
       overflow-x: auto;
-      scroll-behavior: auto;
-      padding: 12px 0 24px;
+      scroll-behavior: smooth;
+      padding: 4px 0 10px;
       -webkit-overflow-scrolling: touch;
-      cursor: grab;
-      user-select: none;
-    }
-
-    .row-carousel:active {
-      cursor: grabbing;
     }
 
     /* Movie Card */
@@ -1857,8 +1851,8 @@
 
       .content-container {
         margin-top: -50px;
-        gap: 32px;
-        padding: 0 4% 60px;
+        gap: 20px;
+        padding: 0 4% 50px;
       }
 
       .row-title {
@@ -1867,8 +1861,8 @@
 
       /* Cover Cards Mobile Optimization & Description Visibility */
       .row-carousel {
-        padding: 8px 0 16px;
-        gap: 12px;
+        padding: 4px 0 8px;
+        gap: 10px;
         -webkit-overflow-scrolling: touch;
       }
 
@@ -5039,7 +5033,7 @@
         container.innerHTML = '';
       } else {
         section.style.display = 'flex';
-        renderInfiniteCards(history, container, true);
+        container.innerHTML = history.map(item => buildCard(item, true)).join('');
       }
     }
 
@@ -5054,7 +5048,7 @@
         container.innerHTML = '';
       } else {
         section.style.display = 'flex';
-        renderInfiniteCards(list, container, false);
+        container.innerHTML = list.map(item => buildCard(item, false)).join('');
       }
     }
 
@@ -5193,121 +5187,12 @@
       }, 60);
     }
 
-    // Setup seamless infinite scroll wrap and horizontal mouse drag & wheel for carousels
-    function setupInfiniteCarousel(carousel) {
-      if (!carousel || carousel._infiniteAttached) return;
-      carousel._infiniteAttached = true;
-
-      // Center initial scroll position on the middle set
-      const centerMiddleSet = () => {
-        const sets = carousel._setCount || 3;
-        if (sets <= 1) return;
-        const setWidth = carousel.scrollWidth / sets;
-        if (setWidth > 0 && carousel.scrollLeft === 0) {
-          carousel._singleSetWidth = setWidth;
-          carousel.scrollLeft = setWidth;
-        }
-      };
-
-      requestAnimationFrame(() => {
-        centerMiddleSet();
-        setTimeout(centerMiddleSet, 200);
-      });
-
-      // Seamless infinite wrapping on horizontal scroll
-      let isLooping = false;
-      carousel.addEventListener('scroll', () => {
-        if (isLooping) return;
-        const sets = carousel._setCount || 3;
-        if (sets <= 1) return;
-        const setWidth = carousel._singleSetWidth || (carousel.scrollWidth / sets);
-        if (!setWidth || setWidth <= 50) return;
-
-        // When user scrolls towards the right end (entering set 3)
-        if (carousel.scrollLeft >= setWidth * (sets - 1)) {
-          isLooping = true;
-          carousel.scrollLeft -= setWidth;
-          requestAnimationFrame(() => { isLooping = false; });
-        }
-        // When user scrolls towards the left end (entering set 1)
-        else if (carousel.scrollLeft <= 20) {
-          isLooping = true;
-          carousel.scrollLeft += setWidth;
-          requestAnimationFrame(() => { isLooping = false; });
-        }
-      }, { passive: true });
-
-      // Enable horizontal mouse wheel scrolling over carousels
-      carousel.addEventListener('wheel', (e) => {
-        if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && e.deltaY !== 0) {
-          e.preventDefault();
-          carousel.scrollLeft += e.deltaY * 1.2;
-        }
-      }, { passive: false });
-
-      // Click-and-drag to scroll horizontally for desktop users
-      let isMouseDown = false;
-      let startMouseX = 0;
-      let startScrollLeft = 0;
-      let userHasDragged = false;
-
-      carousel.addEventListener('mousedown', (e) => {
-        if (e.button !== 0) return; // Only left click
-        isMouseDown = true;
-        userHasDragged = false;
-        startMouseX = e.pageX - carousel.offsetLeft;
-        startScrollLeft = carousel.scrollLeft;
-      });
-
-      window.addEventListener('mouseup', () => {
-        isMouseDown = false;
-      });
-
-      carousel.addEventListener('mousemove', (e) => {
-        if (!isMouseDown) return;
-        const currentX = e.pageX - carousel.offsetLeft;
-        const walk = (currentX - startMouseX) * 1.4;
-        if (Math.abs(walk) > 4) {
-          userHasDragged = true;
-          carousel.scrollLeft = startScrollLeft - walk;
-        }
-      });
-
-      // Prevent card click if mouse was used to drag
-      carousel.addEventListener('click', (e) => {
-        if (userHasDragged) {
-          e.stopPropagation();
-          e.preventDefault();
-          userHasDragged = false;
-        }
-      }, true);
-    }
-
-    // Render cards and clone for seamless infinite repeating
-    function renderInfiniteCards(results, target, isHistory = false) {
-      if (!results || results.length === 0) return '';
-      const valid = results.filter(m => m.poster_path);
-      if (valid.length === 0) return '';
-
-      // Create 3 identical sets of cards for continuous infinite wrapping
-      const sets = valid.length >= 3 ? 3 : 1;
-      if (target) {
-        target._setCount = sets;
-      }
-
-      const singleSet = valid.map(m => buildCard(m, isHistory)).join('');
-      let fullHtml = '';
-      for (let i = 0; i < sets; i++) {
-        fullHtml += singleSet;
-      }
-
-      if (target) {
-        target.innerHTML = fullHtml;
-        if (sets > 1) {
-          setupInfiniteCarousel(target);
-        }
-      }
-      return fullHtml;
+    // Helper to safely render card markup
+    function renderMovieCards(results) {
+      return (results || [])
+        .filter(m => m.poster_path)
+        .map(m => buildCard(m, false))
+        .join('');
     }
 
     // Dynamic Personalized Recommendations ("Because You Watched" or "Top Picks For You")
@@ -5347,8 +5232,11 @@
           results = data?.results || [];
         }
 
-        renderInfiniteCards(results, target, false);
-        if (section) section.style.display = 'flex';
+        const cards = renderMovieCards(results);
+        if (cards) {
+          target.innerHTML = cards;
+          if (section) section.style.display = 'flex';
+        }
       } catch (err) {
         console.error('Error loading recommendations:', err);
       }
@@ -5362,7 +5250,7 @@
           const data = await res.json();
           const target = document.getElementById(targetId);
           if (target && data.results) {
-            renderInfiniteCards(data.results, target, false);
+            target.innerHTML = renderMovieCards(data.results);
           }
         } catch (err) {
           console.error(`Error loading row [${targetId}]:`, err);

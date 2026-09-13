@@ -9,6 +9,11 @@ const DEFAULT_PROVIDERS = [
     tv: "https://primesrc.me/embed/tv?tmdb={id}&season={season}&episode={episode}"
   },
   {
+    name: "VidLove (Secondary)",
+    movie: "https://player.vidlove.cc/embed/movie/{id}?primarycolor=ff4d6d&secondarycolor=c49de8",
+    tv: "https://player.vidlove.cc/embed/tv/{id}/{season}/{episode}?primarycolor=ff4d6d&secondarycolor=c49de8"
+  },
+  {
     name: "Videasy",
     movie: "https://player.videasy.net/movie/{id}?overlay=true&color=E50914",
     tv: "https://player.videasy.net/tv/{id}/{season}/{episode}?overlay=true&episodeSelector=true&autoplayNextEpisode=true&color=E50914"

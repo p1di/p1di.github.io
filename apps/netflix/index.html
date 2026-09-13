@@ -546,10 +546,16 @@
     /* =========================================================
        IN-PAGE BROWSE & FILTER VIEW (Authentic Netflix Full-Page)
        ========================================================= */
+    body.browse-active .content-container {
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+    }
+
     #inPageBrowseView {
       width: 100%;
-      margin-top: 70px;
-      padding: 25px 0 80px;
+      margin-top: 0;
+      padding-top: 115px;
+      padding-bottom: 80px;
       animation: fadeInPage 0.28s ease;
     }
 
@@ -667,8 +673,9 @@
         font-size: 1.6rem;
       }
       #inPageBrowseView {
-        margin-top: 60px;
-        padding: 15px 0 90px;
+        margin-top: 0;
+        padding-top: 85px;
+        padding-bottom: 100px;
       }
     }
 
@@ -6386,6 +6393,7 @@
       if (billboard) billboard.style.display = 'none';
       if (homeRows) homeRows.style.display = 'none';
       if (browseView) browseView.style.display = 'block';
+      document.body.classList.add('browse-active');
 
       // Ensure body scroll is active for normal site scrolling
       document.body.classList.remove('modal-open');
@@ -6468,6 +6476,7 @@
       if (browseView) browseView.style.display = 'none';
       if (billboard) billboard.style.display = '';
       if (homeRows) homeRows.style.display = 'block';
+      document.body.classList.remove('browse-active');
 
       document.body.classList.remove('modal-open');
       window.scrollTo({ top: 0, behavior: 'smooth' });

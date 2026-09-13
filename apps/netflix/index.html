@@ -548,7 +548,8 @@
        ========================================================= */
     #inPageBrowseView {
       width: 100%;
-      padding: 10px 0 60px;
+      margin-top: 70px;
+      padding: 25px 0 80px;
       animation: fadeInPage 0.28s ease;
     }
 
@@ -665,6 +666,32 @@
       .browse-title {
         font-size: 1.6rem;
       }
+      #inPageBrowseView {
+        margin-top: 60px;
+        padding: 15px 0 90px;
+      }
+    }
+
+    .browse-infinite-loader {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 30px 0 10px;
+      color: var(--netflix-red);
+      font-size: 0.9rem;
+      font-weight: 600;
+      width: 100%;
+      grid-column: 1 / -1;
+    }
+
+    .browse-infinite-spinner {
+      width: 22px;
+      height: 22px;
+      border: 3px solid rgba(255, 255, 255, 0.15);
+      border-top-color: var(--netflix-red);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
     }
 
     /* =========================================================
@@ -709,19 +736,18 @@
        ========================================================= */
     #info-overlay {
       display: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      min-height: 100%;
-      background: rgba(0,0,0,0.85);
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      z-index: 1000;
+      z-index: 1200;
       justify-content: center;
       align-items: flex-start;
-      overflow: visible;
-      padding: 30px 15px 80px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      padding: 30px 15px 60px;
     }
 
     .info-modal {
@@ -2000,8 +2026,11 @@
 
       /* Native iOS Bottom Sheet Modal behavior on mobile */
       #explore-modal, #info-overlay {
-        align-items: flex-start;
-        padding: 10px 0 60px;
+        align-items: flex-end;
+        padding: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
       }
 
       .explore-container, .info-modal {
@@ -2009,9 +2038,11 @@
         border-bottom-right-radius: 0;
         border-top-left-radius: 20px;
         border-top-right-radius: 20px;
-        max-height: none;
-        overflow: visible;
-        padding-bottom: max(20px, env(safe-area-inset-bottom));
+        max-height: 90vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        padding-bottom: max(24px, env(safe-area-inset-bottom));
         animation: iosBottomSheet 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       }
 
@@ -2573,11 +2604,14 @@
       transform: scale(1.08);
     }
     .theme-swatch.active::after {
-      content: '✓';
-      color: #fff;
-      font-size: 18px;
-      font-weight: 800;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+      content: '';
+      width: 7px;
+      height: 13px;
+      border: solid #ffffff;
+      border-width: 0 2.5px 2.5px 0;
+      transform: rotate(45deg);
+      margin-bottom: 2px;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.8));
     }
     .theme-custom-row {
       display: flex;
@@ -4150,6 +4184,12 @@
 
       <!-- In-Page Grid of Titles -->
       <div class="browse-grid" id="browseGrid"></div>
+
+      <!-- Infinite Scroll Loading Indicator -->
+      <div id="browseInfiniteLoader" class="browse-infinite-loader">
+        <div class="browse-infinite-spinner"></div>
+        <span>Loading more titles...</span>
+      </div>
     </section>
 
   </main>
@@ -4662,10 +4702,22 @@
 
       <!-- Settings Navigation Tabs -->
       <div class="settings-tabs">
-        <button class="settings-tab-btn active" id="tabBtnTheme" onclick="switchSettingsTab('theme')">🎨 Themes</button>
-        <button class="settings-tab-btn" id="tabBtnSources" onclick="switchSettingsTab('sources')">📺 Sources</button>
-        <button class="settings-tab-btn" id="tabBtnBackup" onclick="switchSettingsTab('backup')">💾 Backup & JSON</button>
-        <button class="settings-tab-btn" id="tabBtnAbout" onclick="switchSettingsTab('about')">ℹ️ GitHub & About</button>
+        <button class="settings-tab-btn active" id="tabBtnTheme" onclick="switchSettingsTab('theme')">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 9.5 10c.9 0 1.6-.7 1.6-1.6 0-.4-.2-.8-.5-1.1-.3-.3-.4-.7-.4-1.1 0-.9.7-1.6 1.6-1.6H17c2.8 0 5-2.2 5-5 0-5.8-4.5-9.6-10-9.6z"></path></svg>
+          Themes
+        </button>
+        <button class="settings-tab-btn" id="tabBtnSources" onclick="switchSettingsTab('sources')">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="15" x="2" y="7" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+          Sources
+        </button>
+        <button class="settings-tab-btn" id="tabBtnBackup" onclick="switchSettingsTab('backup')">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+          Backup & JSON
+        </button>
+        <button class="settings-tab-btn" id="tabBtnAbout" onclick="switchSettingsTab('about')">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          GitHub & About
+        </button>
       </div>
 
       <div class="backup-body">
@@ -5958,12 +6010,13 @@
 
     // Scroll Lock Manager to ensure only 1 scrollbar exists
     function updateBodyScrollLock() {
+      const infoOpen = document.getElementById('info-overlay')?.style.display === 'flex';
       const cinemaOpen = document.getElementById('cinema-player-modal')?.style.display === 'flex';
       const backupOpen = document.getElementById('backup-modal')?.style.display === 'flex';
       const downloadOpen = document.getElementById('download-modal')?.style.display === 'flex';
       const landscapeNoticeOpen = document.getElementById('landscape-notice-modal')?.style.display === 'flex';
 
-      if (cinemaOpen || backupOpen || downloadOpen || landscapeNoticeOpen) {
+      if (infoOpen || cinemaOpen || backupOpen || downloadOpen || landscapeNoticeOpen) {
         document.body.classList.add('modal-open');
       } else {
         document.body.classList.remove('modal-open');
@@ -6266,8 +6319,11 @@
     // =========================================================
     let currentBrowseView = 'home';
     let currentBrowsePage = 1;
+    let currentBrowseGenreId = 28;
     let currentGenreId = null;
     let currentSearchQuery = '';
+    let isBrowseLoadingNextPage = false;
+    let currentBrowseHasMore = true;
 
     function updateNavActiveState(activeKey) {
       const navMap = {
@@ -6313,6 +6369,8 @@
     async function navigateToView(viewType = 'movie', param = null) {
       currentBrowseView = viewType;
       currentBrowsePage = 1;
+      currentBrowseHasMore = true;
+      isBrowseLoadingNextPage = false;
 
       // 1. Hide Home elements & show in-page browse view
       const billboard = document.getElementById('billboard');
@@ -6322,6 +6380,8 @@
       const titleEl = document.getElementById('browseViewTitle');
       const badgeEl = document.getElementById('browseCountBadge');
       const pillBar = document.getElementById('browsePillBar');
+      const loader = document.getElementById('browseInfiniteLoader');
+      if (loader) loader.style.display = 'none';
 
       if (billboard) billboard.style.display = 'none';
       if (homeRows) homeRows.style.display = 'none';
@@ -6362,6 +6422,7 @@
       } else if (viewType === 'genres' || viewType === 'categories') {
         const gid = param?.genreId || 28;
         const gname = param?.genreName || 'Action';
+        currentBrowseGenreId = gid;
         titleEl.textContent = `Category: ${gname}`;
         badgeEl.textContent = 'Curated Genres';
         renderInPageGenrePills(gid);
@@ -6394,9 +6455,15 @@
 
     function resetToHome() {
       currentBrowseView = 'home';
+      currentBrowsePage = 1;
+      currentBrowseHasMore = true;
+      isBrowseLoadingNextPage = false;
+
       const billboard = document.getElementById('billboard');
       const homeRows = document.getElementById('homeRowsContainer');
       const browseView = document.getElementById('inPageBrowseView');
+      const loader = document.getElementById('browseInfiniteLoader');
+      if (loader) loader.style.display = 'none';
 
       if (browseView) browseView.style.display = 'none';
       if (billboard) billboard.style.display = '';
@@ -6416,10 +6483,20 @@
       try {
         const res = await fetch(`${apiEndpoint}/movie/popular?api_key=${apikey}&page=${page}`);
         const data = await res.json();
-        const cards = (data.results || []).filter(m => m.poster_path).map(m => buildCard(m, false)).join('');
-        grid.innerHTML = cards || '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">No movies found.</div>';
+        const results = (data.results || []).filter(m => m.poster_path);
+        if (results.length === 0) {
+          currentBrowseHasMore = false;
+          if (page === 1) grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">No movies found.</div>';
+          return;
+        }
+        const cards = results.map(m => buildCard(m, false)).join('');
+        if (page === 1) {
+          grid.innerHTML = cards;
+        } else {
+          grid.insertAdjacentHTML('beforeend', cards);
+        }
       } catch(e) {
-        grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">Error loading movies.</div>';
+        if (page === 1) grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">Error loading movies.</div>';
       }
     }
 
@@ -6428,10 +6505,20 @@
       try {
         const res = await fetch(`${apiEndpoint}/tv/popular?api_key=${apikey}&page=${page}`);
         const data = await res.json();
-        const cards = (data.results || []).filter(m => m.poster_path).map(m => buildCard(m, false)).join('');
-        grid.innerHTML = cards || '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">No TV shows found.</div>';
+        const results = (data.results || []).filter(m => m.poster_path);
+        if (results.length === 0) {
+          currentBrowseHasMore = false;
+          if (page === 1) grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">No TV shows found.</div>';
+          return;
+        }
+        const cards = results.map(m => buildCard(m, false)).join('');
+        if (page === 1) {
+          grid.innerHTML = cards;
+        } else {
+          grid.insertAdjacentHTML('beforeend', cards);
+        }
       } catch(e) {
-        grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">Error loading TV shows.</div>';
+        if (page === 1) grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">Error loading TV shows.</div>';
       }
     }
 
@@ -6440,15 +6527,26 @@
       try {
         const res = await fetch(`${apiEndpoint}/trending/all/week?api_key=${apikey}&page=${page}`);
         const data = await res.json();
-        const cards = (data.results || []).filter(m => m.poster_path).map(m => buildCard(m, false)).join('');
-        grid.innerHTML = cards || '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">No titles found.</div>';
+        const results = (data.results || []).filter(m => m.poster_path);
+        if (results.length === 0) {
+          currentBrowseHasMore = false;
+          if (page === 1) grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">No titles found.</div>';
+          return;
+        }
+        const cards = results.map(m => buildCard(m, false)).join('');
+        if (page === 1) {
+          grid.innerHTML = cards;
+        } else {
+          grid.insertAdjacentHTML('beforeend', cards);
+        }
       } catch(e) {
-        grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">Error loading titles.</div>';
+        if (page === 1) grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">Error loading titles.</div>';
       }
     }
 
     async function loadInPageGenre(genreId, page = 1) {
       const grid = document.getElementById('browseGrid');
+      currentBrowseGenreId = genreId;
       try {
         const [mRes, tvRes] = await Promise.all([
           fetch(`${apiEndpoint}/discover/movie?api_key=${apikey}&with_genres=${genreId}&sort_by=popularity.desc&page=${page}`),
@@ -6461,14 +6559,58 @@
           .sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
 
         if (combined.length === 0) {
-          grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">No titles found in this category.</div>';
+          if (page === 1) {
+            grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">No titles found in this category.</div>';
+          }
+          currentBrowseHasMore = false;
           return;
         }
-        grid.innerHTML = combined.map(m => buildCard(m, false)).join('');
+        const cards = combined.map(m => buildCard(m, false)).join('');
+        if (page === 1) {
+          grid.innerHTML = cards;
+        } else {
+          grid.insertAdjacentHTML('beforeend', cards);
+        }
       } catch(e) {
-        grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">Error loading category titles.</div>';
+        if (page === 1) grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">Error loading category titles.</div>';
       }
     }
+
+    async function handleInfiniteBrowseScroll() {
+      if (isBrowseLoadingNextPage || !currentBrowseHasMore) return;
+      const browseView = document.getElementById('inPageBrowseView');
+      if (!browseView || browseView.style.display === 'none') return;
+      if (!['movie', 'movies', 'tv', 'all', 'genres', 'categories'].includes(currentBrowseView)) return;
+
+      const scrollPosition = window.innerHeight + (window.scrollY || window.pageYOffset || 0);
+      const threshold = document.documentElement.scrollHeight - 700;
+
+      if (scrollPosition >= threshold) {
+        isBrowseLoadingNextPage = true;
+        currentBrowsePage++;
+
+        const loader = document.getElementById('browseInfiniteLoader');
+        if (loader) loader.style.display = 'flex';
+
+        try {
+          if (currentBrowseView === 'movie' || currentBrowseView === 'movies') {
+            await loadInPageMovies(currentBrowsePage);
+          } else if (currentBrowseView === 'tv') {
+            await loadInPageTv(currentBrowsePage);
+          } else if (currentBrowseView === 'genres' || currentBrowseView === 'categories') {
+            await loadInPageGenre(currentBrowseGenreId || 28, currentBrowsePage);
+          } else if (currentBrowseView === 'all') {
+            await loadInPageAll(currentBrowsePage);
+          }
+        } catch(e) {
+          console.error('Error in infinite scroll:', e);
+        } finally {
+          isBrowseLoadingNextPage = false;
+          if (loader) loader.style.display = 'none';
+        }
+      }
+    }
+    window.addEventListener('scroll', handleInfiniteBrowseScroll, { passive: true });
 
     function renderInPageGenrePills(activeId) {
       currentGenreId = activeId || 28;
@@ -6651,11 +6793,10 @@
 
       // Reset states
       togglePlayerView(false);
-      if (overlay.style.display !== 'flex') {
-        window._savedPageScrollBeforeInfo = window.scrollY || window.pageYOffset || 0;
-        window.scrollTo({ top: 0, behavior: 'instant' });
-      }
       overlay.style.display = 'flex';
+      overlay.scrollTop = 0;
+      const innerModal = overlay.querySelector('.info-modal');
+      if (innerModal) innerModal.scrollTop = 0;
       updateBodyScrollLock();
       episodesSection.style.display = 'none';
       titleEl.textContent = 'Loading...';
@@ -6947,10 +7088,6 @@
         currentMediaId = null;
         isClosingInfo = false;
         updateBodyScrollLock();
-        if (typeof window._savedPageScrollBeforeInfo === 'number') {
-          window.scrollTo({ top: window._savedPageScrollBeforeInfo, behavior: 'instant' });
-          window._savedPageScrollBeforeInfo = null;
-        }
       }, 240);
     }
 

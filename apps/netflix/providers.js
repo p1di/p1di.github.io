@@ -138,3 +138,20 @@ function addCustomProvider(name, movieUrlPattern, tvUrlPattern) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(custom));
   return true;
 }
+
+function removeCustomProvider(index) {
+  const custom = getCustomProviders();
+  if (index >= 0 && index < custom.length) {
+    custom.splice(index, 1);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(custom));
+    return true;
+  }
+  return false;
+}
+
+function removeCustomProviderByName(name) {
+  let custom = getCustomProviders();
+  custom = custom.filter(p => p.name !== name && p.name !== `[Custom] ${name}`);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(custom));
+  return true;
+}

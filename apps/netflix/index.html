@@ -58,6 +58,7 @@
       --text-main: #ffffff;
       --text-muted: #a3a3a3;
       --text-dim: #737373;
+      --theme-glow: rgba(229, 9, 20, 0.4);
     }
 
     * {
@@ -522,104 +523,84 @@
     }
 
     /* =========================================================
-       SEARCH & BROWSE MODAL (No nested scrollbars)
+       IN-PAGE BROWSE & FILTER VIEW (Authentic Netflix Full-Page)
        ========================================================= */
-    #explore-modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      z-index: 990;
-      justify-content: center;
-      align-items: flex-start;
-      overflow-y: auto;
-      padding: 40px 20px;
-    }
-
-    .explore-container {
-      background-color: #181818;
-      border-radius: 12px;
-      max-width: 1100px;
+    #inPageBrowseView {
       width: 100%;
-      margin: auto;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.9);
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.1);
-      animation: modalFadeIn 0.25s ease;
+      padding: 10px 0 60px;
+      animation: fadeInPage 0.28s ease;
     }
 
-    .explore-header {
-      padding: 24px 30px;
-      border-bottom: 1px solid #282828;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      background: #1e1e1e;
+    @keyframes fadeInPage {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .explore-top-bar {
+    .browse-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 14px;
     }
 
-    .explore-title-group {
+    .browse-header-left {
       display: flex;
-      align-items: center;
-      gap: 12px;
+      align-items: baseline;
+      gap: 14px;
+      flex-wrap: wrap;
     }
 
-    .explore-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-    }
-
-    .explore-close-btn {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: #2a2a2a;
-      border: 1px solid rgba(255,255,255,0.15);
-      color: #ffffff;
-      font-size: 18px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-    }
-
-    .explore-close-btn:hover {
-      background: var(--netflix-red);
-      transform: scale(1.05);
-    }
-
-    .explore-search-input-wrap {
-      display: flex;
-      align-items: center;
-      background: #121212;
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 6px;
-      padding: 8px 14px;
-      gap: 10px;
-      color: #888;
-    }
-
-    .explore-search-input-wrap input {
-      flex: 1;
-      background: none;
-      border: none;
+    .browse-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
       color: #fff;
-      font-size: 0.95rem;
-      outline: none;
+      margin: 0;
     }
 
-    .genre-pills-row {
+    .browse-count-badge {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.08);
+      padding: 4px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .browse-header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .browse-filter-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .browse-filter-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: #fff;
+    }
+
+    .browse-pill-bar {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
+      margin-bottom: 24px;
     }
 
     .genre-pill {
@@ -632,26 +613,70 @@
       font-weight: 500;
       cursor: pointer;
       transition: all 0.2s ease;
+      text-decoration: none;
     }
 
     .genre-pill:hover, .genre-pill.active {
       background: var(--netflix-red);
       border-color: var(--netflix-red);
       color: #ffffff;
+      box-shadow: 0 0 12px var(--theme-glow);
       transform: translateY(-1px);
     }
 
-    .explore-body {
-      padding: 30px;
-      min-height: 400px;
-    }
-
-    .explore-grid {
+    .browse-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-      gap: 18px;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 20px;
       width: 100%;
     }
+
+    @media (max-width: 768px) {
+      .browse-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+      }
+      .browse-title {
+        font-size: 1.6rem;
+      }
+    }
+
+    /* =========================================================
+       SHIMMER SKELETON LOADERS
+       ========================================================= */
+    @keyframes skeletonShimmer {
+      0% { background-position: -250% 0; }
+      100% { background-position: 250% 0; }
+    }
+
+    .skeleton-card {
+      flex: 0 0 180px;
+      height: 255px;
+      border-radius: 6px;
+      background: linear-gradient(90deg, #181818 20%, #292929 38%, #181818 55%);
+      background-size: 300% 100%;
+      animation: skeletonShimmer 1.5s ease infinite;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .browse-grid .skeleton-card {
+      width: 100%;
+      height: 255px;
+      flex: none;
+    }
+
+    @media (max-width: 768px) {
+      .skeleton-card {
+        flex: 0 0 148px;
+        height: 205px;
+      }
+      .browse-grid .skeleton-card {
+        height: 205px;
+      }
+    }
+
+    #explore-modal { display: none !important; }
 
     /* =========================================================
        1:1 AUTHENTIC NETFLIX MORE INFO & PLAYER MODAL
@@ -2431,19 +2456,148 @@
     }
 
     .backup-card {
-      background: #181818;
+      background: #161616;
       border-radius: 14px;
-      max-width: 580px;
+      max-width: 620px;
       width: 100%;
       max-height: 90vh;
       max-height: 90dvh;
       display: flex;
       flex-direction: column;
       border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.95);
       overflow: hidden;
       cursor: default;
       animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .settings-tabs {
+      display: flex;
+      border-bottom: 1px solid #282828;
+      background: #1a1a1a;
+      overflow-x: auto;
+      flex-shrink: 0;
+      scrollbar-width: none;
+    }
+    .settings-tabs::-webkit-scrollbar { display: none; }
+
+    .settings-tab-btn {
+      padding: 13px 18px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #888;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .settings-tab-btn:hover {
+      color: #fff;
+    }
+    .settings-tab-btn.active {
+      color: #fff;
+      border-bottom-color: var(--netflix-red);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .settings-pane {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .settings-pane.active {
+      display: flex;
+    }
+
+    /* Theme Swatches */
+    .theme-swatch-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+      gap: 12px;
+      margin: 8px 0;
+    }
+    .theme-swatch {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 3px solid rgba(255,255,255,0.15);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .theme-swatch:hover {
+      transform: scale(1.12);
+      border-color: rgba(255,255,255,0.6);
+    }
+    .theme-swatch.active {
+      border-color: #ffffff;
+      box-shadow: 0 0 16px var(--theme-glow);
+      transform: scale(1.08);
+    }
+    .theme-swatch.active::after {
+      content: '✓';
+      color: #fff;
+      font-size: 18px;
+      font-weight: 800;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    }
+    .theme-custom-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+      padding: 12px;
+      background: #1f1f1f;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .theme-color-input {
+      width: 44px;
+      height: 40px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: none;
+      padding: 0;
+    }
+    .btn-github-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #24292e;
+      color: #fff;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.2s;
+      width: fit-content;
+      text-decoration: none;
+    }
+    .btn-github-link:hover {
+      background: #2f363d;
+      border-color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+    }
+    .settings-source-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: #1f1f1f;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.88rem;
     }
 
     .backup-header {
@@ -3556,12 +3710,12 @@
       </a>
       <div class="brand-logo" onclick="resetToHome()">NETFLIX</div>
       <ul class="main-nav">
-        <li><a href="javascript:void(0)" class="active" onclick="resetToHome()">Home</a></li>
-        <li><a href="javascript:void(0)" onclick="openExploreModal('movie')">Movies</a></li>
-        <li><a href="javascript:void(0)" onclick="openExploreModal('tv')">TV Shows</a></li>
-        <li><a href="javascript:void(0)" onclick="openExploreModal('genres')">Categories</a></li>
-        <li><a href="javascript:void(0)" onclick="openExploreModal('watchlist')">My List</a></li>
-        <li><a href="javascript:void(0)" onclick="openExploreModal('history')">History</a></li>
+        <li><a href="javascript:void(0)" class="active" id="navHome" onclick="resetToHome()">Home</a></li>
+        <li><a href="javascript:void(0)" id="navMovies" onclick="navigateToView('movie')">Movies</a></li>
+        <li><a href="javascript:void(0)" id="navTv" onclick="navigateToView('tv')">TV Shows</a></li>
+        <li><a href="javascript:void(0)" id="navCategories" onclick="navigateToView('genres')">Categories</a></li>
+        <li><a href="javascript:void(0)" id="navWatchlist" onclick="navigateToView('watchlist')">My List</a></li>
+        <li><a href="javascript:void(0)" id="navHistory" onclick="navigateToView('history')">History</a></li>
       </ul>
     </div>
     <div class="header-right">
@@ -3574,7 +3728,7 @@
           </svg>
         </button>
       </div>
-      <button class="btn-nav-backup" onclick="openBackupModal()" title="Settings & Local Storage">
+      <button class="btn-nav-backup" onclick="openSettingsModal()" title="Settings & Appearance">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="3"></circle>
           <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
@@ -3630,6 +3784,7 @@
 
   <!-- Main Content Rows Container -->
   <main class="content-container">
+    <div id="homeRowsContainer">
 
     <!-- Row: Continue Watching / Watch History -->
     <section class="row-section" id="rowHistorySection" style="display: none;">
@@ -3644,7 +3799,7 @@
           Continue Watching
         </h2>
         <div class="row-actions-group">
-          <button class="row-sub-btn" onclick="openExploreModal('history')">See All</button>
+          <button class="row-sub-btn" onclick="navigateToView('history')">See All</button>
         </div>
       </div>
       <div class="row-carousel" id="rowHistory"></div>
@@ -3662,7 +3817,7 @@
           My List
         </h2>
         <div class="row-actions-group">
-          <button class="row-sub-btn" onclick="openExploreModal('watchlist')">See All</button>
+          <button class="row-sub-btn" onclick="navigateToView('watchlist')">See All</button>
         </div>
       </div>
       <div class="row-carousel" id="rowWatchlist"></div>
@@ -3680,7 +3835,7 @@
           <span id="rowRecommendedTitleText">Top Picks For You</span>
         </h2>
         <div class="row-actions-group">
-          <button class="row-sub-btn" onclick="openExploreModal('all')">See All</button>
+          <button class="row-sub-btn" onclick="navigateToView('all')">See All</button>
         </div>
       </div>
       <div class="row-carousel" id="rowRecommended"></div>
@@ -3698,7 +3853,7 @@
           Trending Now
         </h2>
         <div class="row-actions-group">
-          <button class="row-sub-btn" onclick="openExploreModal('all')">See All</button>
+          <button class="row-sub-btn" onclick="navigateToView('all')">See All</button>
         </div>
       </div>
       <div class="row-carousel" id="rowTrending"></div>
@@ -3717,7 +3872,7 @@
           New & Upcoming Releases
         </h2>
         <div class="row-actions-group">
-          <button class="row-sub-btn" onclick="openExploreModal('movie')">See All</button>
+          <button class="row-sub-btn" onclick="navigateToView('movie')">See All</button>
         </div>
       </div>
       <div class="row-carousel" id="rowNowPlaying"></div>
@@ -3742,7 +3897,7 @@
           Popular Movies
         </h2>
         <div class="row-actions-group">
-          <button class="row-sub-btn" onclick="openExploreModal('movie')">See All</button>
+          <button class="row-sub-btn" onclick="navigateToView('movie')">See All</button>
         </div>
       </div>
       <div class="row-carousel" id="rowMovies"></div>
@@ -3761,7 +3916,7 @@
           Top Rated TV Shows
         </h2>
         <div class="row-actions-group">
-          <button class="row-sub-btn" onclick="openExploreModal('tv')">See All</button>
+          <button class="row-sub-btn" onclick="navigateToView('tv')">See All</button>
         </div>
       </div>
       <div class="row-carousel" id="rowTv"></div>
@@ -3779,7 +3934,7 @@
           Action & Adventure Blockbusters
         </h2>
         <div class="row-actions-group">
-          <button class="row-sub-btn" onclick="openExploreGenre(28, 'Action')">See All</button>
+          <button class="row-sub-btn" onclick="navigateToView('genres', { genreId: 28, genreName: 'Action' })">See All</button>
         </div>
       </div>
       <div class="row-carousel" id="rowAction"></div>
@@ -3797,7 +3952,7 @@
           Binge-Worthy TV Dramas
         </h2>
         <div class="row-actions-group">
-          <button class="row-sub-btn" onclick="openExploreGenre(18, 'Drama')">See All</button>
+          <button class="row-sub-btn" onclick="navigateToView('genres', { genreId: 18, genreName: 'Drama' })">See All</button>
         </div>
       </div>
       <div class="row-carousel" id="rowDramas"></div>
@@ -3816,7 +3971,7 @@
           Critically Acclaimed Cinema
         </h2>
         <div class="row-actions-group">
-          <button class="row-sub-btn" onclick="openExploreModal('movie')">See All</button>
+          <button class="row-sub-btn" onclick="navigateToView('movie')">See All</button>
         </div>
       </div>
       <div class="row-carousel" id="rowTopRatedMovies"></div>
@@ -3838,7 +3993,7 @@
           Sci-Fi & Cosmic Adventures
         </h2>
         <div class="row-actions-group">
-          <button class="row-sub-btn" onclick="openExploreGenre(878, 'Sci-Fi')">See All</button>
+          <button class="row-sub-btn" onclick="navigateToView('genres', { genreId: 878, genreName: 'Sci-Fi' })">See All</button>
         </div>
       </div>
       <div class="row-carousel" id="rowSciFi"></div>
@@ -3859,7 +4014,7 @@
           Laugh-Out-Loud Comedies
         </h2>
         <div class="row-actions-group">
-          <button class="row-sub-btn" onclick="openExploreGenre(35, 'Comedy')">See All</button>
+          <button class="row-sub-btn" onclick="navigateToView('genres', { genreId: 35, genreName: 'Comedy' })">See All</button>
         </div>
       </div>
       <div class="row-carousel" id="rowComedy"></div>
@@ -3882,7 +4037,7 @@
           Edge-of-Your-Seat Thrillers
         </h2>
         <div class="row-actions-group">
-          <button class="row-sub-btn" onclick="openExploreGenre(53, 'Thriller')">See All</button>
+          <button class="row-sub-btn" onclick="navigateToView('genres', { genreId: 53, genreName: 'Thriller' })">See All</button>
         </div>
       </div>
       <div class="row-carousel" id="rowThrillers"></div>
@@ -3900,7 +4055,7 @@
           Animation & Anime Spotlight
         </h2>
         <div class="row-actions-group">
-          <button class="row-sub-btn" onclick="openExploreGenre(16, 'Animation')">See All</button>
+          <button class="row-sub-btn" onclick="navigateToView('genres', { genreId: 16, genreName: 'Animation' })">See All</button>
         </div>
       </div>
       <div class="row-carousel" id="rowAnimation"></div>
@@ -3918,7 +4073,7 @@
           Chilling Horror & Mystery
         </h2>
         <div class="row-actions-group">
-          <button class="row-sub-btn" onclick="openExploreGenre(27, 'Horror')">See All</button>
+          <button class="row-sub-btn" onclick="navigateToView('genres', { genreId: 27, genreName: 'Horror' })">See All</button>
         </div>
       </div>
       <div class="row-carousel" id="rowHorror"></div>
@@ -3937,53 +4092,37 @@
           Documentaries & Real Stories
         </h2>
         <div class="row-actions-group">
-          <button class="row-sub-btn" onclick="openExploreGenre(99, 'Documentary')">See All</button>
+          <button class="row-sub-btn" onclick="navigateToView('genres', { genreId: 99, genreName: 'Documentary' })">See All</button>
         </div>
       </div>
       <div class="row-carousel" id="rowDoc"></div>
     </section>
 
-  </main>
+    </div><!-- End #homeRowsContainer -->
 
-  <!-- =========================================================
-       SEARCH & BROWSE MODAL (Single Scrollbar Managed)
-       ========================================================= -->
-  <div id="explore-modal" onclick="if(event.target === this) closeExploreModal()">
-    <div class="explore-container">
-      <div class="ios-drag-handle"></div>
-      <div class="explore-header">
-        <div class="explore-top-bar">
-          <div class="explore-title-group">
-            <h2 class="explore-title" id="exploreModalTitle">Browse & Search</h2>
-          </div>
-          <button class="explore-close-btn" onclick="closeExploreModal()" title="Close">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
+    <!-- In-Page Browse & Category & Search View (Replaces Home on normal site) -->
+    <section id="inPageBrowseView" style="display: none;">
+      <div class="browse-header">
+        <div class="browse-header-left">
+          <h1 class="browse-title" id="browseViewTitle">Popular Titles</h1>
+          <span class="browse-count-badge" id="browseCountBadge">Stream Now</span>
+        </div>
+        <div class="browse-header-right">
+          <button type="button" class="browse-filter-btn" onclick="resetToHome()" title="Back to Home">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            <span>Back to Home</span>
           </button>
         </div>
-
-        <div class="explore-search-input-wrap">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <input type="text" id="modalSearchInput" placeholder="Search movies, TV shows, genres..." oninput="handleModalSearchInput()" />
-        </div>
-
-        <div class="genre-pills-row" id="genrePillsRow">
-          <!-- Injected dynamically -->
-        </div>
       </div>
 
-      <div class="explore-body">
-        <div class="explore-grid" id="exploreGrid">
-          <!-- Injected dynamically -->
-        </div>
-      </div>
-    </div>
-  </div>
+      <!-- Filter / Category Pill Bar -->
+      <div class="browse-pill-bar" id="browsePillBar"></div>
+
+      <!-- In-Page Grid of Titles -->
+      <div class="browse-grid" id="browseGrid"></div>
+    </section>
+
+  </main>
 
   <!-- =========================================================
        1:1 NETFLIX MORE INFO & STREAMING MODAL
@@ -4095,7 +4234,7 @@
           <span id="checkServersText">Check Links</span>
         </button>
 
-        <button class="modal-server-btn" onclick="openAddSourceModal()">
+        <button class="modal-server-btn" onclick="openSettingsModal('sources')">
           <span class="svg-icon">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -4195,22 +4334,6 @@
           <p><strong style="color:#fff;">Maturity Rating:</strong> <span id="aboutRatingDescription">Suitable for general audiences.</span></p>
         </div>
 
-      </div>
-    </div>
-  </div>
-
-  <!-- =========================================================
-       ADD CUSTOM SERVER SOURCE MODAL
-       ========================================================= -->
-  <div id="add-source-modal">
-    <div class="add-source-card">
-      <h3>Add Custom Server Source</h3>
-      <input type="text" id="customSourceName" placeholder="Server Name (e.g. My Fast Server)" />
-      <input type="text" id="customMovieUrl" placeholder="Movie Embed URL (e.g. https://site.com/embed/movie/{id})" />
-      <input type="text" id="customTvUrl" placeholder="TV Embed URL (optional, e.g. https://site.com/embed/tv/{id}/{season}/{episode})" />
-      <div class="add-source-actions">
-        <button class="btn-cancel" onclick="closeAddSourceModal()">Cancel</button>
-        <button class="btn-save" onclick="saveCustomSource()">Save Source</button>
       </div>
     </div>
   </div>
@@ -4486,68 +4609,128 @@
     <div class="backup-card">
       <div class="backup-header">
         <div class="backup-title-wrap">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#E50914" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--netflix-red)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="3"></circle>
             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
           </svg>
-          <h3>Settings & Local Storage</h3>
+          <h3>Settings</h3>
         </div>
-        <button class="backup-close-btn" onclick="closeBackupModal()" title="Close Settings" aria-label="Close Settings">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <a href="https://github.com/p1di/p1di.github.io" target="_blank" rel="noopener noreferrer" class="backup-close-btn" title="View repository on GitHub" aria-label="View on GitHub" style="color: #bbb; display: inline-flex; align-items: center; justify-content: center;">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path>
+            </svg>
+          </a>
+          <button class="backup-close-btn" onclick="closeBackupModal()" title="Close Settings" aria-label="Close Settings">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Settings Navigation Tabs -->
+      <div class="settings-tabs">
+        <button class="settings-tab-btn active" id="tabBtnTheme" onclick="switchSettingsTab('theme')">🎨 Themes</button>
+        <button class="settings-tab-btn" id="tabBtnSources" onclick="switchSettingsTab('sources')">📺 Sources</button>
+        <button class="settings-tab-btn" id="tabBtnBackup" onclick="switchSettingsTab('backup')">💾 Backup & JSON</button>
+        <button class="settings-tab-btn" id="tabBtnAbout" onclick="switchSettingsTab('about')">ℹ️ GitHub & About</button>
       </div>
 
       <div class="backup-body">
-        <div class="backup-storage-warning">
-          <strong>⚠️ Browser Storage Notice:</strong>
-          Your Watchlist and Watch History are saved strictly on this device in your browser's local cache. They are <strong>not synced to an online cloud account</strong>. Clearing browsing data or using private/incognito browsing will wipe your saved items.
-          <br><br>
-          We recommend downloading a JSON backup below periodically to preserve your saved titles!
+        <!-- PANE 1: THEMES & APPEARANCE -->
+        <div class="settings-pane active" id="paneTheme">
+          <div>
+            <h4 style="font-size: 0.98rem; font-weight: 700; margin-bottom: 4px;">Accent Color Presets</h4>
+            <p style="font-size: 0.82rem; color: #999;">Choose your preferred streaming atmosphere.</p>
+          </div>
+          <div class="theme-swatch-list" id="themeSwatchList"></div>
+
+          <div class="theme-custom-row">
+            <div style="flex: 1;">
+              <div style="font-size: 0.88rem; font-weight: 600; color: #fff;">Custom Accent Color</div>
+              <div style="font-size: 0.78rem; color: #888;">Select any hex color of your choice.</div>
+            </div>
+            <input type="color" id="themeColorPicker" class="theme-color-input" onchange="applyCustomTheme(this.value)" value="#E50914" title="Pick custom color" />
+            <button type="button" class="browse-filter-btn" style="padding: 6px 12px; font-size: 0.8rem;" onclick="resetDefaultTheme()">Reset</button>
+          </div>
         </div>
 
-        <div class="backup-stats-row">
-          <div class="backup-stat-box">
-            <span class="backup-stat-val" id="statWatchlistCount">0</span>
-            <span class="backup-stat-lbl">My List Titles</span>
+        <!-- PANE 2: STREAMING SOURCES -->
+        <div class="settings-pane" id="paneSources">
+          <div>
+            <h4 style="font-size: 0.98rem; font-weight: 700; margin-bottom: 4px;">Add Custom Streaming Source</h4>
+            <p style="font-size: 0.82rem; color: #999;">Add your own embeds using <code style="color:var(--netflix-red);">{id}</code>, <code style="color:var(--netflix-red);">{season}</code>, <code style="color:var(--netflix-red);">{episode}</code>.</p>
           </div>
-          <div class="backup-stat-box">
-            <span class="backup-stat-val" id="statHistoryCount">0</span>
-            <span class="backup-stat-lbl">History Titles</span>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <input type="text" id="settingsSourceName" placeholder="Server Name (e.g. MyVid)" style="background:#111; border:1px solid rgba(255,255,255,0.15); border-radius:6px; padding:10px 14px; color:#fff; font-size:0.88rem;" />
+            <input type="text" id="settingsMovieUrl" placeholder="Movie URL pattern: https://.../movie/{id}" style="background:#111; border:1px solid rgba(255,255,255,0.15); border-radius:6px; padding:10px 14px; color:#fff; font-size:0.88rem;" />
+            <input type="text" id="settingsTvUrl" placeholder="TV URL pattern: https://.../tv/{id}/{season}/{episode}" style="background:#111; border:1px solid rgba(255,255,255,0.15); border-radius:6px; padding:10px 14px; color:#fff; font-size:0.88rem;" />
+            <button type="button" class="btn-backup-export" onclick="saveCustomSourceFromSettings()">Save & Add Provider</button>
+          </div>
+          <div style="margin-top: 10px;">
+            <div style="font-size: 0.88rem; font-weight: 600; color: #bbb; margin-bottom: 8px;">Active Streaming Sources</div>
+            <div id="settingsSourcesList" style="display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto;"></div>
           </div>
         </div>
 
-        <!-- Export Action -->
-        <div class="backup-section">
-          <h4>Export Data</h4>
-          <p>Download your Watchlist, Watch History, and custom server sources as a JSON file.</p>
-          <button class="btn-backup-export" onclick="UserDataManager.exportData()">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-            Download JSON Backup
-          </button>
+        <!-- PANE 3: COMPACT BACKUP & STORAGE SUBMENU -->
+        <div class="settings-pane" id="paneBackup">
+          <div class="backup-stats-row">
+            <div class="backup-stat-box">
+              <span class="backup-stat-val" id="statWatchlistCount">0</span>
+              <span class="backup-stat-lbl">My List Titles</span>
+            </div>
+            <div class="backup-stat-box">
+              <span class="backup-stat-val" id="statHistoryCount">0</span>
+              <span class="backup-stat-lbl">History Titles</span>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <button class="btn-backup-export" onclick="UserDataManager.exportData()">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Export JSON Backup
+            </button>
+
+            <div class="import-mode-select" style="margin: 4px 0;">
+              <label>
+                <input type="radio" name="importMode" id="importModeMerge" value="merge" checked />
+                <span>Merge (Keep existing)</span>
+              </label>
+              <label>
+                <input type="radio" name="importMode" id="importModeReplace" value="replace" />
+                <span>Replace all</span>
+              </label>
+            </div>
+            <input type="file" id="backupFileInput" accept=".json,application/json" style="display:none;" onchange="handleBackupFileSelect(event)" />
+            <button class="btn-backup-import" onclick="document.getElementById('backupFileInput').click()">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              Restore from JSON File
+            </button>
+          </div>
         </div>
 
-        <!-- Import Action -->
-        <div class="backup-section">
-          <h4>Import Data</h4>
-          <p>Restore or merge your previously exported Netflix JSON backup file.</p>
-          <div class="import-mode-select">
-            <label>
-              <input type="radio" name="importMode" id="importModeMerge" value="merge" checked />
-              <span>Merge with current data (Keep existing)</span>
-            </label>
-            <label>
-              <input type="radio" name="importMode" id="importModeReplace" value="replace" />
-              <span>Replace current data</span>
-            </label>
+        <!-- PANE 4: ABOUT & GITHUB -->
+        <div class="settings-pane" id="paneAbout">
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="font-size: 1.4rem; font-weight: 900; color: var(--netflix-red); font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px;">NETFLIX WEB</div>
+              <span class="browse-count-badge">v4.0 Fullscreen & DeepLink</span>
+            </div>
+            <p style="font-size: 0.85rem; color: #aaa; line-height: 1.5;">
+              A blazing fast, responsive streaming hub designed for personal streaming, customizable sources, and seamless episode & movie sharing.
+            </p>
+            <div style="margin-top: 6px;">
+              <a href="https://github.com/p1di/p1di.github.io" target="_blank" rel="noopener noreferrer" class="btn-github-link">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path>
+                </svg>
+                <span>View on GitHub</span>
+              </a>
+            </div>
           </div>
-          <input type="file" id="backupFileInput" accept=".json,application/json" style="display:none;" onchange="handleBackupFileSelect(event)" />
-          <button class="btn-backup-import" onclick="document.getElementById('backupFileInput').click()">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-            Select JSON File to Restore
-          </button>
         </div>
       </div>
       <div class="backup-footer">
@@ -4917,14 +5100,122 @@
       }
     }
 
+    // =========================================================
+    // SETTINGS MODAL & THEME CHOOSER
+    // =========================================================
+    const THEME_PRESETS = [
+      { id: 'red', name: 'Netflix Red', color: '#E50914', glow: 'rgba(229, 9, 20, 0.45)', hover: '#F40612' },
+      { id: 'cyan', name: 'Cyberpunk Cyan', color: '#00D2FF', glow: 'rgba(0, 210, 255, 0.45)', hover: '#33DCFF' },
+      { id: 'green', name: 'Matrix Emerald', color: '#00E676', glow: 'rgba(0, 230, 118, 0.45)', hover: '#33EB91' },
+      { id: 'purple', name: 'Royal Amethyst', color: '#9D4EDD', glow: 'rgba(157, 78, 221, 0.45)', hover: '#B068E3' },
+      { id: 'gold', name: 'Sunset Amber', color: '#FF9F1C', glow: 'rgba(255, 159, 28, 0.45)', hover: '#FFAF47' },
+      { id: 'rose', name: 'Neon Crimson', color: '#FF0055', glow: 'rgba(255, 0, 85, 0.45)', hover: '#FF3377' }
+    ];
+
+    function hexToRgba(hex, alpha = 0.45) {
+      let c = hex.replace('#', '');
+      if (c.length === 3) c = c.split('').map(x => x + x).join('');
+      const num = parseInt(c, 16);
+      const r = (num >> 16) & 255;
+      const g = (num >> 8) & 255;
+      const b = num & 255;
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    function adjustBrightness(hex, percent) {
+      let c = hex.replace('#', '');
+      if (c.length === 3) c = c.split('').map(x => x + x).join('');
+      const num = parseInt(c, 16);
+      let r = Math.min(255, Math.max(0, ((num >> 16) & 255) + percent));
+      let g = Math.min(255, Math.max(0, ((num >> 8) & 255) + percent));
+      let b = Math.min(255, Math.max(0, (num & 255) + percent));
+      return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    }
+
+    function applyCustomTheme(colorHex, glowColor = null, hoverColor = null, save = true) {
+      if (!colorHex) return;
+      const glow = glowColor || hexToRgba(colorHex, 0.45);
+      const hover = hoverColor || adjustBrightness(colorHex, 20);
+
+      document.documentElement.style.setProperty('--netflix-red', colorHex);
+      document.documentElement.style.setProperty('--theme-glow', glow);
+      document.documentElement.style.setProperty('--netflix-red-hover', hover);
+
+      const picker = document.getElementById('themeColorPicker');
+      if (picker) picker.value = colorHex;
+
+      if (save) {
+        try {
+          localStorage.setItem('netflix_custom_theme', JSON.stringify({ color: colorHex, glow, hover }));
+        } catch(e) {}
+      }
+
+      document.querySelectorAll('.theme-swatch').forEach(sw => {
+        const swColor = sw.getAttribute('data-color');
+        if (swColor && swColor.toLowerCase() === colorHex.toLowerCase()) {
+          sw.classList.add('active');
+        } else {
+          sw.classList.remove('active');
+        }
+      });
+    }
+
+    function resetDefaultTheme() {
+      applyCustomTheme('#E50914', 'rgba(229, 9, 20, 0.45)', '#F40612', true);
+      showToast('Theme reset to Netflix Red');
+    }
+
+    function renderThemeSwatches() {
+      const container = document.getElementById('themeSwatchList');
+      if (!container) return;
+      let saved = null;
+      try {
+        saved = JSON.parse(localStorage.getItem('netflix_custom_theme') || 'null');
+      } catch(e) {}
+      const activeColor = (saved && saved.color) ? saved.color : '#E50914';
+
+      container.innerHTML = THEME_PRESETS.map(p => {
+        const isActive = p.color.toLowerCase() === activeColor.toLowerCase();
+        return `
+          <div class="theme-swatch ${isActive ? 'active' : ''}"
+               data-color="${p.color}"
+               style="background: ${p.color};"
+               title="${p.name}"
+               onclick="applyCustomTheme('${p.color}', '${p.glow}', '${p.hover}', true); showToast('Theme: ${p.name}')">
+          </div>
+        `;
+      }).join('');
+    }
+
+    function initCustomTheme() {
+      try {
+        const saved = JSON.parse(localStorage.getItem('netflix_custom_theme') || 'null');
+        if (saved && saved.color) {
+          applyCustomTheme(saved.color, saved.glow, saved.hover, false);
+        }
+      } catch(e) {}
+    }
+
     let isClosingBackup = false;
-    function openBackupModal() {
+    function openSettingsModal(tab = 'theme') {
+      openBackupModal(tab);
+    }
+
+    function openBackupModal(tab = 'theme') {
       const modal = document.getElementById('backup-modal');
       if (!modal) return;
       isClosingBackup = false;
       modal.classList.remove('closing');
-      document.getElementById('statWatchlistCount').textContent = UserDataManager.getWatchlist().length;
-      document.getElementById('statHistoryCount').textContent = UserDataManager.getHistory().length;
+
+      const statW = document.getElementById('statWatchlistCount');
+      const statH = document.getElementById('statHistoryCount');
+      if (statW) statW.textContent = UserDataManager.getWatchlist().length;
+      if (statH) statH.textContent = UserDataManager.getHistory().length;
+
+      switchSettingsTab(tab);
+      renderThemeSwatches();
+      renderSettingsSourcesList();
+
       modal.style.display = 'flex';
       updateBodyScrollLock();
     }
@@ -4943,6 +5234,18 @@
       }, 200);
     }
 
+    function switchSettingsTab(tabName) {
+      const tabs = ['theme', 'sources', 'backup', 'about'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`tabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
+        const pane = document.getElementById(`pane${t.charAt(0).toUpperCase() + t.slice(1)}`);
+        if (btn) btn.classList.toggle('active', t === tabName);
+        if (pane) pane.classList.toggle('active', t === tabName);
+      });
+      if (tabName === 'sources') renderSettingsSourcesList();
+      if (tabName === 'theme') renderThemeSwatches();
+    }
+
     function handleBackupFileSelect(event) {
       const file = event.target.files && event.target.files[0];
       if (!file) return;
@@ -4951,6 +5254,10 @@
         const replaceMode = document.getElementById('importModeReplace')?.checked || false;
         UserDataManager.importData(e.target.result, replaceMode);
         event.target.value = '';
+        const statW = document.getElementById('statWatchlistCount');
+        const statH = document.getElementById('statHistoryCount');
+        if (statW) statW.textContent = UserDataManager.getWatchlist().length;
+        if (statH) statH.textContent = UserDataManager.getHistory().length;
       };
       reader.readAsText(file);
     }
@@ -5134,35 +5441,77 @@
       });
     }
 
-    // Modal Add Source
+    // Modal Add Source (Now inside Settings > Sources)
     function openAddSourceModal() {
-      document.getElementById('add-source-modal').style.display = 'flex';
-      updateBodyScrollLock();
+      openSettingsModal('sources');
     }
     function closeAddSourceModal() {
-      document.getElementById('add-source-modal').style.display = 'none';
-      document.getElementById('customSourceName').value = '';
-      document.getElementById('customMovieUrl').value = '';
-      document.getElementById('customTvUrl').value = '';
-      updateBodyScrollLock();
+      closeBackupModal();
     }
     function saveCustomSource() {
-      const name = document.getElementById('customSourceName').value.trim();
-      const movieUrl = document.getElementById('customMovieUrl').value.trim();
-      const tvUrl = document.getElementById('customTvUrl').value.trim();
+      saveCustomSourceFromSettings();
+    }
+
+    function saveCustomSourceFromSettings() {
+      const nameEl = document.getElementById('settingsSourceName') || document.getElementById('customSourceName');
+      const movieEl = document.getElementById('settingsMovieUrl') || document.getElementById('customMovieUrl');
+      const tvEl = document.getElementById('settingsTvUrl') || document.getElementById('customTvUrl');
+
+      const name = nameEl?.value.trim();
+      const movieUrl = movieEl?.value.trim();
+      const tvUrl = tvEl?.value.trim();
 
       if (!name || !movieUrl) {
-        alert('Please enter a server name and a movie embed URL pattern.');
+        showToast('Please enter both a Server Name and Movie URL');
         return;
       }
 
-      addCustomProvider(name, movieUrl, tvUrl);
-      const providers = getSafeProviders();
-      currentServerIndex = providers.length - 1;
-      renderServerDropdown();
-      updatePlayerUrl();
-      
-      closeAddSourceModal();
+      if (typeof addCustomProvider === 'function') {
+        addCustomProvider(name, movieUrl, tvUrl);
+      }
+
+      if (nameEl) nameEl.value = '';
+      if (movieEl) movieEl.value = '';
+      if (tvEl) tvEl.value = '';
+
+      renderSettingsSourcesList();
+      initServerSelect();
+      showToast(`Custom source "${name}" added!`);
+    }
+
+    function renderSettingsSourcesList() {
+      const container = document.getElementById('settingsSourcesList');
+      if (!container) return;
+
+      const providers = (typeof getAllProviders === 'function') ? getAllProviders() : [];
+      container.innerHTML = providers.map((p) => {
+        const isCustom = p.name.startsWith('[Custom]');
+        const safeName = p.name.replace(/'/g, "\\'");
+        return `
+          <div style="display: flex; align-items: center; justify-content: space-between; background: #1a1a1a; padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); font-size: 0.82rem;">
+            <div style="display: flex; align-items: center; gap: 8px; overflow: hidden;">
+              <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: ${isCustom ? '#00E676' : 'var(--netflix-red)'}; flex-shrink: 0;"></span>
+              <span style="color: #fff; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 210px;">${p.name}</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+              <span style="color: #888; font-size: 0.74rem;">${isCustom ? 'Custom' : 'Built-in'}</span>
+              ${isCustom ? `<button type="button" onclick="deleteCustomSource('${safeName}')" style="background:none; border:none; color:#ff4d4d; cursor:pointer; padding:2px 6px; font-size:0.75rem; font-weight:600;">Delete</button>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function deleteCustomSource(fullName) {
+      if (typeof removeCustomProviderByName === 'function') {
+        removeCustomProviderByName(fullName);
+      } else if (typeof getCustomProviders === 'function') {
+        const custom = getCustomProviders().filter(p => p.name !== fullName);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(custom));
+      }
+      renderSettingsSourcesList();
+      initServerSelect();
+      showToast(`Removed custom source: ${fullName}`);
     }
 
     // Link Checker with SVG animated spinner
@@ -5650,9 +5999,12 @@
       }
 
       const inList = UserDataManager.isInWatchlist(m.id);
+      const targetHref = mediaType === 'tv'
+        ? (isHistory && m.season && m.episode ? `#tv-${m.id}/s${seasonNum}/e${epNum}` : `#tv-${m.id}`)
+        : `#movie-${m.id}`;
 
       return `
-        <a href="#${m.id}" class="movie-card" data-id="${m.id}" data-type="${mediaType}" onclick="handleMovieLinkClick(event, ${m.id}, '${mediaType}')">
+        <a href="${targetHref}" class="movie-card" data-id="${m.id}" data-type="${mediaType}" onclick="handleMovieLinkClick(event, ${m.id}, '${mediaType}', ${seasonNum}, ${epNum})">
           <img class="movie-poster" src="${poster}" alt="${title}" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/180x255/1f1f1f/ffffff?text=No+Poster'" />
           <div class="movie-card-overlay">
             <div class="card-title">${title}</div>
@@ -5811,8 +6163,32 @@
       }
     }
 
+    // =========================================================
+    // SKELETON LOADERS
+    // =========================================================
+    function getSkeletonCards(count = 12) {
+      return Array.from({ length: count }, () => '<div class="skeleton-card"></div>').join('');
+    }
+
+    function renderSkeletonRows() {
+      const skeletonHtml = getSkeletonCards(6);
+      const rowIds = [
+        'rowRecommended', 'rowTrending', 'rowNowPlaying', 'rowMovies', 'rowTv',
+        'rowAction', 'rowDramas', 'rowTopRatedMovies', 'rowSciFi', 'rowComedy',
+        'rowThrillers', 'rowAnimation', 'rowHorror', 'rowDoc'
+      ];
+      rowIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && !el.children.length) {
+          el.innerHTML = skeletonHtml;
+        }
+      });
+    }
+
     // Load Netflix Row Carousels
     async function loadNetflixRows() {
+      renderSkeletonRows();
+
       const loadRow = async (targetId, url) => {
         try {
           const res = await fetch(url);
@@ -5854,160 +6230,198 @@
     }
 
     // =========================================================
-    // EXPLORE & SEARCH MODAL (No page scrolling)
+    // IN-PAGE BROWSE & FILTER VIEW (1:1 Authentic Netflix Full-Page)
+    // Replaces Home menu. Document scrolls naturally (no inner scrollbars!)
     // =========================================================
-    function initGenrePills() {
-      const container = document.getElementById('genrePillsRow');
-      container.innerHTML = `
-        <button class="genre-pill ${activeGenreId === null && activeExploreType === 'all' ? 'active' : ''}" onclick="selectGenrePill(null, 'All Content')">All</button>
-        <button class="genre-pill ${activeExploreType === 'watchlist' ? 'active' : ''}" onclick="openExploreModal('watchlist')">My List</button>
-        <button class="genre-pill ${activeExploreType === 'history' ? 'active' : ''}" onclick="openExploreModal('history')">History</button>
-      `;
+    let currentBrowseView = 'home';
+    let currentBrowsePage = 1;
+    let currentGenreId = null;
+    let currentSearchQuery = '';
 
-      GENRES.forEach(g => {
-        const btn = document.createElement('button');
-        btn.className = `genre-pill ${activeGenreId === g.id ? 'active' : ''}`;
-        btn.textContent = g.name;
-        btn.onclick = () => selectGenrePill(g.id, g.name);
-        container.appendChild(btn);
-      });
-    }
+    function updateNavActiveState(activeKey) {
+      const navMap = {
+        home: 'navHome',
+        movie: 'navMovies',
+        movies: 'navMovies',
+        tv: 'navTv',
+        genres: 'navCategories',
+        categories: 'navCategories',
+        watchlist: 'navWatchlist',
+        mylist: 'navWatchlist',
+        history: 'navHistory',
+        search: null
+      };
 
-    function selectGenrePill(genreId, genreName) {
-      activeGenreId = genreId;
-      activeExploreType = 'genre';
-      document.querySelectorAll('.genre-pill').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
+      const mobMap = {
+        home: 'mobNavHome',
+        movie: 'mobNavMovies',
+        movies: 'mobNavMovies',
+        tv: 'mobNavTv',
+        genres: 'mobNavCategories',
+        categories: 'mobNavCategories',
+        watchlist: 'mobNavWatchlist',
+        mylist: 'mobNavWatchlist',
+        search: 'mobNavSearch'
+      };
 
-      if (genreId === null) {
-        document.getElementById('exploreModalTitle').textContent = 'Explore All Content';
-        loadExploreDefault();
-      } else {
-        document.getElementById('exploreModalTitle').textContent = `Category: ${genreName}`;
-        loadExploreGenre(genreId);
+      document.querySelectorAll('.main-nav a').forEach(el => el.classList.remove('active'));
+      const targetId = navMap[activeKey];
+      if (targetId) {
+        const el = document.getElementById(targetId);
+        if (el) el.classList.add('active');
+      }
+
+      document.querySelectorAll('.mob-nav-item').forEach(el => el.classList.remove('active'));
+      const mobTargetId = mobMap[activeKey];
+      if (mobTargetId) {
+        const el = document.getElementById(mobTargetId);
+        if (el) el.classList.add('active');
       }
     }
 
-    async function openExploreModal(type = 'all') {
-      const modal = document.getElementById('explore-modal');
-      const titleEl = document.getElementById('exploreModalTitle');
-      const input = document.getElementById('modalSearchInput');
-      input.value = '';
-      activeGenreId = null;
-      activeExploreType = type;
-      initGenrePills();
+    async function navigateToView(viewType = 'movie', param = null) {
+      currentBrowseView = viewType;
+      currentBrowsePage = 1;
 
-      modal.style.display = 'flex';
-      updateBodyScrollLock();
+      // 1. Hide Home elements & show in-page browse view
+      const billboard = document.getElementById('billboard');
+      const homeRows = document.getElementById('homeRowsContainer');
+      const browseView = document.getElementById('inPageBrowseView');
+      const browseGrid = document.getElementById('browseGrid');
+      const titleEl = document.getElementById('browseViewTitle');
+      const badgeEl = document.getElementById('browseCountBadge');
+      const pillBar = document.getElementById('browsePillBar');
 
-      if (type === 'movie') {
+      if (billboard) billboard.style.display = 'none';
+      if (homeRows) homeRows.style.display = 'none';
+      if (browseView) browseView.style.display = 'block';
+
+      // Ensure body scroll is active for normal site scrolling
+      document.body.classList.remove('modal-open');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // 2. Update navigation active state
+      updateNavActiveState(viewType);
+
+      // 3. Immediately show skeleton loading placeholders
+      browseGrid.innerHTML = getSkeletonCards(12);
+      pillBar.innerHTML = '';
+
+      // 4. Render specific view content
+      if (viewType === 'movie' || viewType === 'movies') {
         titleEl.textContent = 'Popular Movies';
-        loadExploreType('movie');
-      } else if (type === 'tv') {
+        badgeEl.textContent = 'Blockbusters & Cinema';
+        try { history.replaceState(null, '', '#movies'); } catch(e) {}
+        await loadInPageMovies(1);
+      } else if (viewType === 'tv') {
         titleEl.textContent = 'Popular TV Shows';
-        loadExploreType('tv');
-      } else if (type === 'genres') {
-        titleEl.textContent = 'Browse by Category';
-        loadExploreDefault();
-      } else if (type === 'watchlist') {
-        titleEl.textContent = 'My Watchlist';
-        loadExploreWatchlist();
-      } else if (type === 'history') {
+        badgeEl.textContent = 'Series & Binge-Worthy';
+        try { history.replaceState(null, '', '#tv'); } catch(e) {}
+        await loadInPageTv(1);
+      } else if (viewType === 'watchlist' || viewType === 'mylist') {
+        titleEl.textContent = 'My List';
+        badgeEl.textContent = `${UserDataManager.getWatchlist().length} Titles`;
+        try { history.replaceState(null, '', '#mylist'); } catch(e) {}
+        loadInPageWatchlist();
+      } else if (viewType === 'history') {
         titleEl.textContent = 'Watch History';
-        loadExploreHistory();
-      } else {
-        titleEl.textContent = 'Explore Titles';
-        loadExploreDefault();
+        badgeEl.textContent = `${UserDataManager.getHistory().length} Titles`;
+        try { history.replaceState(null, '', '#history'); } catch(e) {}
+        loadInPageHistory();
+      } else if (viewType === 'genres' || viewType === 'categories') {
+        const gid = param?.genreId || 28;
+        const gname = param?.genreName || 'Action';
+        titleEl.textContent = `Category: ${gname}`;
+        badgeEl.textContent = 'Curated Genres';
+        renderInPageGenrePills(gid);
+        try { history.replaceState(null, '', `#genre-${gid}`); } catch(e) {}
+        await loadInPageGenre(gid, 1);
+      } else if (viewType === 'search') {
+        const query = typeof param === 'string' ? param : (document.getElementById('searchInput')?.value.trim() || '');
+        currentSearchQuery = query;
+        titleEl.textContent = query ? `Results for "${query}"` : 'Search All Content';
+        badgeEl.textContent = 'Search';
+        try { history.replaceState(null, '', query ? `#search=${encodeURIComponent(query)}` : '#search'); } catch(e) {}
+        renderInPageSearchBar(query);
+        if (query) {
+          await performInPageSearch(query);
+        } else {
+          browseGrid.innerHTML = `
+            <div style="grid-column: 1 / -1; padding: 60px 20px; text-align: center; color: #888;">
+              <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#555" stroke-width="1.8" style="margin-bottom: 14px;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <h3 style="color: #fff; margin-bottom: 8px;">Explore Titles & Genres</h3>
+              <p style="max-width: 420px; margin: 0 auto;">Type any movie name, television show, or category in the search box.</p>
+            </div>
+          `;
+        }
+      } else if (viewType === 'all') {
+        titleEl.textContent = 'Trending & Popular';
+        badgeEl.textContent = 'All Categories';
+        await loadInPageAll(1);
       }
     }
 
-    let isClosingExplore = false;
-    function closeExploreModal() {
-      if (isClosingExplore) return;
-      const modal = document.getElementById('explore-modal');
-      isClosingExplore = true;
-      modal.classList.add('closing');
+    function resetToHome() {
+      currentBrowseView = 'home';
+      const billboard = document.getElementById('billboard');
+      const homeRows = document.getElementById('homeRowsContainer');
+      const browseView = document.getElementById('inPageBrowseView');
 
-      setTimeout(() => {
-        modal.style.display = 'none';
-        modal.classList.remove('closing');
-        isClosingExplore = false;
-        updateBodyScrollLock();
-      }, 240);
-    }
+      if (browseView) browseView.style.display = 'none';
+      if (billboard) billboard.style.display = '';
+      if (homeRows) homeRows.style.display = 'block';
 
-    function loadExploreWatchlist() {
-      const grid = document.getElementById('exploreGrid');
-      const items = UserDataManager.getWatchlist();
+      document.body.classList.remove('modal-open');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
 
-      if (items.length === 0) {
-        grid.innerHTML = `
-          <div style="grid-column:1/-1; padding:60px 20px; text-align:center; color:#888;">
-            <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#555" stroke-width="1.8" style="margin-bottom:14px;"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
-            <h3 style="color:#fff; margin-bottom:8px; font-size:1.2rem;">Your Watchlist is Empty</h3>
-            <p style="max-width:400px; margin:0 auto 20px;">Explore popular titles and tap "Add to My List" on any movie or series to save it here.</p>
-            <button class="btn-storage-export" onclick="openExploreModal('movie')" style="background:var(--netflix-red); color:#fff; padding:10px 20px; font-size:0.9rem;">Browse Movies</button>
-          </div>
-        `;
-        return;
-      }
-
-      grid.innerHTML = items.map(m => buildCard(m, false)).join('');
-    }
-
-    function loadExploreHistory() {
-      const grid = document.getElementById('exploreGrid');
-      const items = UserDataManager.getHistory();
-
-      if (items.length === 0) {
-        grid.innerHTML = `
-          <div style="grid-column:1/-1; padding:60px 20px; text-align:center; color:#888;">
-            <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#555" stroke-width="1.8" style="margin-bottom:14px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            <h3 style="color:#fff; margin-bottom:8px; font-size:1.2rem;">No Watching History</h3>
-            <p style="max-width:400px; margin:0 auto 20px;">Titles and episodes you play will automatically appear here so you can pick up where you left off.</p>
-            <button class="btn-storage-export" onclick="openExploreModal('tv')" style="background:var(--netflix-red); color:#fff; padding:10px 20px; font-size:0.9rem;">Browse TV Series</button>
-          </div>
-        `;
-        return;
-      }
-
-      grid.innerHTML = items.map(m => buildCard(m, false, true)).join('');
-    }
-
-    async function loadExploreDefault() {
-      const grid = document.getElementById('exploreGrid');
-      grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">Loading popular titles...</div>';
-
+      updateNavActiveState('home');
       try {
-        const res = await fetch(`${apiEndpoint}/trending/all/week?api_key=${apikey}`);
-        const data = await res.json();
-        grid.innerHTML = (data.results || []).filter(m => m.poster_path).map(m => buildCard(m, false)).join('');
-      } catch (e) {
-        grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center;">Error loading items.</div>';
-      }
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+      } catch(e) {}
     }
 
-    async function loadExploreType(type) {
-      const grid = document.getElementById('exploreGrid');
-      grid.innerHTML = `<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">Loading ${type === 'movie' ? 'Movies' : 'TV Shows'}...</div>`;
-
+    async function loadInPageMovies(page = 1) {
+      const grid = document.getElementById('browseGrid');
       try {
-        const res = await fetch(`${apiEndpoint}/${type}/popular?api_key=${apikey}`);
+        const res = await fetch(`${apiEndpoint}/movie/popular?api_key=${apikey}&page=${page}`);
         const data = await res.json();
-        grid.innerHTML = (data.results || []).filter(m => m.poster_path).map(m => buildCard(m, false)).join('');
-      } catch (e) {
-        grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center;">Error loading items.</div>';
+        const cards = (data.results || []).filter(m => m.poster_path).map(m => buildCard(m, false)).join('');
+        grid.innerHTML = cards || '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">No movies found.</div>';
+      } catch(e) {
+        grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">Error loading movies.</div>';
       }
     }
 
-    async function loadExploreGenre(genreId) {
-      const grid = document.getElementById('exploreGrid');
-      grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">Loading genre titles...</div>';
+    async function loadInPageTv(page = 1) {
+      const grid = document.getElementById('browseGrid');
+      try {
+        const res = await fetch(`${apiEndpoint}/tv/popular?api_key=${apikey}&page=${page}`);
+        const data = await res.json();
+        const cards = (data.results || []).filter(m => m.poster_path).map(m => buildCard(m, false)).join('');
+        grid.innerHTML = cards || '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">No TV shows found.</div>';
+      } catch(e) {
+        grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">Error loading TV shows.</div>';
+      }
+    }
 
+    async function loadInPageAll(page = 1) {
+      const grid = document.getElementById('browseGrid');
+      try {
+        const res = await fetch(`${apiEndpoint}/trending/all/week?api_key=${apikey}&page=${page}`);
+        const data = await res.json();
+        const cards = (data.results || []).filter(m => m.poster_path).map(m => buildCard(m, false)).join('');
+        grid.innerHTML = cards || '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">No titles found.</div>';
+      } catch(e) {
+        grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">Error loading titles.</div>';
+      }
+    }
+
+    async function loadInPageGenre(genreId, page = 1) {
+      const grid = document.getElementById('browseGrid');
       try {
         const [mRes, tvRes] = await Promise.all([
-          fetch(`${apiEndpoint}/discover/movie?api_key=${apikey}&with_genres=${genreId}`),
-          fetch(`${apiEndpoint}/discover/tv?api_key=${apikey}&with_genres=${genreId}`)
+          fetch(`${apiEndpoint}/discover/movie?api_key=${apikey}&with_genres=${genreId}&sort_by=popularity.desc&page=${page}`),
+          fetch(`${apiEndpoint}/discover/tv?api_key=${apikey}&with_genres=${genreId}&sort_by=popularity.desc&page=${page}`)
         ]);
         const mData = await mRes.json();
         const tvData = await tvRes.json();
@@ -6016,45 +6430,73 @@
           .sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
 
         if (combined.length === 0) {
-          grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center;">No titles found in this category.</div>';
+          grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">No titles found in this category.</div>';
           return;
         }
-        grid.innerHTML = combined.map(buildCard).join('');
-      } catch (e) {
-        grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center;">Error loading category.</div>';
+        grid.innerHTML = combined.map(m => buildCard(m, false)).join('');
+      } catch(e) {
+        grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">Error loading category titles.</div>';
       }
     }
 
-    let searchDebounce = null;
-    function handleModalSearchInput() {
-      clearTimeout(searchDebounce);
-      searchDebounce = setTimeout(() => {
-        const query = document.getElementById('modalSearchInput').value.trim();
-        if (!query) {
-          if (activeGenreId) {
-            loadExploreGenre(activeGenreId);
-          } else {
-            loadExploreDefault();
-          }
-          return;
-        }
-        performModalSearch(query);
-      }, 350);
+    function renderInPageGenrePills(activeId) {
+      currentGenreId = activeId || 28;
+      const pillBar = document.getElementById('browsePillBar');
+      if (!pillBar) return;
+
+      pillBar.innerHTML = GENRES.map(g => {
+        const isActive = (g.id === currentGenreId);
+        const safeName = g.name.replace(/'/g, "\\'");
+        return `
+          <button type="button" class="genre-pill ${isActive ? 'active' : ''}" onclick="selectInPageGenre(${g.id}, '${safeName}')">
+            ${g.name}
+          </button>
+        `;
+      }).join('');
     }
 
-    function triggerSearch() {
-      const query = document.getElementById('searchInput').value.trim();
+    async function selectInPageGenre(genreId, genreName) {
+      currentGenreId = genreId;
+      renderInPageGenrePills(genreId);
+      document.getElementById('browseViewTitle').textContent = `Category: ${genreName}`;
+      const browseGrid = document.getElementById('browseGrid');
+      browseGrid.innerHTML = getSkeletonCards(12);
+      try { history.replaceState(null, '', `#genre-${genreId}`); } catch(e) {}
+      await loadInPageGenre(genreId, 1);
+    }
+
+    function renderInPageSearchBar(initialVal = '') {
+      const pillBar = document.getElementById('browsePillBar');
+      if (!pillBar) return;
+      const safeVal = (initialVal || '').replace(/"/g, '&quot;');
+      pillBar.innerHTML = `
+        <div style="display:flex; width:100%; max-width:620px; gap:8px; margin: 4px 0 16px;">
+          <input type="text" id="inPageSearchInput" placeholder="Search movies, TV shows, genres, actors..." value="${safeVal}"
+                 style="flex:1; background:#181818; border:1px solid rgba(255,255,255,0.2); border-radius:6px; padding:12px 16px; color:#fff; font-size:0.95rem; outline:none;"
+                 onkeydown="if(event.key==='Enter') performInPageSearch(this.value)" />
+          <button type="button" class="browse-filter-btn" onclick="performInPageSearch(document.getElementById('inPageSearchInput').value)">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <span>Search</span>
+          </button>
+        </div>
+      `;
+    }
+
+    function triggerSearch(customQuery = null) {
+      const query = customQuery || document.getElementById('searchInput')?.value.trim() || '';
       if (!query) return;
-
-      openExploreModal('search');
-      document.getElementById('modalSearchInput').value = query;
-      document.getElementById('exploreModalTitle').textContent = `Results for "${query}"`;
-      performModalSearch(query);
+      navigateToView('search', query);
     }
 
-    async function performModalSearch(query) {
-      const grid = document.getElementById('exploreGrid');
-      grid.innerHTML = `<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">Searching for "${query}"...</div>`;
+    async function performInPageSearch(query) {
+      if (!query) return;
+      currentSearchQuery = query;
+      const titleEl = document.getElementById('browseViewTitle');
+      if (titleEl) titleEl.textContent = `Results for "${query}"`;
+      try { history.replaceState(null, '', `#search=${encodeURIComponent(query)}`); } catch(e) {}
+
+      const grid = document.getElementById('browseGrid');
+      grid.innerHTML = getSkeletonCards(12);
 
       try {
         const [movieRes, tvRes] = await Promise.all([
@@ -6070,20 +6512,69 @@
           .sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
 
         if (allResults.length === 0) {
-          grid.innerHTML = `<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">No titles found matching "${query}".</div>`;
+          grid.innerHTML = `<div style="grid-column:1/-1; padding:60px 20px; text-align:center; color:#888;">No titles found matching "${query}".</div>`;
           return;
         }
 
-        grid.innerHTML = allResults.map(buildCard).join('');
+        grid.innerHTML = allResults.map(m => buildCard(m, false)).join('');
       } catch (err) {
-        grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center;">Error searching titles.</div>';
+        grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">Error searching titles.</div>';
       }
+    }
+
+    function loadInPageWatchlist() {
+      const grid = document.getElementById('browseGrid');
+      const items = UserDataManager.getWatchlist();
+
+      if (items.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column:1/-1; padding:60px 20px; text-align:center; color:#888;">
+            <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#555" stroke-width="1.8" style="margin-bottom:14px;"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+            <h3 style="color:#fff; margin-bottom:8px; font-size:1.2rem;">Your Watchlist is Empty</h3>
+            <p style="max-width:400px; margin:0 auto 20px;">Explore popular titles and tap "Add to My List" on any movie or series to save it here.</p>
+            <button class="browse-filter-btn" onclick="navigateToView('movie')" style="background:var(--netflix-red); border-color:var(--netflix-red); color:#fff; padding:10px 22px; font-size:0.9rem;">Browse Movies</button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = items.map(m => buildCard(m, false)).join('');
+    }
+
+    function loadInPageHistory() {
+      const grid = document.getElementById('browseGrid');
+      const items = UserDataManager.getHistory();
+
+      if (items.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column:1/-1; padding:60px 20px; text-align:center; color:#888;">
+            <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#555" stroke-width="1.8" style="margin-bottom:14px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <h3 style="color:#fff; margin-bottom:8px; font-size:1.2rem;">No Watching History</h3>
+            <p style="max-width:400px; margin:0 auto 20px;">Titles and episodes you play will automatically appear here so you can pick up where you left off.</p>
+            <button class="browse-filter-btn" onclick="navigateToView('tv')" style="background:var(--netflix-red); border-color:var(--netflix-red); color:#fff; padding:10px 22px; font-size:0.9rem;">Browse TV Series</button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = items.map(m => buildCard(m, true)).join('');
+    }
+
+    // Compatibility stubs so external calls seamlessly use the in-page Netflix view
+    function openExploreModal(type = 'all') {
+      navigateToView(type);
+    }
+    function closeExploreModal() {
+      resetToHome();
+    }
+    function openExploreGenre(genreId, genreName) {
+      navigateToView('genres', { genreId, genreName });
     }
 
     // =========================================================
     // 1:1 NETFLIX MORE INFO & PLAYER MODAL
     // =========================================================
-    async function openInfo(id, type, autoPlay = false) {
+    async function openInfo(id, type, autoPlay = false, targetSeason = 1, targetEpisode = 1) {
       const overlay = document.getElementById('info-overlay');
       const titleEl = document.getElementById('infoTitle');
       const banner = document.getElementById('modalHeroBanner');
@@ -6103,16 +6594,24 @@
 
       currentMediaId = id;
       currentContentType = type;
-      currentSeason = 1;
-      currentEpisode = 1;
+      currentSeason = parseInt(targetSeason) || 1;
+      currentEpisode = parseInt(targetEpisode) || 1;
       updateModalDownloadBtn();
 
-      // Update URL hash for easy sharing (#id)
+      // Update URL hash with episode/season for TV shows, or movie id
       if (id) {
-        const targetHash = `#${id}`;
+        let targetHash = `#${id}`;
+        if (type === 'tv') {
+          targetHash = (currentSeason > 1 || currentEpisode > 1)
+            ? `#tv-${id}/s${currentSeason}/e${currentEpisode}`
+            : `#tv-${id}`;
+        } else {
+          targetHash = `#movie-${id}`;
+        }
+
         if (window.location.hash !== targetHash && window.location.hash !== `#(${id})`) {
           try {
-            history.pushState({ mediaId: id, type }, '', targetHash);
+            history.pushState({ mediaId: id, type, season: currentSeason, episode: currentEpisode }, '', targetHash);
           } catch(e) {
             window.location.hash = targetHash;
           }
@@ -6210,7 +6709,7 @@
             const rType = rec.media_type || (rec.first_air_date ? 'tv' : 'movie');
 
             return `
-              <a href="#${rec.id}" class="sim-card" data-id="${rec.id}" data-type="${rType}" onclick="handleMovieLinkClick(event, ${rec.id}, '${rType}')">
+              <a href="#${rType === 'tv' ? 'tv-' + rec.id : 'movie-' + rec.id}" class="sim-card" data-id="${rec.id}" data-type="${rType}" onclick="handleMovieLinkClick(event, ${rec.id}, '${rType}')">
                 <img class="sim-backdrop" src="${rImg}" alt="${rTitle}" onerror="this.onerror=null;this.src='https://placehold.co/240x125/1f1f1f/ffffff?text=Netflix'" />
                 <div class="sim-content">
                   <div class="sim-meta-row">
@@ -6233,10 +6732,10 @@
           const viewableSeasons = info.seasons ? info.seasons.filter(s => s.season_number > 0) : [];
           
           if (viewableSeasons.length > 0) {
-            const initialSeason = viewableSeasons[0].season_number;
-            currentSeason = initialSeason;
-            renderSeasonDropdown(viewableSeasons, initialSeason);
-            await loadSeasonEpisodes(initialSeason);
+            const hasSeason = viewableSeasons.some(s => s.season_number === currentSeason);
+            if (!hasSeason) currentSeason = viewableSeasons[0].season_number;
+            renderSeasonDropdown(viewableSeasons, currentSeason);
+            await loadSeasonEpisodes(currentSeason, currentEpisode);
           } else {
             document.getElementById('episodesList').innerHTML = '<div style="color:#888; padding:20px;">No season episode data available.</div>';
           }
@@ -6284,15 +6783,18 @@
           document.getElementById('seasonDropdownList').classList.remove('open');
           renderSeasonDropdown(seasons, currentSeason);
           updateModalDownloadBtn();
-          await loadSeasonEpisodes(currentSeason);
+          try {
+            history.replaceState(null, '', `#tv-${currentMediaId}/s${currentSeason}/e1`);
+          } catch(err) {}
+          await loadSeasonEpisodes(currentSeason, 1);
         };
 
         list.appendChild(item);
       });
     }
 
-    // Load Season Episodes with 1:1 Netflix Episode Card Design
-    async function loadSeasonEpisodes(seasonNumber) {
+    // Load Season Episodes with 1:1 Netflix Episode Card Design & Anchor Tags
+    async function loadSeasonEpisodes(seasonNumber, targetEp = null) {
       const episodesList = document.getElementById('episodesList');
       episodesList.innerHTML = '<div style="color:#888; padding:25px; text-align:center;">Loading episodes...</div>';
 
@@ -6301,6 +6803,10 @@
         const data = await res.json();
 
         if (data.episodes && data.episodes.length > 0) {
+          if (targetEp) {
+            currentEpisode = targetEp;
+          }
+
           episodesList.innerHTML = data.episodes.map(ep => {
             const epNum = ep.episode_number;
             const epName = ep.name || `Episode ${epNum}`;
@@ -6310,7 +6816,10 @@
             const isActive = (currentEpisode === epNum);
 
             return `
-              <div class="episode-card ${isActive ? 'active' : ''}" id="ep-card-${epNum}" onclick="selectEpisode(${epNum})">
+              <a href="#tv-${currentMediaId}/s${seasonNumber}/e${epNum}"
+                 class="episode-card ${isActive ? 'active' : ''}"
+                 id="ep-card-${epNum}"
+                 onclick="handleEpisodeClick(event, ${seasonNumber}, ${epNum})">
                 <div class="episode-index">${epNum}</div>
                 <div class="episode-thumbnail-wrap">
                   <img class="episode-thumbnail" src="${epThumb}" alt="${epName}" onerror="this.onerror=null;this.src='https://placehold.co/135x76/1a1a1a/ffffff?text=Episode'" />
@@ -6325,18 +6834,20 @@
                   </div>
                   <p class="episode-overview">${epOverview}</p>
                 </div>
-                <button class="episode-download-btn" title="Download Episode ${epNum}" onclick="event.stopPropagation(); downloadMedia('tv', currentMediaId, ${seasonNumber}, ${epNum});" aria-label="Download Episode ${epNum}">
+                <button type="button" class="episode-download-btn" title="Download Episode ${epNum}" onclick="event.stopPropagation(); event.preventDefault(); downloadMedia('tv', currentMediaId, ${seasonNumber}, ${epNum});" aria-label="Download Episode ${epNum}">
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                     <polyline points="7 10 12 15 17 10"></polyline>
                     <line x1="12" y1="15" x2="12" y2="3"></line>
                   </svg>
                 </button>
-              </div>
+              </a>
             `;
           }).join('');
 
-          currentEpisode = data.episodes[0].episode_number;
+          if (!targetEp) {
+            currentEpisode = data.episodes[0].episode_number;
+          }
           updateModalDownloadBtn();
         } else {
           episodesList.innerHTML = '<div style="color:#888; padding:20px;">No episodes found for this season.</div>';
@@ -6346,12 +6857,29 @@
       }
     }
 
+    function handleEpisodeClick(event, seasonNumber, epNum) {
+      if (event && (event.ctrlKey || event.metaKey || event.button === 1)) {
+        return; // Middle click / Cmd-click opens in new tab natively
+      }
+      if (event) event.preventDefault();
+      currentSeason = seasonNumber;
+      currentEpisode = epNum;
+      try {
+        history.replaceState(null, '', `#tv-${currentMediaId}/s${seasonNumber}/e${epNum}`);
+      } catch(e) {}
+      selectEpisode(epNum);
+    }
+
     function selectEpisode(epNum) {
       currentEpisode = epNum;
       document.querySelectorAll('.episode-card').forEach(card => card.classList.remove('active'));
       const activeCard = document.getElementById(`ep-card-${epNum}`);
       if (activeCard) activeCard.classList.add('active');
       updateModalDownloadBtn();
+
+      try {
+        history.replaceState(null, '', `#tv-${currentMediaId}/s${currentSeason}/e${epNum}`);
+      } catch(e) {}
 
       const title = currentItemDetails?.name || currentItemDetails?.title || 'TV Series';
       triggerPlayWithAnimation(null, currentMediaId, 'tv', currentSeason, epNum, title, currentItemDetails);
@@ -6905,10 +7433,19 @@
       const mediaId = id || currentMediaId;
       if (!mediaId) return;
 
-      const fullUrl = `${window.location.origin}${window.location.pathname}#${mediaId}`;
+      let linkTag = `#${mediaId}`;
+      if (currentMediaType === 'tv') {
+        const sNum = currentSeason || 1;
+        const eNum = currentEpisode || 1;
+        linkTag = `#tv-${mediaId}/s${sNum}/e${eNum}`;
+      } else if (currentMediaType === 'movie') {
+        linkTag = `#movie-${mediaId}`;
+      }
+
+      const fullUrl = `${window.location.origin}${window.location.pathname}${linkTag}`;
 
       const notifySuccess = () => {
-        showToast(`Copied movie link: #${mediaId}`);
+        showToast(`Copied direct link: ${linkTag}`);
       };
 
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -6951,20 +7488,61 @@
         return;
       }
 
-      // Parse hash e.g. #550, #(550), #movie-550, #tv-1399, #play-550, #watch-550
-      let raw = hash.replace(/^#\/?/, '').trim();
-      raw = raw.replace(/[()]/g, '').trim();
+      // Check for top-level view navigation routes first: #movies, #tv, #watchlist, #mylist, #history, #categories, #genres, #search=...
+      const cleanHash = hash.replace(/^#\/?/, '').trim();
+      const lowerClean = cleanHash.toLowerCase();
+
+      if (lowerClean === 'movies' || lowerClean === 'movie') {
+        navigateToView('movie');
+        return;
+      }
+      if (lowerClean === 'tv' || lowerClean === 'tvshows' || lowerClean === 'shows') {
+        navigateToView('tv');
+        return;
+      }
+      if (lowerClean === 'watchlist' || lowerClean === 'mylist') {
+        navigateToView('watchlist');
+        return;
+      }
+      if (lowerClean === 'history') {
+        navigateToView('history');
+        return;
+      }
+      if (lowerClean === 'categories' || lowerClean === 'genres') {
+        navigateToView('genres');
+        return;
+      }
+      if (lowerClean.startsWith('search')) {
+        const queryPart = cleanHash.includes('=') ? cleanHash.split('=')[1] : cleanHash.replace(/^search\/?/i, '');
+        navigateToView('search', decodeURIComponent(queryPart || ''));
+        return;
+      }
+
+      // Parse media hash e.g. #550, #(550), #movie-550, #tv-1399, #tv-1399/s2/e3, #1399/s1/e4, #play-550
+      let raw = cleanHash.replace(/[()]/g, '').trim();
 
       const isPlay = /^(play|watch)[-_/:]?/i.test(raw);
       if (isPlay) {
         raw = raw.replace(/^(play|watch)[-_/:]?/i, '').trim();
       }
 
+      // Detect season and episode if present
+      let targetSeason = null;
+      let targetEpisode = null;
+      const sMatch = raw.match(/[/_-]s(\d+)/i) || raw.match(/season[/_-]?(\d+)/i);
+      if (sMatch) {
+        targetSeason = parseInt(sMatch[1], 10);
+      }
+      const eMatch = raw.match(/[/_-]e(\d+)/i) || raw.match(/ep(?:isode)?[/_-]?(\d+)/i);
+      if (eMatch) {
+        targetEpisode = parseInt(eMatch[1], 10);
+      }
+
       let explicitType = null;
       if (/^movie[-_/:]/i.test(raw)) {
         explicitType = 'movie';
         raw = raw.replace(/^movie[-_/:]/i, '').trim();
-      } else if (/^tv[-_/:]/i.test(raw)) {
+      } else if (/^tv[-_/:]/i.test(raw) || targetSeason !== null || targetEpisode !== null) {
         explicitType = 'tv';
         raw = raw.replace(/^tv[-_/:]/i, '').trim();
       }
@@ -6977,14 +7555,18 @@
         const infoOpen = document.getElementById('info-overlay')?.style.display === 'flex';
         const cinemaOpen = document.getElementById('cinema-player-modal')?.style.display === 'flex';
         if ((isPlay && cinemaOpen) || (!isPlay && infoOpen)) {
-          return;
+          if (targetSeason !== null && targetEpisode !== null && (currentSeason !== targetSeason || currentEpisode !== targetEpisode)) {
+            // season/episode change requested
+          } else {
+            return;
+          }
         }
       }
 
       isHandlingHash = true;
       try {
         if (explicitType) {
-          await openInfo(mediaId, explicitType, isPlay);
+          await openInfo(mediaId, explicitType, isPlay, targetSeason, targetEpisode);
           return;
         }
 
@@ -7006,7 +7588,7 @@
           resolvedType = 'tv';
         }
 
-        await openInfo(mediaId, resolvedType, isPlay);
+        await openInfo(mediaId, resolvedType, isPlay, targetSeason, targetEpisode);
       } finally {
         isHandlingHash = false;
       }
@@ -7023,6 +7605,7 @@
     function initApp() {
       if (isAppInitialized) return;
       isAppInitialized = true;
+      try { initCustomTheme(); } catch(e) { console.error('initCustomTheme err:', e); }
       try { initServerSelect(); } catch(e) { console.error('initServerSelect err:', e); }
       try { initAdblockToast(); } catch(e) { console.error('initAdblockToast err:', e); }
       try { checkStorageWarningVisibility(); } catch(e) { console.error('checkStorageWarning err:', e); }
@@ -7050,7 +7633,7 @@
       </svg>
       <span>Home</span>
     </a>
-    <a href="javascript:void(0)" class="mob-nav-item" id="mobNavMovies" onclick="openExploreModal('movie'); setMobNavActive(this)">
+    <a href="javascript:void(0)" class="mob-nav-item" id="mobNavMovies" onclick="navigateToView('movie'); setMobNavActive(this)">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <rect width="20" height="20" x="2" y="2" rx="2.18" ry="2.18"></rect>
         <line x1="7" x2="7" y1="2" y2="22"></line>
@@ -7059,27 +7642,27 @@
       </svg>
       <span>Movies</span>
     </a>
-    <a href="javascript:void(0)" class="mob-nav-item" id="mobNavTv" onclick="openExploreModal('tv'); setMobNavActive(this)">
+    <a href="javascript:void(0)" class="mob-nav-item" id="mobNavTv" onclick="navigateToView('tv'); setMobNavActive(this)">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <rect width="20" height="15" x="2" y="7" rx="2"></rect>
         <polyline points="17 2 12 7 7 2"></polyline>
       </svg>
       <span>TV Shows</span>
     </a>
-    <a href="javascript:void(0)" class="mob-nav-item" id="mobNavSearch" onclick="openExploreModal('search'); setMobNavActive(this)">
+    <a href="javascript:void(0)" class="mob-nav-item" id="mobNavSearch" onclick="navigateToView('search'); setMobNavActive(this)">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="8"></circle>
         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
       </svg>
       <span>Search</span>
     </a>
-    <a href="javascript:void(0)" class="mob-nav-item" id="mobNavWatchlist" onclick="openExploreModal('watchlist'); setMobNavActive(this)">
+    <a href="javascript:void(0)" class="mob-nav-item" id="mobNavWatchlist" onclick="navigateToView('watchlist'); setMobNavActive(this)">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
       </svg>
       <span>My List</span>
     </a>
-    <a href="javascript:void(0)" class="mob-nav-item" id="mobNavCategories" onclick="openExploreModal('genres'); setMobNavActive(this)">
+    <a href="javascript:void(0)" class="mob-nav-item" id="mobNavCategories" onclick="navigateToView('genres'); setMobNavActive(this)">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="8" y1="6" x2="21" y2="6"></line>
         <line x1="8" y1="12" x2="21" y2="12"></line>

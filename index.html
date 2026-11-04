@@ -662,13 +662,14 @@
         const repos = await res.json();
         
         // Filter repos where primary language is HTML and not excluded
-        const htmlRepos = repos.filter(repo => {
-          const isHtml = repo.language && repo.language.toLowerCase() === 'html';
+        const allowedLanguages = ['html', 'javascript'];
+        const validRepos = repos.filter(repo => {
+          const matchesLang = repo.language && allowedLanguages.includes(repo.language.toLowerCase());
           const notExcluded = !EXCLUDE_REPOS.includes(repo.name.toLowerCase());
-          return isHtml && notExcluded;
+          return matchesLang && notExcluded;
         });
 
-        loadedApps = htmlRepos.map(repo => {
+        loadedApps = validRepos.map(repo => {
           const branch = repo.default_branch || 'main';
           const title = formatTitle(repo.name);
           const url = getLaunchUrl(repo);

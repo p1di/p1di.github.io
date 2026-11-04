@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -464,38 +464,8 @@
   </div>
 
   <script>
-    const defaultApps = [
-      { 
-        name: 'startpage', 
-        title: 'Startpage',
-        tags: ['startpage', 'home', 'dashboard', 'bookmark', 'search', 'links', 'start', 'browser', 'homepage', 'quicklinks', 'navigation', 'minimalist'] 
-      },
-      { 
-        name: 'netflix', 
-        title: 'Netflix',
-        tags: ['netflix', 'streaming', 'movies', 'tv shows', 'cinema', 'video', 'player', 'entertainment', 'watch', 'media', 'series', 'film', 'trailers'] 
-      },
-      {
-        name: 'spotify',
-        title: 'Spotify',
-        tags: ['spotify', 'music', 'player', 'streaming', 'audio', 'songs', 'playlists', 'podcasts', 'tracks', 'albums', 'artist', 'sound']
-      },
-      {
-        name: 'chatgpt',
-        title: 'ChatGPT',
-        tags: ['chatgpt', 'ai', 'chat', 'assistant', 'pdai', 'duck.ai', 'duckai', 'gpt', 'bot', 'llm', 'questions', 'answers']
-      },
-      {
-        name: 'pinterest',
-        title: 'Pinterest',
-        tags: ['pinterest', 'social', 'images', 'moodboard', 'pins', 'bloatcat', 'binnacle', 'inspiration', 'photos', 'gallery', 'unblocked']
-      },
-      {
-        name: 'apple-music',
-        title: 'Apple Music',
-        tags: ['apple-music', 'music', 'player', 'streaming', 'audio', 'songs', 'playlists', 'octavestreaming', 'albums', 'sound']
-      }
-    ];
+    const GITHUB_USERNAME = 'p1di';
+    const EXCLUDE_REPOS = ['p1di.github.io'];
 
     const appsGrid = document.getElementById('appsGrid');
     const searchInput = document.getElementById('searchInput');
@@ -507,30 +477,47 @@
     const modalBody = document.getElementById('modalBody');
     const modalLaunchBtn = document.getElementById('modalLaunchBtn');
 
-    let loadedApps = [...defaultApps];
+    let loadedApps = [];
 
-    // Load tags.txt for an app
-    async function loadAppTags(appName) {
-      try {
-        const res = await fetch(`apps/${appName}/tags.txt`);
-        if (res.ok) {
-          const text = await res.text();
-          return text.split(',').map(t => t.trim().toLowerCase()).filter(Boolean);
-        }
-      } catch (e) {}
-      return null;
+    // Format repo name for clean title display
+    function formatTitle(name) {
+      if (!name) return '';
+      return name
+        .split(/[-_]/)
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
     }
 
-    // Load readme.md for an app
-    async function loadAppReadme(appName) {
-      const candidates = [`apps/${appName}/readme.md`, `apps/${appName}/README.md` ];
-      for (let path of candidates) {
+    // Determine target URL to launch
+    function getLaunchUrl(repo) {
+      if (repo.homepage && repo.homepage.trim()) {
+        return repo.homepage.trim();
+      }
+      if (repo.has_pages) {
+        return `https://${GITHUB_USERNAME}.github.io/${repo.name}/`;
+      }
+      return repo.html_url;
+    }
+
+    // Load README.md from repo
+    async function loadRepoReadme(repo) {
+      const branch = repo.default_branch || 'main';
+      const urls = [
+        `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${repo.name}/${branch}/README.md`,
+        `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${repo.name}/${branch}/readme.md`
+      ];
+
+      for (const url of urls) {
         try {
-          const res = await fetch(path);
+          const res = await fetch(url);
           if (res.ok) {
             return await res.text();
           }
         } catch (e) {}
+      }
+
+      if (repo.description) {
+        return repo.description;
       }
       return null;
     }
@@ -581,22 +568,22 @@
       e.preventDefault();
       e.stopPropagation();
 
-      const title = app.title || app.name;
-      modalTitle.textContent = title;
-      modalIcon.src = `apps/${app.name}/icon.png`;
+      modalTitle.textContent = app.title;
+      modalIcon.src = app.iconUrl;
       modalIcon.onerror = function() { this.style.display = 'none'; };
       modalIcon.style.display = 'block';
-      modalLaunchBtn.href = `apps/${app.name}/`;
+
+      modalLaunchBtn.href = app.url;
       modalLaunchBtn.onclick = (e) => {
         e.preventDefault();
         closeModal();
-        launchApp(`apps/${app.name}/`);
+        launchApp(app.url);
       };
 
       modalBody.innerHTML = '<em>Loading app info...</em>';
       infoModal.classList.add('active');
 
-      const rawMd = await loadAppReadme(app.name);
+      const rawMd = await loadRepoReadme(app.repo);
       modalBody.innerHTML = parseMarkdown(rawMd);
     }
 
@@ -627,11 +614,9 @@
       apps.forEach(app => {
         const card = document.createElement('a');
         card.className = 'app-card';
-        card.href = `apps/${app.name}/`;
+        card.href = app.url;
 
-        const iconPath = `apps/${app.name}/icon.png`;
-        const title = app.title || app.name;
-        const initial = app.name.charAt(0).toUpperCase();
+        const initial = app.title.charAt(0).toUpperCase();
 
         card.innerHTML = `
           <button class="info-btn" title="View app info">
@@ -643,21 +628,21 @@
           </button>
           <div class="icon-container">
             <img 
-              src="${iconPath}" 
-              alt="${title}" 
+              src="${app.iconUrl}" 
+              alt="${app.title}" 
               class="icon-img"
               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
             />
             <div class="fallback-badge" style="display:none;">${initial}</div>
           </div>
-          <div class="app-name">${title}</div>
+          <div class="app-name">${app.title}</div>
         `;
 
-        // Attach card launch animation click handler
+        // Launch on card click
         card.addEventListener('click', (e) => {
           if (e.target.closest('.info-btn')) return;
           e.preventDefault();
-          launchApp(`apps/${app.name}/`, card);
+          launchApp(app.url, card);
         });
 
         // Attach info button click handler
@@ -668,39 +653,53 @@
       });
     }
 
-    // Initialize
-    async function init() {
-      renderApps(loadedApps);
-
-      // Fetch external tags.txt for each app
-      for (let app of loadedApps) {
-        const fileTags = await loadAppTags(app.name);
-        if (fileTags && fileTags.length > 0) {
-          app.tags = Array.from(new Set([...(app.tags || []), ...fileTags]));
-        }
-      }
-
-      // Discover extra folders from GitHub API if hosted on GitHub Pages
+    // Scan GitHub for HTML repositories
+    async function scanRepos() {
       try {
-        const res = await fetch('https://api.github.com/repos/p1di/p1di.github.io/contents/apps');
-        if (res.ok) {
-          const items = await res.json();
-          const dirs = items.filter(i => i.type === 'dir');
+        const res = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`);
+        if (!res.ok) throw new Error('Failed to fetch repositories from GitHub');
+
+        const repos = await res.json();
+        
+        // Filter repos where primary language is HTML and not excluded
+        const htmlRepos = repos.filter(repo => {
+          const isHtml = repo.language && repo.language.toLowerCase() === 'html';
+          const notExcluded = !EXCLUDE_REPOS.includes(repo.name.toLowerCase());
+          return isHtml && notExcluded && !repo.fork;
+        });
+
+        loadedApps = htmlRepos.map(repo => {
+          const branch = repo.default_branch || 'main';
+          const title = formatTitle(repo.name);
+          const url = getLaunchUrl(repo);
+          const iconUrl = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${repo.name}/${branch}/icon.png`;
           
-          for (let dir of dirs) {
-            const existing = loadedApps.find(a => a.name.toLowerCase() === dir.name.toLowerCase());
-            if (!existing) {
-              const fileTags = await loadAppTags(dir.name);
-              loadedApps.push({
-                name: dir.name,
-                title: dir.name.charAt(0).toUpperCase() + dir.name.slice(1),
-                tags: fileTags || [dir.name]
-              });
-            }
-          }
-          renderApps(loadedApps);
-        }
-      } catch (e) {}
+          const tags = [
+            repo.name.toLowerCase(),
+            title.toLowerCase(),
+            ...(repo.topics || []).map(t => t.toLowerCase()),
+            ...(repo.description ? repo.description.toLowerCase().split(/\s+/) : [])
+          ];
+
+          return {
+            name: repo.name,
+            title: title,
+            url: url,
+            iconUrl: iconUrl,
+            tags: tags,
+            repo: repo
+          };
+        });
+
+        renderApps(loadedApps);
+      } catch (err) {
+        console.error('Error scanning repos:', err);
+        appsGrid.innerHTML = `
+          <div class="empty-state" style="display:block;">
+            Failed to load repositories. Please check connection.
+          </div>
+        `;
+      }
     }
 
     // Filter on search input across name, title, and tags
@@ -721,7 +720,7 @@
       renderApps(filtered);
     });
 
-    init();
+    scanRepos();
   </script>
 </body>
 </html>

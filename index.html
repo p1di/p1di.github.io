@@ -665,7 +665,7 @@
         const htmlRepos = repos.filter(repo => {
           const isHtml = repo.language && repo.language.toLowerCase() === 'html';
           const notExcluded = !EXCLUDE_REPOS.includes(repo.name.toLowerCase());
-          return isHtml && notExcluded && !repo.fork;
+          return isHtml && notExcluded;
         });
 
         loadedApps = htmlRepos.map(repo => {
